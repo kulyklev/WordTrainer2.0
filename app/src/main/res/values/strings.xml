@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WordTrainer2.0</string>
+    <string name="item_setting">Settings</string>
+    <string name="about_us">About us</string>
+    <string name="my_dictionaries">My dictionaries</string>
+    <string name="statistic">Statistic</string>
+    <string name="calendar">Calendar</string>
+</resources>
