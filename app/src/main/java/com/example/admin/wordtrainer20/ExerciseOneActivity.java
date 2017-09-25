@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 public class ExerciseOneActivity extends GeneralMenu {
 
-
     private Button buttonYes;
     private Button buttonNo;
 
@@ -24,6 +23,7 @@ public class ExerciseOneActivity extends GeneralMenu {
                 //
                 //DO SOME STUFF ON BUTTON CLICK "I KNOW"
                 //
+                Toast.makeText(getApplicationContext(), "You clicked button YES", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -34,6 +34,7 @@ public class ExerciseOneActivity extends GeneralMenu {
                 //
                 //DO SOME STUFF ON BUTTON CLICK "I DON`T KNOW"
                 //
+                Toast.makeText(getApplicationContext(), "You clicked button NO", Toast.LENGTH_SHORT).show();
             }
         });
     }

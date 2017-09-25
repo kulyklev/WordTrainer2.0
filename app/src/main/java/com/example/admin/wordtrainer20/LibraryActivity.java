@@ -40,7 +40,7 @@ public class LibraryActivity extends GeneralMenu {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //
-                //ADD LIBRARY TO USERS LIST
+                //ADD LIBRARY TO USER`S LIST
                 //
                 Toast.makeText(LibraryActivity.this, "You tapped: " + signatureText[position], Toast.LENGTH_SHORT).show();//DELETE THIS
             }
