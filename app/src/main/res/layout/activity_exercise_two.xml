@@ -7,7 +7,7 @@
     tools:context="com.example.admin.wordtrainer20.ExerciseTwoActivity">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewShow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -24,7 +24,7 @@
         app:layout_constraintVertical_bias="0.23000002" />
 
     <EditText
-        android:id="@+id/answer"
+        android:id="@+id/textAnswer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -35,10 +35,12 @@
         android:hint="Enter your answer"
         android:inputType="textCapCharacters"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewShow"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:layout_constraintVertical_bias="0.457" />
+        app:layout_constraintVertical_bias="0.457"
+        />
+
 
 </android.support.constraint.ConstraintLayout>
