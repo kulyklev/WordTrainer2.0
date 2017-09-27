@@ -1,14 +1,16 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.activities;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.admin.wordtrainer20.Exercise;
+import com.example.admin.wordtrainer20.GeneralMenu;
+import com.example.admin.wordtrainer20.MarkExercise;
+import com.example.admin.wordtrainer20.R;
+import com.example.admin.wordtrainer20.Word;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,7 @@ public class ExerciseTwoActivity extends GeneralMenu {
                 if((event.getAction() == KeyEvent.ACTION_DOWN)&& (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // сохраняем текст, введенный до нажатия Enter в переменную
                     String userTranslate = answer.getText().toString();
-                    if (nowStudy.checkWorld(userTranslate, MarkExercise.WRITING))
+                    if (nowStudy.checkWord(userTranslate, MarkExercise.WRITING))
                     {
                         textShow.setText("Yes");
                         // Update nowStudy in table Trainings in dataBase (name training in enum)

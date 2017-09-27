@@ -1,14 +1,14 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
+
+import com.example.admin.wordtrainer20.GeneralMenu;
+import com.example.admin.wordtrainer20.GridViewAdapter;
+import com.example.admin.wordtrainer20.R;
 
 public class LibraryActivity extends GeneralMenu {
 

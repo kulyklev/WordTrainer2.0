@@ -7,6 +7,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.admin.wordtrainer20.activities.CalendarActivity;
+import com.example.admin.wordtrainer20.activities.MainActivity;
+
 /**
  * Created by admin on 22.09.2017.
  */

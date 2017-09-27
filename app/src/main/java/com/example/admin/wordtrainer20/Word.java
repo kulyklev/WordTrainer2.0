@@ -1,5 +1,7 @@
 package com.example.admin.wordtrainer20;
 
+
+
 public class Word {
     private String englishWord;
     private String russianWord;
@@ -40,7 +42,7 @@ public class Word {
         this.check = check;
     }
 
-    public boolean checkWorld(String UserTranslate, MarkExercise NameExercise){
+    public boolean checkWord(String UserTranslate, MarkExercise NameExercise){
         UserTranslate = UserTranslate.toLowerCase();
         this.englishWord = this.englishWord.toLowerCase();
         this.russianWord = this.russianWord.toLowerCase();
@@ -69,7 +71,8 @@ public class Word {
         ((Word) o).englishWord.toLowerCase();
         ((Word) o).russianWord.toLowerCase();
 
-        if (!englishWord.equals(word.englishWord)) return false;
+        if (!englishWord.equals(word.englishWord))
+            return false;
         return russianWord.equals(word.russianWord);
     }
 

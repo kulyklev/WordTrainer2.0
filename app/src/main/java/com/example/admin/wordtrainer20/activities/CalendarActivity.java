@@ -1,4 +1,4 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.activities;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.admin.wordtrainer20.GeneralMenu;
+import com.example.admin.wordtrainer20.R;
 
 import java.util.ArrayList;
 

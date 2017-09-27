@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.admin.wordtrainer20.ExerciseTwoActivity">
+    tools:context="com.example.admin.wordtrainer20.activities.ExerciseTwoActivity">
 
     <TextView
         android:id="@+id/textViewShow"
