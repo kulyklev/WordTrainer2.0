@@ -9,7 +9,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="start"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@drawable/ic_book_black_24dp"/>
 
     <TextView
         android:id="@+id/LibraryNameTextView"

@@ -1,6 +1,8 @@
 package com.example.admin.wordtrainer20;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -38,6 +40,7 @@ public class MainActivity extends GeneralMenu {
                 this, R.layout.list_item,
                 R.id.LibraryNameTextView, data
         ));
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> parent, View v,
             int position, long id) {
@@ -47,6 +50,41 @@ public class MainActivity extends GeneralMenu {
                 //Pass some data
                 Intent openExerciseOneActivity = new Intent(MainActivity.this, SelectExerciseActivity.class);
                 startActivity(openExerciseOneActivity);
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Delete")
+                        .setMessage("Do you want to delete " + data[position])
+                        .setCancelable(true);
+
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        //
+                        //Do some stuff, when YES is clicked
+                        //
+                        dialog.cancel();
+                        Toast.makeText(getApplicationContext(), "You clicked YES", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        //
+                        //Do some stuff, when NO is clicked
+                        //
+                        dialog.cancel();
+                        Toast.makeText(getApplicationContext(), "You clicked NO", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                return true;
             }
         });
     }
