@@ -19,7 +19,7 @@
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:gravity="end|center_vertical"
         android:paddingStart="?android:attr/listPreferredItemPaddingLeft"
-        android:textAlignment="textStart"
+
         android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
 </LinearLayout>
