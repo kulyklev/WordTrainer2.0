@@ -82,8 +82,7 @@ public class LibraryActivity extends GeneralMenu {
             throw mSQLException;
         }
 
-        List<String> listTopicName = new ArrayList<>();
-        listTopicName = getTopic();
+        List<String> listTopicName = getTopic();
 
         signatureText = new String[listTopicName.size()];
         signatureText = listTopicName.toArray(signatureText);
@@ -107,18 +106,16 @@ public class LibraryActivity extends GeneralMenu {
         });
     }
 
-
-
     // Move to Helper
     public List<String> getTopic(){
         List<String> listTopic = new ArrayList<>();
         Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary", null);
         cursor.moveToFirst();
 
-        while (!cursor.isAfterLast()) {
-            listTopic.add(cursor.getString(1));
-            cursor.moveToNext();
+        do{
+            listTopic.add(cursor.getString(cursor.getColumnIndex("ShortName")));
         }
+        while (cursor.moveToNext());
         cursor.close();
         return listTopic;
     }
