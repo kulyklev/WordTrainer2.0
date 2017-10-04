@@ -53,9 +53,10 @@ public class LibraryActivity extends GeneralMenu {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //
-
-                //ADD LIBRARY TO USERS LIST
+                //update position in database
+                setVocabulary(position);
                 //
+                onBackPressed();
                 Toast.makeText(LibraryActivity.this, "You tapped: " + signatureText[position], Toast.LENGTH_SHORT).show();//DELETE THIS
             }
         });
@@ -73,6 +74,13 @@ public class LibraryActivity extends GeneralMenu {
         while (cursor.moveToNext());
         cursor.close();
         return listTopic;
+    }
+
+    public void setVocabulary(int id){
+        Cursor cursor = mDb.rawQuery("UPDATE vocabulary" +
+                " SET isSelected = 1 WHERE _id='" + id + "'",null);
+        cursor.moveToFirst();
+        cursor.close();
     }
 
     public List<byte[]> getIcons() {

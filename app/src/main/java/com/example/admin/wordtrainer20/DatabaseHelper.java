@@ -12,7 +12,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static String DB_NAME = "diction.db";
     private static String DB_PATH = "";
     private static final int DB_VERSION = 2;
-
     private SQLiteDatabase mDataBase;
     private final Context mContext;
     private boolean mNeedUpdate = false;
@@ -27,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         copyDataBase();
 
-        this.getReadableDatabase();
+        this.getWritableDatabase();
     }
 
     public void updateDataBase() throws IOException {
@@ -49,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void copyDataBase() {
         if (!checkDataBase()) {
-            this.getReadableDatabase();
+            this.getWritableDatabase();
             this.close();
             try {
                 copyDBFile();
