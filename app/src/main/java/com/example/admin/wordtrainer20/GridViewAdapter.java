@@ -13,9 +13,9 @@ import android.widget.TextView;
  */
 
 public class GridViewAdapter extends BaseAdapter {
+    private Context context;
     private int icons/*[]*/;
     private String signatureText[];
-    private Context context;
     private LayoutInflater inflater;
 
     public GridViewAdapter(Context context, int icons/*[]*/, String signatureText[]) {
@@ -41,35 +41,20 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        /*View gridView = convertView;
+         final String sigText = signatureText[position];
 
         if (convertView == null) {
-            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            gridView = inflater.inflate(R.layout.grid_view_item_2, null);
+            final LayoutInflater inflater = LayoutInflater.from(context);
+            convertView = inflater.inflate(R.layout.grid_view_item, null);
         }
 
-        ImageView icon = (ImageView) gridView.findViewById(R.id.icons);
-        TextView text = (TextView) gridView.findViewById(R.id.signature);
-*/
-        //icon.setImageResource(icons/*[position]*/);
-        //text.setText(signatureText[position]);
+        final ImageView imageView = (ImageView) convertView.findViewById(R.id.icons);
+        final TextView textView = (TextView) convertView.findViewById(R.id.signature);
+
+        imageView.setImageResource(R.drawable.book);
+        textView.setText(signatureText[position]);
 
 
-        View gridView;
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        if (convertView == null) {
-            gridView = new View(context);
-            gridView = inflater.inflate(R.layout.grid_view_item_2, null);
-            ImageView icon = (ImageView) gridView.findViewById(R.id.icons);
-            TextView text = (TextView) gridView.findViewById(R.id.signature);
-
-            icon.setImageResource(icons/*[position]*/);
-            text.setText(signatureText[position]);
-        } else {
-            gridView = (View) convertView;
-        }
-
-        return gridView;
+        return convertView;
     }
 }

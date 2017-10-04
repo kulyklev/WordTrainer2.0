@@ -15,6 +15,7 @@
         android:id="@+id/LibraryNameTextView"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/listPreferredItemHeightSmall"
+        android:layout_marginRight="8dp"
         android:layout_gravity="end"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:gravity="end|center_vertical"
