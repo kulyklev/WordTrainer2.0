@@ -13,12 +13,12 @@ import android.widget.TextView;
  */
 
 public class GridViewAdapter extends BaseAdapter {
-    private int icons[];
+    private int icons/*[]*/;
     private String signatureText[];
     private Context context;
     private LayoutInflater inflater;
 
-    public GridViewAdapter(Context context, int icons[], String signatureText[]) {
+    public GridViewAdapter(Context context, int icons/*[]*/, String signatureText[]) {
         this.context = context;
         this.icons = icons;
         this.signatureText = signatureText;
@@ -41,18 +41,34 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View gridView = convertView;
+        /*View gridView = convertView;
 
         if (convertView == null) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            gridView = inflater.inflate(R.layout.grid_view_item, null);
+            gridView = inflater.inflate(R.layout.grid_view_item_2, null);
         }
 
         ImageView icon = (ImageView) gridView.findViewById(R.id.icons);
         TextView text = (TextView) gridView.findViewById(R.id.signature);
+*/
+        //icon.setImageResource(icons/*[position]*/);
+        //text.setText(signatureText[position]);
 
-        icon.setImageResource(icons[position]);
-        text.setText(signatureText[position]);
+
+        View gridView;
+        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        if (convertView == null) {
+            gridView = new View(context);
+            gridView = inflater.inflate(R.layout.grid_view_item_2, null);
+            ImageView icon = (ImageView) gridView.findViewById(R.id.icons);
+            TextView text = (TextView) gridView.findViewById(R.id.signature);
+
+            icon.setImageResource(icons/*[position]*/);
+            text.setText(signatureText[position]);
+        } else {
+            gridView = (View) convertView;
+        }
 
         return gridView;
     }
