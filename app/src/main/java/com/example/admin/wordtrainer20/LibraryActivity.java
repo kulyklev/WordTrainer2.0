@@ -14,6 +14,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,45 +22,8 @@ public class LibraryActivity extends GeneralMenu {
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private GridView gridView;
-    private String[] signatureText;// = {"alarm", "android", "mobile", "profile_icon", "web", "wordpress", "7", "8"};
-    private int icons[] = {
-
-            R.drawable.sample_0,
-            R.drawable.sample_1,
-            R.drawable.sample_2,
-            R.drawable.sample_3,
-            R.drawable.sample_4,
-            R.drawable.sample_5,
-            R.drawable.sample_6,
-            R.drawable.sample_7,
-
-            R.drawable.sample_0,
-            R.drawable.sample_1,
-            R.drawable.sample_2,
-            R.drawable.sample_3,
-            R.drawable.sample_4,
-            R.drawable.sample_5,
-            R.drawable.sample_6,
-            R.drawable.sample_7,
-
-            R.drawable.sample_0,
-            R.drawable.sample_1,
-            R.drawable.sample_2,
-            R.drawable.sample_3,
-            R.drawable.sample_4,
-            R.drawable.sample_5,
-            R.drawable.sample_6,
-            R.drawable.sample_7,
-
-            R.drawable.sample_0,
-            R.drawable.sample_1,
-            R.drawable.sample_2,
-            R.drawable.sample_3,
-            R.drawable.sample_4,
-            R.drawable.sample_5,
-            R.drawable.sample_6,
-            R.drawable.sample_7,
-    };
+    private String[] signatureText;
+    private List<byte[]> icons = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +51,9 @@ public class LibraryActivity extends GeneralMenu {
         signatureText = new String[listTopicName.size()];
         signatureText = listTopicName.toArray(signatureText);
 
+        List<byte[]> listIcons = getIcons();
+        for (int i = 0; i < listIcons.size(); i++)
+            icons.add(listIcons.get(i));
 
         GridViewAdapter adapter = new GridViewAdapter(LibraryActivity.this, icons, signatureText);
 
@@ -96,8 +63,6 @@ public class LibraryActivity extends GeneralMenu {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //
-
-
 
                 //ADD LIBRARY TO USERS LIST
                 //
@@ -120,4 +85,19 @@ public class LibraryActivity extends GeneralMenu {
         return listTopic;
     }
 
+    public List<byte[]> getIcons() {
+        List<byte[]> listIcons = new ArrayList<>();
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary", null);
+        cursor.moveToFirst();
+
+        do{
+            byte[] arr = cursor.getBlob(cursor.getColumnIndex("image"));
+            listIcons.add(arr);
+        }
+        while (cursor.moveToNext());
+        cursor.close();
+
+        return listIcons;
+    }
 }
