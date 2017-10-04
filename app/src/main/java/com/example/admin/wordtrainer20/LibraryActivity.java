@@ -1,5 +1,6 @@
 package com.example.admin.wordtrainer20;
 
+import android.content.Intent;
 import android.database.*;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -54,9 +55,11 @@ public class LibraryActivity extends GeneralMenu {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //
                 //update position in database
-                setVocabulary(position);
+                setVocabulary(position+1);
                 //
-                onBackPressed();
+                Intent openMainActivity = new Intent(LibraryActivity.this, MainActivity.class);
+                startActivity(openMainActivity);
+
                 Toast.makeText(LibraryActivity.this, "You tapped: " + signatureText[position], Toast.LENGTH_SHORT).show();//DELETE THIS
             }
         });
@@ -76,7 +79,7 @@ public class LibraryActivity extends GeneralMenu {
         return listTopic;
     }
 
-    public void setVocabulary(int id){
+    public void setVocabulary(long id){
         Cursor cursor = mDb.rawQuery("UPDATE vocabulary" +
                 " SET isSelected = 1 WHERE _id='" + id + "'",null);
         cursor.moveToFirst();
