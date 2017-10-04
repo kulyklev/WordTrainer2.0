@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SelectExerciseActivity extends GeneralMenu {
     private ImageButton exerciseOne;
     private ImageButton exerciseTwo;
@@ -21,6 +25,18 @@ public class SelectExerciseActivity extends GeneralMenu {
         exerciseTwo = (ImageButton) findViewById(R.id.ExerciseTwoImageButton);
         exerciseThree = (ImageButton) findViewById(R.id.ExerciseThreeImageButton);
         exerciseFour = (ImageButton) findViewById(R.id.ExerciseFourImageButton);
+
+       /* List<Word> listWord = new ArrayList<>();
+        DatabaseHelper mDBHelper = new DatabaseHelper(this);
+        try {
+            listWord = mDBHelper.getRandomWords();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+        // Загрузить слова
+
+
 
         exerciseOne.setOnClickListener(new View.OnClickListener() {
             @Override
