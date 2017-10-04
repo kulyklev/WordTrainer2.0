@@ -5,7 +5,6 @@ public class Word {
     private String russianWord;
     private boolean check = false; // Временное поле , пока нет базы и проверки полей Trainings
 
-
     public Word(){
         englishWord ="";
         russianWord ="";

@@ -1,34 +1,40 @@
 package com.example.admin.wordtrainer20;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 public class MainActivity extends GeneralMenu {
-
+    private DatabaseHelper mDBHelper;
+    private SQLiteDatabase mDb;
     private String[] data;
     private ListView listView;
     public Button openLibraryActivity;
 
     //  Мои словари
     public void init(){
-        data = new String[]{"value1", "value2", "value3", "value4", "value5", "value6", "value7", "value8", "value9", "value10", "value11", "value12", "value13"};
-        List<String> getListUserTopic = new ArrayList<>(); // Словари юзера
+        mDBHelper = new DatabaseHelper(this);
+        try {
+            mDBHelper.updateDataBase();
+        } catch (IOException mIOException) {
+            throw new Error("UnableToUpdateDatabase");
+        }
+        try {
+            mDb = mDBHelper.getWritableDatabase();
+        } catch (SQLException mSQLException) {
+            throw mSQLException;
+        }
 
-
-
+        List<String> userTopics = getTopic();
+        data = new String[userTopics.size()];
+        data = userTopics.toArray(data);
 
         openLibraryActivity = (Button) findViewById(R.id.openLibrariesButton);
         openLibraryActivity.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +68,20 @@ public class MainActivity extends GeneralMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         init();
+    }
+
+    public List<String> getTopic(){
+        List<String> listTopic = new ArrayList<>();
+        Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary WHERE isSelected=1;", null);
+        if(cursor.getCount()>0) {
+            cursor.moveToFirst();
+            do {
+                listTopic.add(cursor.getString(cursor.getColumnIndex("ShortName")));
+            }
+            while (cursor.moveToNext());
+        }
+        cursor.close();
+        return listTopic;
     }
 }

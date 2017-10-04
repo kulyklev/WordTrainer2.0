@@ -1,22 +1,12 @@
 package com.example.admin.wordtrainer20;
 
-import android.database.Cursor;
-import android.database.SQLException;
+import android.database.*;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.*;
+import java.io.*;
+import java.util.*;
 
 public class LibraryActivity extends GeneralMenu {
     private DatabaseHelper mDBHelper;

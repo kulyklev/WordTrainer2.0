@@ -1,7 +1,6 @@
 package com.example.admin.wordtrainer20;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 enum MarkExercise
 {

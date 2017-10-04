@@ -1,6 +1,5 @@
 package com.example.admin.wordtrainer20;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class CalendarActivity extends GeneralMenu {

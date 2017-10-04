@@ -1,22 +1,15 @@
 package com.example.admin.wordtrainer20;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.database.*;
+import android.database.sqlite.*;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "dictionary.db";
+    private static String DB_NAME = "diction.db";
     private static String DB_PATH = "";
     private static final int DB_VERSION = 2;
 
@@ -102,7 +95,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             mNeedUpdate = true;
     }
 
-
     public List<Word> getRandomWords() throws IOException
     {
         List<Word> result = new ArrayList<>();
@@ -110,13 +102,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (result.size()< 10)
         {
             Cursor cursor = mDataBase.rawQuery(query, null);
-            Word word = null;
             int random = (int)(Math.random()*20);
             int i=0;
             if (cursor.moveToFirst()) {
                 do {
                     if (i%random==0) {
-                        word = new Word();
+                        Word word = new Word();
                         word.setEnglishWord(cursor.getString(1));
                         word.setRussianWord(cursor.getString(3));
                         word.setCheck(false);
