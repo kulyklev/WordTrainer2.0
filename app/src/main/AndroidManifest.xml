@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WelcomeActivity"
-                    android:theme="@style/SplashTheme">
+        <activity
+            android:name=".WelcomeActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +23,8 @@
         <activity android:name=".ExerciseOneActivity" />
         <activity android:name=".SelectExerciseActivity" />
         <activity android:name=".ExerciseTwoActivity" />
-        <activity android:name=".CalendarActivity"></activity>
+        <activity android:name=".CalendarActivity" />
+        <activity android:name=".ListOfWordsActivity"></activity>
     </application>
 
 </manifest>
