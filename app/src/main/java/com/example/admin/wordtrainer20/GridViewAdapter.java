@@ -16,7 +16,6 @@ public class GridViewAdapter extends BaseAdapter {
     private Context context;
     private int icons/*[]*/;
     private String signatureText[];
-    private LayoutInflater inflater;
 
     public GridViewAdapter(Context context, int icons/*[]*/, String signatureText[]) {
         this.context = context;
@@ -52,7 +51,7 @@ public class GridViewAdapter extends BaseAdapter {
         final TextView textView = (TextView) convertView.findViewById(R.id.signature);
 
         imageView.setImageResource(R.drawable.book);
-        textView.setText(signatureText[position]);
+        textView.setText(sigText);
 
 
         return convertView;
