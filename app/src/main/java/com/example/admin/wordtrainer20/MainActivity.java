@@ -45,8 +45,8 @@ public class MainActivity extends GeneralMenu {
                 //DO SOME STUFF ON ITEM CLICK
                 //
                 //Pass some data
-                Intent openExerciseOneActivity = new Intent(MainActivity.this, SelectExerciseActivity.class);
-                startActivity(openExerciseOneActivity);
+                Intent openListOfWordsActivity = new Intent(MainActivity.this, ListOfWordsActivity.class);
+                startActivity(openListOfWordsActivity);
             }
         });
 

@@ -1,6 +1,7 @@
 package com.example.admin.wordtrainer20;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,8 @@ public class ListViewAdapter extends BaseAdapter {
                 //Do some stuff, when opening list of Exercises
                 //
                 Toast.makeText(context, "You clicked button to open " + libraryNames[position], Toast.LENGTH_SHORT).show();
+                Intent openListOfWordsActivity = new Intent(context, SelectExerciseActivity.class);
+                context.startActivity(openListOfWordsActivity);
             }
         });
 
