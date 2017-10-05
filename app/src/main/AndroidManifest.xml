@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity android:name=".WelcomeActivity"/>
         <activity android:name=".MainActivity" />
         <activity android:name=".LibraryActivity" />
@@ -20,7 +22,7 @@
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
         <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.MAIN" />android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" >
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
