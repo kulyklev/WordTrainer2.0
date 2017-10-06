@@ -49,7 +49,8 @@ public class ExerciseTwoActivity extends GeneralMenu {
                 //
                 //DO SOME STUFF
                 //
-                if((event.getAction() == KeyEvent.ACTION_DOWN)&& (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // сохраняем текст, введенный до нажатия Enter в переменную
                     String userTranslate = answer.getText().toString();
                     if (nowStudy.checkWorld(userTranslate, MarkExercise.WRITING))

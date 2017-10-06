@@ -1,7 +1,6 @@
 package com.example.admin.wordtrainer20;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 enum MarkExercise
 {
@@ -16,7 +15,6 @@ public class Exercise {
 
     private List<Word> WordList = new ArrayList<>();
 
-
     static private boolean ENG_RUS_CHOISE = true;   // Для Enable всего упражнения
     static private boolean RUS_ENG_CHOISE = true;
     static private boolean WRITING = true;
@@ -27,7 +25,6 @@ public class Exercise {
     }
 
     public Exercise(List<Word> WordList){
-
         this.WordList = WordList;
     }
 
