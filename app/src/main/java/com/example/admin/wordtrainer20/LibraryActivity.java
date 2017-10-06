@@ -62,9 +62,11 @@ public class LibraryActivity extends GeneralMenu {
                 //update position in database
                 setVocabulary(position+1);
                 //
-                /*Intent openMainActivity = new Intent(LibraryActivity.this, MainActivity.class);
-                startActivity(openMainActivity);*/
-                finish();
+
+                //This is not good.
+                Intent openMainActivity = new Intent(LibraryActivity.this, MainActivity.class);
+                startActivity(openMainActivity);
+                //finish();
 
                 Toast.makeText(LibraryActivity.this, "You tapped: " + signatureText[position], Toast.LENGTH_SHORT).show();//DELETE THIS
             }

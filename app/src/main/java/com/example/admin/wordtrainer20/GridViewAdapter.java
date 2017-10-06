@@ -35,7 +35,7 @@ public class GridViewAdapter extends BaseAdapter {
         }
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
         ImageView icon;
         TextView text;
     }

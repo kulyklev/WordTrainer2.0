@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,15 +17,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.admin.wordtrainer20.R.id.parent;
-
 public class MainActivity extends GeneralMenu {
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private String[] data;
     private ListView listView;
     private ListViewAdapter listViewAdapter;
-    public Button openLibraryActivity;
+    public ImageButton openLibraryActivityButt;
 
     //  Мои словари
     public void init(){
@@ -45,8 +43,8 @@ public class MainActivity extends GeneralMenu {
         data = new String[userTopics.size()];
         data = userTopics.toArray(data);
 
-        openLibraryActivity = (Button) findViewById(R.id.openLibrariesButton);
-        openLibraryActivity.setOnClickListener(new View.OnClickListener() {
+        openLibraryActivityButt = (ImageButton) findViewById(R.id.openLibrariesButton);
+        openLibraryActivityButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent openLibrariesActivity = new Intent(MainActivity.this, LibraryActivity.class);

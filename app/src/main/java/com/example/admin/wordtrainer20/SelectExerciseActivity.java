@@ -46,8 +46,8 @@ public class SelectExerciseActivity extends GeneralMenu {
                 //
                 //DO SOME STUFF
                 //
-                Intent openExerciseOneActivity = new Intent(SelectExerciseActivity.this, ExerciseTwoActivity.class);
-                startActivity(openExerciseOneActivity);
+                Intent openExerciseTwoActivity = new Intent(SelectExerciseActivity.this, ExerciseTwoActivity.class);
+                startActivity(openExerciseTwoActivity);
             }
         });
 
@@ -57,6 +57,9 @@ public class SelectExerciseActivity extends GeneralMenu {
                 //
                 //DO SOME STUFF
                 //
+                Intent openExerciseThreeActivity = new Intent(SelectExerciseActivity.this, ExerciseThreeActivity.class);
+                startActivity(openExerciseThreeActivity);
+
             }
         });
 

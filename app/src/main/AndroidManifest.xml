@@ -24,7 +24,8 @@
         <activity android:name=".SelectExerciseActivity" />
         <activity android:name=".ExerciseTwoActivity" />
         <activity android:name=".CalendarActivity" />
-        <activity android:name=".ListOfWordsActivity"></activity>
+        <activity android:name=".ListOfWordsActivity" />
+        <activity android:name=".ExerciseThreeActivity"></activity>
     </application>
 
 </manifest>

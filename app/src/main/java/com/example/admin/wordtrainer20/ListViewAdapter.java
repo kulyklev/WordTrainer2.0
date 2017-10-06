@@ -25,7 +25,7 @@ public class ListViewAdapter extends BaseAdapter {
         this.libraryNames = libraryNames;
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
         ImageView image;
         TextView text;
         Button openExersiceButt;
