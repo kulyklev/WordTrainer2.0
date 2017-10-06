@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,15 +18,21 @@ import java.util.List;
  */
 
 public class GridViewAdapter extends BaseAdapter {
-    private List<byte[]> icons;
+    private List<Bitmap> icons;
     private String signatureText[];
     private Context context;
     private LayoutInflater inflater;
 
+
     public GridViewAdapter(Context context, List<byte[]> icons, String signatureText[]) {
         this.context = context;
-        this.icons = icons;
         this.signatureText = signatureText;
+
+        this.icons = new ArrayList<>();
+        for (byte[] img:
+             icons) {
+            this.icons.add( BitmapFactory.decodeByteArray(img, 0, img.length) );
+        }
     }
 
     static class ViewHolder {
@@ -64,9 +71,8 @@ public class GridViewAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Bitmap bmp= BitmapFactory.decodeByteArray( icons.get(position), 0, icons.get(position).length );
         viewHolder.text.setText(signatureText[position]);
-        viewHolder.icon.setImageBitmap(bmp);
+        viewHolder.icon.setImageBitmap(icons.get(position));
 
         return convertView;
     }

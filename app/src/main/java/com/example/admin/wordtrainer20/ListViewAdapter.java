@@ -25,6 +25,13 @@ public class ListViewAdapter extends BaseAdapter {
         this.libraryNames = libraryNames;
     }
 
+    static class ViewHolder {
+        ImageView image;
+        TextView text;
+        Button openExersiceButt;
+    }
+
+
     @Override
     public int getCount() {
         return libraryNames.length;
@@ -42,19 +49,22 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
 
-        View row = convertView;
-
-        if (row == null) {
+        if (convertView == null) {
             inflater = LayoutInflater.from(context);
-            row = inflater.inflate(R.layout.list_item, null);
+            convertView = inflater.inflate(R.layout.list_item, null);
+
+            viewHolder = new ViewHolder();
+            viewHolder.image = (ImageView) convertView.findViewById(R.id.LibraryImageView);
+            viewHolder.text = (TextView) convertView.findViewById(R.id.LibraryNameTextView);
+            viewHolder.openExersiceButt = (Button) convertView.findViewById(R.id.openExerciseButt);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        final ImageView imageView = (ImageView) row.findViewById(R.id.LibraryImageView);
-        final TextView textView = (TextView) row.findViewById(R.id.LibraryNameTextView);
-        final Button openExerciseButt = (Button) row.findViewById(R.id.openExerciseButt);
-
-        openExerciseButt.setOnClickListener(new View.OnClickListener() {
+        viewHolder.openExersiceButt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //
                 //Do some stuff, when opening list of Exercises
@@ -65,9 +75,9 @@ public class ListViewAdapter extends BaseAdapter {
             }
         });
 
-        imageView.setImageResource(R.drawable.ic_book_black_24dp);
-        textView.setText(libraryNames[position]);
+        viewHolder.image.setImageResource(R.drawable.ic_book_black_24dp);
+        viewHolder.text.setText(libraryNames[position]);
 
-        return row;
+        return convertView;
     }
 }
