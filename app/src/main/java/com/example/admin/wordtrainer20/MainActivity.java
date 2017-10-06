@@ -1,23 +1,23 @@
 package com.example.admin.wordtrainer20;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.admin.wordtrainer20.R.id.parent;
 
 public class MainActivity extends GeneralMenu {
     private DatabaseHelper mDBHelper;
@@ -25,7 +25,7 @@ public class MainActivity extends GeneralMenu {
     private String[] data;
     private ListView listView;
     private ListViewAdapter listViewAdapter;
-    public Button openLibraryActivityButt;
+    public Button openLibraryActivity;
 
     //  Мои словари
     public void init(){

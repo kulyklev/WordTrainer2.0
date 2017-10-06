@@ -1,13 +1,10 @@
 package com.example.admin.wordtrainer20;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -65,8 +62,9 @@ public class LibraryActivity extends GeneralMenu {
                 //update position in database
                 setVocabulary(position+1);
                 //
-                Intent openMainActivity = new Intent(LibraryActivity.this, MainActivity.class);
-                startActivity(openMainActivity);
+                /*Intent openMainActivity = new Intent(LibraryActivity.this, MainActivity.class);
+                startActivity(openMainActivity);*/
+                finish();
 
                 Toast.makeText(LibraryActivity.this, "You tapped: " + signatureText[position], Toast.LENGTH_SHORT).show();//DELETE THIS
             }
