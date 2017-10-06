@@ -69,7 +69,7 @@ public class MainActivity extends GeneralMenu {
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Delete")
                         .setMessage("Do you want to delete " + data[position])
@@ -82,6 +82,13 @@ public class MainActivity extends GeneralMenu {
                         //
                         dialog.cancel();
                         Toast.makeText(getApplicationContext(), "You clicked YES", Toast.LENGTH_SHORT).show();
+
+                        int id = getId(data[position]);
+                        setVocabulary(id);
+
+                        finish();
+                        startActivity(getIntent());
+
                     }
                 });
 
@@ -109,6 +116,21 @@ public class MainActivity extends GeneralMenu {
         setContentView(R.layout.activity_main);
 
         init();
+    }
+
+    public int getId(String name){
+        Cursor cursor = mDb.rawQuery("SELECT _id FROM vocabulary WHERE ShortName='"+ name + "'", null);
+        cursor.moveToFirst();
+        int i = cursor.getInt(cursor.getColumnIndex("_id"));
+        cursor.close();
+        return i;
+    }
+
+    public void setVocabulary(long id){
+        Cursor cursor = mDb.rawQuery("UPDATE vocabulary" +
+                " SET isSelected = 0 WHERE _id='" + id + "'",null);
+        cursor.moveToFirst();
+        cursor.close();
     }
 
     public List<String> getTopic(){
