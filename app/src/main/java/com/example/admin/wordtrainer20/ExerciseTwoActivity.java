@@ -1,9 +1,18 @@
 package com.example.admin.wordtrainer20;
 
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
-import java.util.*;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ExerciseTwoActivity extends GeneralMenu {
     private EditText answer;

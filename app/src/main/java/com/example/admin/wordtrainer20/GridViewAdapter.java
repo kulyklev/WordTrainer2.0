@@ -1,9 +1,16 @@
 package com.example.admin.wordtrainer20;
 
 import android.content.Context;
-import android.graphics.*;
-import android.view.*;
-import android.widget.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,15 +18,26 @@ import java.util.List;
  */
 
 public class GridViewAdapter extends BaseAdapter {
-    private List<byte[]> icons;
+    private List<Bitmap> icons;
     private String signatureText[];
     private Context context;
     private LayoutInflater inflater;
 
+
     public GridViewAdapter(Context context, List<byte[]> icons, String signatureText[]) {
         this.context = context;
-        this.icons = icons;
         this.signatureText = signatureText;
+
+        this.icons = new ArrayList<>();
+        for (byte[] img:
+             icons) {
+            this.icons.add( BitmapFactory.decodeByteArray(img, 0, img.length) );
+        }
+    }
+
+    private static class ViewHolder {
+        ImageView icon;
+        TextView text;
     }
 
     @Override
@@ -39,21 +57,23 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View gridView = convertView;
+        ViewHolder viewHolder;
 
         if (convertView == null) {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            gridView = inflater.inflate(R.layout.grid_view_item, null);
+            convertView = inflater.inflate(R.layout.grid_view_item, null);
+
+            viewHolder = new ViewHolder();
+            viewHolder.icon = (ImageView) convertView.findViewById(R.id.icons);
+            viewHolder.text = (TextView) convertView.findViewById(R.id.signature);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        ImageView icon = (ImageView) gridView.findViewById(R.id.icons);
-        TextView text = (TextView) gridView.findViewById(R.id.signature);
+        viewHolder.text.setText(signatureText[position]);
+        viewHolder.icon.setImageBitmap(icons.get(position));
 
-        Bitmap bmp= BitmapFactory.decodeByteArray(icons.get(position),0,icons.get(position).length);
-        icon.setImageBitmap(bmp);
-
-        text.setText(signatureText[position]);
-
-        return gridView;
+        return convertView;
     }
 }

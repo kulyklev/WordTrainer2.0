@@ -5,19 +5,18 @@
 
     <ImageView
         android:id="@+id/icons"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:scaleType="centerCrop"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="bottom|center"
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
+        android:layout_below="@+id/icons"
         android:id="@+id/signature"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/icons"
-        android:text="Android"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="8dp"/>
+        android:layout_height="24dp"
+        android:text="This is Just Dummy Text"
+        android:textAlignment="center"
+        android:textSize="18dp"
+        />
 </RelativeLayout>
