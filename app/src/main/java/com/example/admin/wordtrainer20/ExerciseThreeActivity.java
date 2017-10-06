@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseThreeActivity extends AppCompatActivity implements View.OnClickListener {
-    //Create list if buttons
+
     private Button variantButt_1;
     private Button variantButt_2;
     private Button variantButt_3;
