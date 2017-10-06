@@ -31,7 +31,6 @@ public class Exercise {
     // Генерация слова для TextView
     public Word getWordForTextView(){
         int RANDOM_INDEX = GetRandomIndexForListWord(0, WordList.size() - 1);
-
         // Если на слово уже дали правильный ответ.
         if (WordList.get(RANDOM_INDEX).isCheck()) {
             // Генерировать до любого непройденного слова.
