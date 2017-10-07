@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by admin on 05.10.2017.
@@ -28,7 +27,7 @@ public class ListViewAdapter extends BaseAdapter {
     private static class ViewHolder {
         ImageView image;
         TextView text;
-        Button openExersiceButt;
+        Button openExerciseButt;
     }
 
     @Override
@@ -57,13 +56,13 @@ public class ListViewAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.image = (ImageView) convertView.findViewById(R.id.LibraryImageView);
             viewHolder.text = (TextView) convertView.findViewById(R.id.LibraryNameTextView);
-            viewHolder.openExersiceButt = (Button) convertView.findViewById(R.id.openExerciseButt);
+            viewHolder.openExerciseButt = (Button) convertView.findViewById(R.id.openExerciseButt);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.openExersiceButt.setOnClickListener(new View.OnClickListener() {
+        viewHolder.openExerciseButt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //
                 //Do some stuff, when opening list of Exercises

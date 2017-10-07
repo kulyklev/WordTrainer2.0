@@ -66,7 +66,7 @@ public class ExerciseThreeActivity extends AppCompatActivity implements View.OnC
         на нужный индекс
         */
 
-        TextView myAwesomeTextView = (TextView)findViewById(R.id.wordTetxView);
+        TextView myAwesomeTextView = (TextView)findViewById(R.id.wordTextView);
         myAwesomeTextView.setText(ListWord.get(0).getEnglishWord());
 
         variantButt_1 = (Button) findViewById(R.id.variantButt_1);

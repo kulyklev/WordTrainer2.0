@@ -64,9 +64,9 @@ public class LibraryActivity extends GeneralMenu {
                 //
 
                 //This is not good.
-                Intent openMainActivity = new Intent(LibraryActivity.this, MainActivity.class);
-                startActivity(openMainActivity);
-                //finish();
+                /*Intent openMainActivity = new Intent(LibraryActivity.this, MainActivity.class);
+                startActivity(openMainActivity);*/
+                finish();
 
                 Toast.makeText(LibraryActivity.this, "You tapped: " + signatureText[position], Toast.LENGTH_SHORT).show();//DELETE THIS
             }
