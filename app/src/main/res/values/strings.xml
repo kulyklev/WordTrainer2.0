@@ -14,5 +14,7 @@
     <string name="exercise_four">Exercise four</string>
     <string name="study_butt">Study</string>
     <string name="dictionary_image">Dictionary image</string>
+    <string name="i_know">I know</string>
+    <string name="i_don_t_know">I don`t know</string>
 
 </resources>
