@@ -1,31 +1,22 @@
 package com.example.admin.wordtrainer20;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
+import android.database.*;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.*;
+import java.io.*;
+import java.util.*;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class ListOfWordsActivity extends GeneralMenu {
-    private String[] words;
+    private Model[] modelItems;
     private ListView wordsLV;
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
-    private int id;
+    private int categoryId;
 
     private void init() {
         mDBHelper = new DatabaseHelper(this);
@@ -40,41 +31,55 @@ public class ListOfWordsActivity extends GeneralMenu {
             throw mSQLException;
         }
 
-        List<String> databaseWords = new ArrayList<>();
+        List<Model> databaseWords = new ArrayList<>();
         try {
-            databaseWords = getWords(id);
+            databaseWords = getWords(categoryId);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        words = new String[databaseWords.size()];
-        words = databaseWords.toArray(words);
+        modelItems = new Model[databaseWords.size()];
+        modelItems = databaseWords.toArray(modelItems);
 
 
-        ArrayAdapter<String> itemsAdapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_checked, words);
-
-        wordsLV = (ListView) findViewById(R.id.ListOfWordsLV);
+        wordsLV = (ListView) findViewById(R.id.listView1);
+        final CustomAdapter adapter = new CustomAdapter(this, modelItems);
         wordsLV.setChoiceMode(wordsLV.CHOICE_MODE_MULTIPLE);
-        wordsLV.setAdapter(itemsAdapter);
+        wordsLV.setAdapter(adapter);
+
         wordsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                CheckedTextView item = (CheckedTextView) view;
-                Toast.makeText(ListOfWordsActivity.this, words[position] + " checked : " + item.isChecked(), Toast.LENGTH_SHORT).show();
+                int study_id = getIdByEnglish(modelItems[position].getCategory());
+                if (!adapter.getCheckBox(position))
+                {
+                    setWordTrue(study_id);
+                }
+                else
+                {
+                    setWordFalse(study_id);
+                }
+                adapter.setCheckBox(position);
+//                Toast.makeText(ListOfWordsActivity.this, modelItems[position].getCategory() /*words[position]*/ + " checked : " /*+ item.isChecked()*/, Toast.LENGTH_SHORT).show();
+                //Intent intent = getIntent();
+                //finish();
+                //startActivity(intent);
             }
         });
     }
 
-
-    public List<String> getWords(int id) throws IOException
+    public List<Model> getWords(int id) throws IOException
     {
-        List<String> list = new ArrayList<>();
+        List<Model> list = new ArrayList<>();
         Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE Category='"+ id + "'", null);
         if(cursor.getCount()>0) {
             cursor.moveToFirst();
             do {
-                list.add(cursor.getString(cursor.getColumnIndex("English")));
+                String s = cursor.getString(cursor.getColumnIndex("English"));
+                Integer i = cursor.getInt(cursor.getColumnIndex("_id"));
+                Boolean b = getIsStudied(i);
+                Model model = new Model(s,b);
+                list.add(model);
             }
             while (cursor.moveToNext());
         }
@@ -82,12 +87,50 @@ public class ListOfWordsActivity extends GeneralMenu {
         return list;
     }
 
+    public int getIdByEnglish(String english){
+        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE English='"+ english + "'", null);
+        cursor.moveToFirst();
+        int i = cursor.getInt(cursor.getColumnIndex("_id"));
+        cursor.close();
+        return i;
+    }
+
+
+
+    public Boolean getIsStudied(int id){
+        Cursor cursor = mDb.rawQuery("SELECT * FROM study WHERE _id='"+ id + "'", null);
+        cursor.moveToFirst();
+        Boolean i = cursor.getInt(cursor.getColumnIndex("isStudied")) == 1;
+        cursor.close();
+        return i;
+    }
+
+    public void setWordTrue(long id){
+//        Toast toast = Toast.makeText(getApplicationContext(),
+//                "true"+String.valueOf(id), Toast.LENGTH_SHORT);
+ //       toast.show();
+        Cursor cursor = mDb.rawQuery("UPDATE study" +
+                " SET isStudied = 1 WHERE _id='" + id + "'",null);
+        cursor.moveToFirst();
+        cursor.close();
+    }
+
+    public void setWordFalse(long id){
+//        Toast toast = Toast.makeText(getApplicationContext(),
+//                "false"+String.valueOf(id), Toast.LENGTH_SHORT);
+//        toast.show();
+        Cursor cursor = mDb.rawQuery("UPDATE study" +
+                " SET isStudied = 0 WHERE _id='" + id + "'",null);
+        cursor.moveToFirst();
+        cursor.close();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_words);
         Intent intent = getIntent();
-        id = intent.getIntExtra("id",0);
+        categoryId = intent.getIntExtra("id",0);
 
         init();
     }
