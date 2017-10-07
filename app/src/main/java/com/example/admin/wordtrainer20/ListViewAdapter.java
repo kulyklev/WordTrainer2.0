@@ -31,7 +31,6 @@ public class ListViewAdapter extends BaseAdapter {
         Button openExersiceButt;
     }
 
-
     @Override
     public int getCount() {
         return libraryNames.length;
@@ -69,7 +68,7 @@ public class ListViewAdapter extends BaseAdapter {
                 //
                 //Do some stuff, when opening list of Exercises
                 //
-                Toast.makeText(context, "You clicked button to open " + libraryNames[position], Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "You clicked button to open " + libraryNames[position], Toast.LENGTH_SHORT).show();
                 Intent openListOfWordsActivity = new Intent(context, SelectExerciseActivity.class);
                 context.startActivity(openListOfWordsActivity);
             }

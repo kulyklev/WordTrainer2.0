@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "dictionar.db";
+    private static String DB_NAME = "dictionaryDatab.db";
     private static String DB_PATH = "";
     private static final int DB_VERSION = 2;
     private SQLiteDatabase mDataBase;
@@ -96,33 +96,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (newVersion > oldVersion)
             mNeedUpdate = true;
     }
-    /*
-    public List<Word> getRandomWords() throws IOException
-    {
-        List<Word> result = new ArrayList<>();
-        String query = "SELECT * FROM words";
-        //while (result.size()< 10)
-        //{
-        Cursor cursor = mDb.rawQuery(query, null);
-        int random = (int)(Math.random()*20);
-        int i=0;
-        if(cursor.getCount()>0) {
-            cursor.moveToFirst();
-            do {
-                if (i%random==0) {
-                    Word word = new Word();
-                    word.setEnglishWord(cursor.getString(1));
-                    word.setRussianWord(cursor.getString(3));
-                    word.setCheck(false);
-                    result.add(word);
-                }
-                i++;
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        //}
-        Log.d("getRandomWords()", result.toString());
-        return result;
-    }
-     */
 }

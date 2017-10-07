@@ -95,8 +95,6 @@ public class ListOfWordsActivity extends GeneralMenu {
         return i;
     }
 
-
-
     public Boolean getIsStudied(int id){
         Cursor cursor = mDb.rawQuery("SELECT * FROM study WHERE _id='"+ id + "'", null);
         cursor.moveToFirst();
