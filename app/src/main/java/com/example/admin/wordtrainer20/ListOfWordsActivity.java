@@ -9,8 +9,6 @@ import android.widget.*;
 import java.io.*;
 import java.util.*;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
 public class ListOfWordsActivity extends GeneralMenu {
     private Model[] modelItems;
     private ListView wordsLV;
@@ -88,7 +86,9 @@ public class ListOfWordsActivity extends GeneralMenu {
     }
 
     public int getIdByEnglish(String english){
-        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE English='"+ english + "'", null);
+        String copyEnglish = english.replaceAll("'", "''");
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE English='"+ copyEnglish + "'", null);
         cursor.moveToFirst();
         int i = cursor.getInt(cursor.getColumnIndex("_id"));
         cursor.close();
