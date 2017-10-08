@@ -25,7 +25,7 @@ public class SelectExerciseActivity extends GeneralMenu {
     private ImageButton exerciseChoiceRus_to_Eng;
     private ImageButton exerciseChoiceEng_to_Rus;
     private final int NUMBER_FOR_TRAINING = 10;
-
+    private List<Word> listWord = new ArrayList<Word>();
     private Exercise learningObject;
 
     private void init(){
@@ -36,32 +36,39 @@ public class SelectExerciseActivity extends GeneralMenu {
 
         connectionDatabase();
 
-        exerciseTrue_or_False.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                Intent openExerciseTwoActivity = new Intent(SelectExerciseActivity.this, ExerciseOneActivity.class);
-                startActivity(openExerciseTwoActivity);
-                //
+
+        if (listWord.isEmpty()){
+            try {
+                listWord = getWords();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+        }
+
 
         exerciseWriting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
-                List<Word> listWriting = new ArrayList<Word>();
-                try {
-                    listWriting = getWords("Writing");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //
+
                 Intent openExerciseTwoActivity = new Intent(SelectExerciseActivity.this, ExerciseWritingActivity.class);
-                openExerciseTwoActivity.putExtra("ListWord", (Serializable) listWriting);
+                openExerciseTwoActivity.putExtra("ListWord", (Serializable) listWord);
                 startActivity(openExerciseTwoActivity);
             }
         });
+
+        /*
+
+
+        exerciseTrue_or_False.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                Intent exerciseTrue_or_False = new Intent(SelectExerciseActivity.this, ExerciseOneActivity.class);
+                startActivity(exerciseTrue_or_False);
+                //
+            }
+        });
+
 
         exerciseChoiceRus_to_Eng.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +105,7 @@ public class SelectExerciseActivity extends GeneralMenu {
                 startActivity(openExerciseOneActivity);
             }
         });
+        */
 
     }
 
@@ -118,7 +126,7 @@ public class SelectExerciseActivity extends GeneralMenu {
 
 
     // Выбор 10 случайных слов
-    public List<Word> getWords(String field) throws IOException
+    public List<Word> getWords() throws IOException
     {
         List<Word> result = new ArrayList<>();
         String query = "SELECT * FROM words";
@@ -131,13 +139,13 @@ public class SelectExerciseActivity extends GeneralMenu {
                 Word word = new Word();
                 word.setEnglishWord(cursor.getString(cursor.getColumnIndex("English")));
                 word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));
-                int id = cursor.getInt(cursor.getColumnIndex("_id"));
+                word.setId(cursor.getInt(cursor.getColumnIndex("_id")));
                 int category = cursor.getInt(cursor.getColumnIndex("Category"));
-
+                Boolean t = getFieldById("Writing", word.getId());
+                word.setProgress(t);
                 Boolean isSelected = getIsSelected(category);
-                Boolean isStudied = getIsStudied(id);
-                Boolean isTrainingOver = getFieldById(field,id);
-                if (isSelected && !isStudied && !isTrainingOver)
+                Boolean isStudied = getIsStudied(word.getId());
+                if (isSelected && !isStudied)
                 {
                     result.add(word);
                 }
@@ -148,7 +156,7 @@ public class SelectExerciseActivity extends GeneralMenu {
         return result;
     }
 
-    public Boolean getIsSelected(int category){
+       public Boolean getIsSelected(int category){
         Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary WHERE _id='"+ category + "'", null);
         cursor.moveToFirst();
         Boolean i = cursor.getInt(cursor.getColumnIndex("isSelected")) == 1;

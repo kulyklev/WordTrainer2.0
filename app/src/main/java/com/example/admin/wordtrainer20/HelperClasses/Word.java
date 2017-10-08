@@ -7,10 +7,12 @@ public class Word implements Serializable {
     private int id;
     private String englishWord;
     private String russianWord;
+    private boolean progress;
 
     public Word(){
         englishWord ="";
         russianWord ="";
+        progress = false;
     }
 
     public Word(int id, String englishWord, String translateWord){
@@ -43,21 +45,28 @@ public class Word implements Serializable {
         this.russianWord = russianWord;
     }
 
+    public boolean isProgress() {
+        return progress;
+    }
 
-    public boolean checkWorld(String UserTranslate, MarkExercise NameExercise){
+    public void setProgress(boolean progress) {
+        this.progress = progress;
+    }
+
+    public boolean checkWord(String UserTranslate, MarkExercise NameExercise){
         UserTranslate = UserTranslate.toLowerCase();
         this.englishWord = this.englishWord.toLowerCase();
         this.russianWord = this.russianWord.toLowerCase();
         if ((NameExercise == MarkExercise.RUS_TO_ENG) || (NameExercise == MarkExercise.WRITING))
         {
-            if (this.englishWord.equals(UserTranslate))
+            if (this.russianWord.equals(UserTranslate))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (this.russianWord.equals(UserTranslate))
+            if (this.englishWord.equals(UserTranslate))
                 return true;
             else
                 return false;
@@ -83,4 +92,6 @@ public class Word implements Serializable {
         result = 31 * result + russianWord.hashCode();
         return result;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.admin.wordtrainer20;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,7 @@ import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
 import com.example.admin.wordtrainer20.HelperClasses.Word;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +29,10 @@ public class ExerciseWritingActivity extends GeneralMenu {
     private EditText answer;
     private TextView textShow;
     private Button nextBtn;
+    private Exercise learningObject;
     List<Word> ListWord = new ArrayList<>();
     Word nowStudy = new Word();
+    List<Word> copy = new ArrayList<>();
 
     private void init(){
         
@@ -38,9 +42,8 @@ public class ExerciseWritingActivity extends GeneralMenu {
         textShow = (TextView) findViewById(R.id.textViewShow);
         nextBtn = (Button) findViewById(R.id.button_next);
 
-        Exercise obj = new Exercise(ListWord);
 
-        //nowStudy = obj.getWordForTextView();
+        nowStudy = learningObject.getWordForTextView(MarkExercise.WRITING, mDb);
         textShow.setText(nowStudy.getEnglishWord());
 
         answer.setOnKeyListener(new View.OnKeyListener() {
@@ -53,14 +56,16 @@ public class ExerciseWritingActivity extends GeneralMenu {
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // сохраняем текст, введенный до нажатия Enter в переменную
                     String userTranslate = answer.getText().toString();
-                    if (nowStudy.checkWorld(userTranslate, MarkExercise.WRITING))
+                    if (nowStudy.checkWord(userTranslate, MarkExercise.WRITING))
                     {
                         textShow.setText("Yes");
                         // Show button Next;
                         // Button click on Next -> repeat step1 and hide itself and show button Check
                         // Also clear textBox
-                        int id = getIdByEnglish(nowStudy.getEnglishWord());
-                        setWord(id,1);
+                        //int id = getIdByEnglish(nowStudy.getEnglishWord());
+                        learningObject.setWord(nowStudy.getId(),1, mDb, MarkExercise.WRITING);
+                        learningObject.removeWordInList(nowStudy);
+                        copy.add(nowStudy);
                     }
                     else
                     {
@@ -69,8 +74,8 @@ public class ExerciseWritingActivity extends GeneralMenu {
                         // Show button Next;
                         // Click on Next repeat step1 and hide itself and show button Check
                         // Also clear textBox
-                        int id = getIdByEnglish(nowStudy.getEnglishWord());
-                        setWord(id,0);
+
+                        learningObject.setWord(nowStudy.getId(),0, mDb, MarkExercise.WRITING);
                     }
                     return true;
                 }
@@ -83,6 +88,17 @@ public class ExerciseWritingActivity extends GeneralMenu {
             @Override
             public void onClick(View v) {
                 //
+                if (copy.size()<10)
+                {
+                    textShow.setText("");
+                    nowStudy = learningObject.getWordForTextView(MarkExercise.WRITING, mDb);
+                    textShow.setText(nowStudy.getEnglishWord());
+                    answer.setText("");
+                }
+                else
+                {
+                   finish();
+                }
                 //Todo implement this button
                 //
             }
@@ -128,7 +144,7 @@ public class ExerciseWritingActivity extends GeneralMenu {
         if (extras != null)
         {
             ListWord = (List<Word>) extras.getSerializable("ListWord");
-            System.out.println(ListWord.size());
+            learningObject = new Exercise(ListWord);
             // do something with the customer
         }
         init();

@@ -3,7 +3,6 @@ package com.example.admin.wordtrainer20.HelperClasses;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.io.IOException;
 import java.util.*;
 
 
@@ -24,21 +23,82 @@ public class Exercise {
         this.WordList = WordList;
     }
 
-    public Word getWordForTextView(){
+    public List<Word> getWordList() {
+        return WordList;
+    }
+
+    public void setWordList(List<Word> wordList) {
+        WordList = wordList;
+    }
+
+    // Генерация слова из списка для тренировки
+
+    public Word getWordForTextView(MarkExercise markTypeTraining, SQLiteDatabase mDb){
         int RANDOM_INDEX = GetRandomIndexForListWord(0, WordList.size() - 1);
 
-        // Если на слово уже дали правильный ответ.
-        if (WordList.get(RANDOM_INDEX).isStudiedTrainings)) {
+        Word temp = WordList.get(RANDOM_INDEX);
+        String nameFieldCheckTraining = getStringField(markTypeTraining);
 
+        if (isStudiedTrainingsWord(temp.getId(), nameFieldCheckTraining, mDb)) {
             // Генерировать до любого непройденного слова.
-
-            while (WordList.get(RANDOM_INDEX).isCheck()) {
+            while (isStudiedTrainingsWord(temp.getId(), nameFieldCheckTraining, mDb)) {
                 RANDOM_INDEX = GetRandomIndexForListWord(0, WordList.size() - 1);
+                temp = WordList.get(RANDOM_INDEX);
             }
         }
 
-        Word word = WordList.get(RANDOM_INDEX);
-        return word;
+        return temp;
+    }
+
+    public Boolean isStudiedTrainingsWord(int id, String field, SQLiteDatabase mDb){ //field - название тренировки
+        Cursor cursor = mDb.rawQuery("SELECT * FROM trainings WHERE _id='"+ id + "'", null);
+        cursor.moveToFirst();
+        Boolean t = cursor.getInt(cursor.getColumnIndex(field)) == 1;
+        cursor.close();
+        return t;
+    }
+
+    /* НУЖНА ЛИ?
+    public Boolean isTrainingOff(MarkExercise mark, SQLiteDatabase mDb){
+
+        boolean off = false; // Они не изучены
+        String field = getStringField(mark);
+        for (Word w: this.WordList) {
+            if (!isStudiedTrainingsWord(w.getId(), field, mDb)) // Если слово не выучено, вернуть false
+            {
+                off = true; // Если хотя бы одно не изучено, тогда продолжить упражнение.
+                break;
+            }
+        }
+        return off;
+    }
+    */
+
+    private String getStringField(MarkExercise mark) {
+        String s = "";
+        if (mark == MarkExercise.ENG_TO_RUS)
+            s = "EngtoRus"; // Тоже выбор, но кривой
+        else if (mark == MarkExercise.ENG_TO_RUS)
+            s =  "Choice";
+        else if (mark == MarkExercise.TRUE_OR_FALSE)
+            s = "TrueFalse";
+        else if (mark == MarkExercise.WRITING)
+            s = "Writing";
+
+        return s;
+    }
+
+    public void setWord(long id, long valueTrueFalse, SQLiteDatabase mDb, MarkExercise mark){
+        String field = getStringField(mark);
+        Cursor cursor = mDb.rawQuery("UPDATE trainings" +
+                " SET " + field + "='" + valueTrueFalse +"'"+" WHERE _id='" + id + "'",null);
+        cursor.moveToFirst();
+        cursor.close();
+
+    }
+
+    public void removeWordInList(Word word){
+        this.WordList.remove(word);
     }
 
 
@@ -53,13 +113,7 @@ public class Exercise {
         return i;
     }
 
-    public Boolean isStudiedTrainings(String field, int id, SQLiteDatabase mDb){ //fiekd - название тренировки
-        Cursor cursor = mDb.rawQuery("SELECT * FROM trainings WHERE _id='"+ id + "'", null);
-        cursor.moveToFirst();
-        Boolean t = cursor.getInt(cursor.getColumnIndex(field))==1;
-        cursor.close();
-        return t;
-    }
+
 
 /*
     public Boolean getIsSelected(int category){
@@ -83,12 +137,7 @@ public class Exercise {
 
 
 
-    public void setWord(long id, long val, SQLiteDatabase mDb){
-        Cursor cursor = mDb.rawQuery("UPDATE trainings" +
-                " SET Choice='" + val +"'"+" WHERE _id='" + id + "'",null);
-        cursor.moveToFirst();
-        cursor.close();
-    }
+
 
 
     public int GetRandomIndexForListWord(int min, int max){
