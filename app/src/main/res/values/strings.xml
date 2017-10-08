@@ -1,9 +1,21 @@
 <resources>
-    <string name="app_name">WordTrainer2.0</string>
+    <string name="app_name">Word Trainer</string>
     <string name="item_setting">Settings</string>
     <string name="about_us">About us</string>
     <string name="my_dictionaries">My dictionaries</string>
     <string name="statistic">Statistic</string>
     <string name="calendar">Calendar</string>
+    <string name="test_text">Some test text</string>
+    <string name="hint_answer">Enter your answer</string>
+    <string name="add_dictionary">Add dictionary</string>
+    <string name="exercise_two">Exercise two</string>
+    <string name="exercise_one">Exercise one</string>
+    <string name="exercise_three">Exercise three</string>
+    <string name="exercise_four">Exercise four</string>
+    <string name="study_butt">Study</string>
+    <string name="dictionary_image">Dictionary image</string>
+    <string name="i_know">I know</string>
+    <string name="i_don_t_know">I don`t know</string>
+    <string name="next_butt">Next</string>
 
 </resources>

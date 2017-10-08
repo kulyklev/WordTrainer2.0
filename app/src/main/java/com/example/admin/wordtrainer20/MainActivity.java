@@ -67,6 +67,7 @@ public class MainActivity extends GeneralMenu {
                 //
                 //Pass some data
                 Intent openListOfWordsActivity = new Intent(MainActivity.this, ListOfWordsActivity.class);
+                openListOfWordsActivity.putExtra("id", getId(data[position]));
                 startActivity(openListOfWordsActivity);
             }
         });

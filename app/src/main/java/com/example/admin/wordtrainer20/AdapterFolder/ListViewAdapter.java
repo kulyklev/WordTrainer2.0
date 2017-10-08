@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.admin.wordtrainer20.R;
 import com.example.admin.wordtrainer20.SelectExerciseActivity;
@@ -31,9 +30,8 @@ public class ListViewAdapter extends BaseAdapter {
     private static class ViewHolder {
         ImageView image;
         TextView text;
-        Button openExersiceButt;
+        Button openExerciseButt;
     }
-
 
     @Override
     public int getCount() {
@@ -61,18 +59,18 @@ public class ListViewAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.image = (ImageView) convertView.findViewById(R.id.LibraryImageView);
             viewHolder.text = (TextView) convertView.findViewById(R.id.LibraryNameTextView);
-            viewHolder.openExersiceButt = (Button) convertView.findViewById(R.id.openExerciseButt);
+            viewHolder.openExerciseButt = (Button) convertView.findViewById(R.id.openExerciseButt);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.openExersiceButt.setOnClickListener(new View.OnClickListener() {
+        viewHolder.openExerciseButt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //
                 //Do some stuff, when opening list of Exercises
                 //
-                Toast.makeText(context, "You clicked button to open " + libraryNames[position], Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "You clicked button to open " + libraryNames[position], Toast.LENGTH_SHORT).show();
                 Intent openListOfWordsActivity = new Intent(context, SelectExerciseActivity.class);
                 context.startActivity(openListOfWordsActivity);
             }

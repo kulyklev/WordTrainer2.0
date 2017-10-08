@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static String DB_NAME = "diction.db";
+    private static String DB_NAME = "dictionaryDatab.db";
     private static String DB_PATH = "";
     private static final int DB_VERSION = 2;
     private SQLiteDatabase mDataBase;
@@ -100,6 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (newVersion > oldVersion)
             mNeedUpdate = true;
     }
+
 
     public List<Word> getRandomWords() throws IOException
     {

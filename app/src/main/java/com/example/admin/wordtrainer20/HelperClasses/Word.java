@@ -1,7 +1,9 @@
 package com.example.admin.wordtrainer20.HelperClasses;
 
 
-public class Word {
+import java.io.Serializable;
+
+public class Word implements Serializable {
     private String englishWord;
     private String russianWord;
 
