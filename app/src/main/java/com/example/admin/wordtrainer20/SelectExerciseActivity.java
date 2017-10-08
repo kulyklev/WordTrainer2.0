@@ -27,6 +27,8 @@ public class SelectExerciseActivity extends GeneralMenu {
     private final int NUMBER_FOR_TRAINING = 10;
     private List<Word> listWord = new ArrayList<Word>();
     private Exercise learningObject;
+    private int id_category;
+
 
     private void init(){
         exerciseTrue_or_False = (ImageButton) findViewById(R.id.ExerciseOneImageButton);
@@ -129,7 +131,7 @@ public class SelectExerciseActivity extends GeneralMenu {
     public List<Word> getWords() throws IOException
     {
         List<Word> result = new ArrayList<>();
-        String query = "SELECT * FROM words";
+        String query = "SELECT * FROM words WHERE Category ='" + id_category + "'";
         Cursor cursor = mDb.rawQuery(query, null);
 
         if(cursor.getCount()>0) {
@@ -140,10 +142,10 @@ public class SelectExerciseActivity extends GeneralMenu {
                 word.setEnglishWord(cursor.getString(cursor.getColumnIndex("English")));
                 word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));
                 word.setId(cursor.getInt(cursor.getColumnIndex("_id")));
-                int category = cursor.getInt(cursor.getColumnIndex("Category"));
+               // int category = cursor.getInt(cursor.getColumnIndex("Category"));
                 Boolean t = getFieldById("Writing", word.getId());
                 word.setProgress(t);
-                Boolean isSelected = getIsSelected(category);
+                Boolean isSelected = getIsSelected(id_category);
                 Boolean isStudied = getIsStudied(word.getId());
                 if (isSelected && !isStudied)
                 {
@@ -185,6 +187,12 @@ public class SelectExerciseActivity extends GeneralMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_exercise);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+            id_category = (int) extras.getInt("id");;
+            int k = id_category; // do something with the customer
+        }
         init();
     }
 

@@ -49,7 +49,7 @@ public class MyDictionaries extends GeneralMenu {
             }
         });
 
-        listViewAdapter = new ListViewAdapter(MyDictionaries.this, dataUserTopic);
+        listViewAdapter = new ListViewAdapter(MyDictionaries.this, dataUserTopic, mDb);
         listView = (ListView) findViewById(R.id.LibListView);
         listView.setAdapter(listViewAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){

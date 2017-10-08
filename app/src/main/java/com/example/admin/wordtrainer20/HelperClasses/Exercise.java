@@ -58,7 +58,7 @@ public class Exercise {
         return t;
     }
 
-    /* НУЖНА ЛИ?
+    //НУЖНА ЛИ?
     public Boolean isTrainingOff(MarkExercise mark, SQLiteDatabase mDb){
 
         boolean off = false; // Они не изучены
@@ -72,7 +72,7 @@ public class Exercise {
         }
         return off;
     }
-    */
+
 
     private String getStringField(MarkExercise mark) {
         String s = "";
@@ -100,19 +100,6 @@ public class Exercise {
     public void removeWordInList(Word word){
         this.WordList.remove(word);
     }
-
-
-    public int getIdByEnglish(String english, SQLiteDatabase mDb){
-
-        String copyEnglish = english.replaceAll("'", "''");
-
-        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE English='"+ copyEnglish + "'", null);
-        cursor.moveToFirst();
-        int i = cursor.getInt(cursor.getColumnIndex("_id"));
-        cursor.close();
-        return i;
-    }
-
 
 
 /*

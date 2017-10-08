@@ -2,6 +2,8 @@ package com.example.admin.wordtrainer20.AdapterFolder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +12,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.example.admin.wordtrainer20.R;
 import com.example.admin.wordtrainer20.SelectExerciseActivity;
+
 
 /**
  * Created by admin on 05.10.2017.
  */
 
 public class ListViewAdapter extends BaseAdapter {
-    private Context context;
     private LayoutInflater inflater;
     private String[] libraryNames;
+    private SQLiteDatabase mDb;
+    private Context context;
 
-    public ListViewAdapter(Context context, String[] libraryNames) {
+    public ListViewAdapter(Context context, String[] libraryNames, SQLiteDatabase mDb) {
         this.context = context;
         this.libraryNames = libraryNames;
+        this.mDb = mDb;
     }
 
     private static class ViewHolder {
@@ -71,8 +77,12 @@ public class ListViewAdapter extends BaseAdapter {
                 //Do some stuff, when opening list of Exercises
                 //
                 //Toast.makeText(context, "You clicked button to open " + libraryNames[position], Toast.LENGTH_SHORT).show();
-                Intent openListOfWordsActivity = new Intent(context, SelectExerciseActivity.class);
-                context.startActivity(openListOfWordsActivity);
+                int id = getId(libraryNames[position]);
+
+                Intent selectExerciseActivity = new Intent(context, SelectExerciseActivity.class);
+                selectExerciseActivity.putExtra("id", id);
+                context.startActivity(selectExerciseActivity);
+
             }
         });
 
@@ -80,5 +90,13 @@ public class ListViewAdapter extends BaseAdapter {
         viewHolder.text.setText(libraryNames[position]);
 
         return convertView;
+    }
+
+    public int getId(String name){
+        Cursor cursor = mDb.rawQuery("SELECT _id FROM vocabulary WHERE ShortName='"+ name + "'", null);
+        cursor.moveToFirst();
+        int i = cursor.getInt(cursor.getColumnIndex("_id"));
+        cursor.close();
+        return i;
     }
 }

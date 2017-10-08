@@ -42,9 +42,14 @@ public class ExerciseWritingActivity extends GeneralMenu {
         textShow = (TextView) findViewById(R.id.textViewShow);
         nextBtn = (Button) findViewById(R.id.button_next);
 
+        if (learningObject.isTrainingOff(MarkExercise.WRITING, mDb)){
+            nowStudy = learningObject.getWordForTextView(MarkExercise.WRITING, mDb);
+            textShow.setText(nowStudy.getEnglishWord());
+        }
+        else
+            textShow.setText("Конец");
 
-        nowStudy = learningObject.getWordForTextView(MarkExercise.WRITING, mDb);
-        textShow.setText(nowStudy.getEnglishWord());
+
 
         answer.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -97,7 +102,13 @@ public class ExerciseWritingActivity extends GeneralMenu {
                 }
                 else
                 {
-                   finish();
+                    //learningObject.setWordList(copy);
+
+
+                   // Intent openExerciseSelecetTraining = new Intent(ExerciseWritingActivity.this, ExerciseWritingActivity.class);
+                   // openExerciseSelecetTraining.putExtra("ListWord", (Serializable) learningObject.getWordList());
+                  //  startActivity(openExerciseSelecetTraining);
+
                 }
                 //Todo implement this button
                 //
