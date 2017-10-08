@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ public class ExerciseTwoActivity extends GeneralMenu {
     private SQLiteDatabase mDb;
     private EditText answer;
     private TextView textShow;
+    private Button skipButt;
     List<Word> ListWord = new ArrayList<>();
     Word nowStudy = new Word();
 
@@ -41,6 +43,7 @@ public class ExerciseTwoActivity extends GeneralMenu {
 
         answer = (EditText) findViewById(R.id.textAnswer);
         textShow = (TextView) findViewById(R.id.textViewShow);
+        skipButt = (Button) findViewById(R.id.button_skip);
 
         Exercise obj = new Exercise(ListWord);
 
@@ -81,6 +84,15 @@ public class ExerciseTwoActivity extends GeneralMenu {
                 }
                 else
                     return false;
+            }
+        });
+
+        skipButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                //Todo implement this button
+                //
             }
         });
     }
