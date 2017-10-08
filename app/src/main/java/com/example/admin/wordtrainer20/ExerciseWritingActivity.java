@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
 import com.example.admin.wordtrainer20.HelperClasses.Exercise;
 import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
 import com.example.admin.wordtrainer20.HelperClasses.Word;
@@ -19,36 +20,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ExerciseTwoActivity extends GeneralMenu {
+public class ExerciseWritingActivity extends GeneralMenu {
+    
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private EditText answer;
     private TextView textShow;
-    private Button skipButt;
+    private Button nextBtn;
     List<Word> ListWord = new ArrayList<>();
     Word nowStudy = new Word();
 
     private void init(){
-        mDBHelper = new DatabaseHelper(this);
-        try {
-            mDBHelper.updateDataBase();
-        } catch (IOException mIOException) {
-            throw new Error("UnableToUpdateDatabase");
-        }
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
+        
+        connectionDatabase();
 
         answer = (EditText) findViewById(R.id.textAnswer);
         textShow = (TextView) findViewById(R.id.textViewShow);
-        skipButt = (Button) findViewById(R.id.button_next);
+        nextBtn = (Button) findViewById(R.id.button_next);
 
         Exercise obj = new Exercise(ListWord);
 
-        // Step first - generation word on textView;
-        nowStudy = obj.getWordForTextView();
+        //nowStudy = obj.getWordForTextView();
         textShow.setText(nowStudy.getEnglishWord());
 
         answer.setOnKeyListener(new View.OnKeyListener() {
@@ -87,7 +79,7 @@ public class ExerciseTwoActivity extends GeneralMenu {
             }
         });
 
-        skipButt.setOnClickListener(new View.OnClickListener() {
+        nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //
@@ -95,6 +87,20 @@ public class ExerciseTwoActivity extends GeneralMenu {
                 //
             }
         });
+    }
+
+    public void connectionDatabase() {
+        mDBHelper = new DatabaseHelper(this);
+        try {
+            mDBHelper.updateDataBase();
+        } catch (IOException mIOException) {
+            throw new Error("UnableToUpdateDatabase");
+        }
+        try {
+            mDb = mDBHelper.getWritableDatabase();
+        } catch (SQLException mSQLException) {
+            throw mSQLException;
+        }
     }
 
     public void setWord(long id, long val){
@@ -117,7 +123,7 @@ public class ExerciseTwoActivity extends GeneralMenu {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exercise_two);
+        setContentView(R.layout.activity_exercise_writing);
         Bundle extras = getIntent().getExtras();
         if (extras != null)
         {

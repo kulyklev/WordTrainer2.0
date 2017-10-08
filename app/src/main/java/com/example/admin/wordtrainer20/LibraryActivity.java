@@ -23,7 +23,9 @@ public class LibraryActivity extends GeneralMenu {
     private SQLiteDatabase mDb;
     private GridView gridView;
     private String[] signatureText;
-    private List<byte[]> icons = new ArrayList<>();
+
+
+    private List<byte[]> icons = new ArrayList<>(); // List for image
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +34,7 @@ public class LibraryActivity extends GeneralMenu {
 
         gridView = (GridView) findViewById(R.id.gridView);
 
-        mDBHelper = new DatabaseHelper(this);
-
-        try {
-            mDBHelper.updateDataBase();
-        } catch (IOException mIOException) {
-            throw new Error("UnableToUpdateDatabase");
-        }
-
-        try {
-           mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
+        checkConnectionDatabase();
 
         List<String> listTopicName = getTopic();
 
@@ -62,19 +52,33 @@ public class LibraryActivity extends GeneralMenu {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //
+
                 //update position in database
                 setVocabulary(position+1);
-                //
 
-                //This is not good.
-                /*Intent openMainActivity = new Intent(LibraryActivity.this, MainActivity.class);
-                startActivity(openMainActivity);*/
+                Intent openMainActivity = new Intent(LibraryActivity.this, MyDictionaries.class);
+                startActivity(openMainActivity);
                 finish();
 
-                Toast.makeText(LibraryActivity.this, "You tapped: " + signatureText[position], Toast.LENGTH_SHORT).show();//DELETE THIS
+                Toast.makeText(LibraryActivity.this, "Вы успешно добавили тему : " + signatureText[position], Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void checkConnectionDatabase() {
+        mDBHelper = new DatabaseHelper(this);
+
+        try {
+            mDBHelper.updateDataBase();
+        } catch (IOException mIOException) {
+            throw new Error("UnableToUpdateDatabase");
+        }
+
+        try {
+           mDb = mDBHelper.getWritableDatabase();
+        } catch (SQLException mSQLException) {
+            throw mSQLException;
+        }
     }
 
     // Move to Helper

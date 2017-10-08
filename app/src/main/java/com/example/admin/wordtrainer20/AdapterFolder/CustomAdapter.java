@@ -1,15 +1,13 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.AdapterFolder;
 
-import android.content.ClipData;
 import android.view.LayoutInflater;
-import java.util.ArrayList;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.Context;
-import android.widget.BaseAdapter;
 import android.widget.*;
 
-import org.w3c.dom.Text;
+import com.example.admin.wordtrainer20.AdapterFolder.Model;
+import com.example.admin.wordtrainer20.R;
 
 /**
  * Created by 2andr on 07.10.2017.
@@ -25,7 +23,7 @@ public class CustomAdapter extends ArrayAdapter<Model>
 
     public CustomAdapter(Context context, Model[] resource)
     {
-        super(context,R.layout.row,resource);
+        super(context, R.layout.row,resource);
         // TODO Auto-generated constructor stub
         this.context = context;
         this.modelItems = resource;

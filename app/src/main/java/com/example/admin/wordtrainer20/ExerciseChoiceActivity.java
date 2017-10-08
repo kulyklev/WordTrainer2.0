@@ -9,12 +9,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+import com.example.admin.wordtrainer20.HelperClasses.Word;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ExerciseThreeActivity extends AppCompatActivity implements View.OnClickListener {
+public class ExerciseChoiceActivity extends AppCompatActivity implements View.OnClickListener {
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private Button variantButt_1;
@@ -30,7 +33,7 @@ public class ExerciseThreeActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exercise_three);
+        setContentView(R.layout.activity_exercise_choice);
 
         mDBHelper = new DatabaseHelper(this);
         try {
@@ -51,11 +54,11 @@ public class ExerciseThreeActivity extends AppCompatActivity implements View.OnC
         }
 
         List<Word> listRandom = new ArrayList<>();
-        try {
-            listRandom = getRandomWords();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       // try {
+           // listRandom = getRandomWords();
+       // } catch (IOException e) {
+        //    e.printStackTrace();
+        //}
 
         Random random = new Random();
         correctNumber = random.nextInt(5);
@@ -98,12 +101,12 @@ public class ExerciseThreeActivity extends AppCompatActivity implements View.OnC
                 if (correctNumber == 1)
                 {   //После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,1);
+                 //   setWord(0+1,1);
                 }
                 else
                 {   //После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,0);
+                 //   setWord(0+1,0);
                 }
                 //
                 break;
@@ -113,12 +116,12 @@ public class ExerciseThreeActivity extends AppCompatActivity implements View.OnC
                 if (correctNumber == 2)
                 {   //После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,1);
+                  //  setWord(0+1,1);
                 }
                 else
                 {   //После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,0);
+                  //  setWord(0+1,0);
                 }
                 //
                 break;
@@ -128,12 +131,12 @@ public class ExerciseThreeActivity extends AppCompatActivity implements View.OnC
                 if (correctNumber == 3)
                 {   //После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,1);
+                   // setWord(0+1,1);
                 }
                 else
                 {   //После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,0);
+                  //  setWord(0+1,0);
                 }
                 //
                 break;
@@ -143,12 +146,12 @@ public class ExerciseThreeActivity extends AppCompatActivity implements View.OnC
                 if (correctNumber == 4)
                 {   //После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,1);
+                  //  setWord(0+1,1);
                 }
                 else
                 {   //После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,0);
+                  //  setWord(0+1,0);
                 }
                 //
                 break;
@@ -158,11 +161,11 @@ public class ExerciseThreeActivity extends AppCompatActivity implements View.OnC
                 if (correctNumber == 5)
                 {   //После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,1);
+                  //  setWord(0+1,1);
                 }
                 else {//После добавления перехода раскоментить и изменить нули на нужные id
                     //int id = getIdByEnglish(ListWord.get(0).getEnglishWord());
-                    setWord(0+1,0);
+                  //  setWord(0+1,0);
                 }
                 break;
             default:
@@ -170,46 +173,5 @@ public class ExerciseThreeActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    public int getIdByEnglish(String english){
-        String copyEnglish = english.replaceAll("'", "''");
 
-        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE English='"+ copyEnglish + "'", null);
-        cursor.moveToFirst();
-        int i = cursor.getInt(cursor.getColumnIndex("_id"));
-        cursor.close();
-        return i;
-    }
-
-    public void setWord(long id, long val){
-        Cursor cursor = mDb.rawQuery("UPDATE trainings" +
-                " SET Choice='" + val +"'"+" WHERE _id='" + id + "'",null);
-        cursor.moveToFirst();
-        cursor.close();
-    }
-
-    public List<Word> getRandomWords() throws IOException
-    {
-        List<Word> result = new ArrayList<>();
-        String query = "SELECT * FROM words";
-        Cursor cursor = mDb.rawQuery(query, null);
-
-        int random = (int)(Math.random()*30)+21;
-        int i=0;
-
-        if(cursor.getCount()>0) {
-            cursor.moveToFirst();
-            do {
-                if (i%random==0) {
-                    Word word = new Word();
-                    word.setEnglishWord(cursor.getString(cursor.getColumnIndex("English")));
-                    word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));
-                    //word.setCheck(false);
-                    result.add(word);
-                }
-                i++;
-            } while (cursor.moveToNext() && result.size()< RANDOM_NUMBER);
-        }
-        cursor.close();
-        return result;
-    }
 }

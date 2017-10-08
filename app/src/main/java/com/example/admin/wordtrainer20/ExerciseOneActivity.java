@@ -37,7 +37,7 @@ public class ExerciseOneActivity extends GeneralMenu {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exercise_one);
+        setContentView(R.layout.activity_exercise_true_or_false);
 
         init();
     }

@@ -31,7 +31,7 @@ public class GeneralMenu extends AppCompatActivity {
 
             case R.id.action_my_dictionaries:
                 Toast.makeText(GeneralMenu.this, "You have tapped on MY DICTIONARIES.", Toast.LENGTH_SHORT).show();
-                Intent openMainActivity = new Intent(GeneralMenu.this, MainActivity.class);
+                Intent openMainActivity = new Intent(GeneralMenu.this, MyDictionaries.class);
                 startActivity(openMainActivity);
                 break;
 

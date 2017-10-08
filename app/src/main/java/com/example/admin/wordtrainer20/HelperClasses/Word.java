@@ -4,6 +4,7 @@ package com.example.admin.wordtrainer20.HelperClasses;
 import java.io.Serializable;
 
 public class Word implements Serializable {
+    private int id;
     private String englishWord;
     private String russianWord;
 
@@ -12,9 +13,18 @@ public class Word implements Serializable {
         russianWord ="";
     }
 
-    public Word(String englishWord, String translateWord){
+    public Word(int id, String englishWord, String translateWord){
+        this.id = id;
         this.englishWord = englishWord;
         this.russianWord = translateWord;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEnglishWord() {
