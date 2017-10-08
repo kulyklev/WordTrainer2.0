@@ -1,4 +1,4 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.AdapterFolder;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.admin.wordtrainer20.R;
 
 import java.util.ArrayList;
 import java.util.List;

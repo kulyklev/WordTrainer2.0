@@ -10,11 +10,15 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.example.admin.wordtrainer20.AdapterFolder.GridViewAdapter;
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryActivity extends GeneralMenu {
+
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private GridView gridView;

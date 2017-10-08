@@ -1,8 +1,8 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.HelperClasses;
 
 import java.util.*;
 
-enum MarkExercise
+public enum MarkExercise
 {
     ENG_TO_RUS,             // Проверка русского слова
     RUS_TO_ENG,             // Проверка английского слова

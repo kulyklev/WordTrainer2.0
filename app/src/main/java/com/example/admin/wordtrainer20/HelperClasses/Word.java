@@ -1,9 +1,9 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.HelperClasses;
+
 
 public class Word {
     private String englishWord;
     private String russianWord;
-    private boolean check = false; // Временное поле , пока нет базы и проверки полей Trainings
 
     public Word(){
         englishWord ="";
@@ -31,13 +31,6 @@ public class Word {
         this.russianWord = russianWord;
     }
 
-    public boolean isCheck() {
-        return check;
-    }
-
-    public void setCheck(boolean check) {
-        this.check = check;
-    }
 
     public boolean checkWorld(String UserTranslate, MarkExercise NameExercise){
         UserTranslate = UserTranslate.toLowerCase();

@@ -2,13 +2,13 @@ package com.example.admin.wordtrainer20;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.admin.wordtrainer20.HelperClasses.Exercise;
+import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
+import com.example.admin.wordtrainer20.HelperClasses.Word;
 
 import java.util.ArrayList;
 import java.util.List;

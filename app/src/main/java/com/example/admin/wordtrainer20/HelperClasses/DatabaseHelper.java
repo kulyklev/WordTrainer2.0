@@ -1,4 +1,4 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.HelperClasses;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -116,7 +116,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         Word word = new Word();
                         word.setEnglishWord(cursor.getString(1));
                         word.setRussianWord(cursor.getString(3));
-                        word.setCheck(false);
                         result.add(word);
                     }
                     i++;

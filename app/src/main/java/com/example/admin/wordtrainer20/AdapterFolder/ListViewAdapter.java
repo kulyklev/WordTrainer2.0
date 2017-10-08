@@ -1,4 +1,4 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.AdapterFolder;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.wordtrainer20.R;
+import com.example.admin.wordtrainer20.SelectExerciseActivity;
+
 /**
  * Created by admin on 05.10.2017.
  */
@@ -20,7 +23,7 @@ public class ListViewAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private String[] libraryNames;
 
-    ListViewAdapter(Context context, String[] libraryNames) {
+    public ListViewAdapter(Context context, String[] libraryNames) {
         this.context = context;
         this.libraryNames = libraryNames;
     }

@@ -13,11 +13,15 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.admin.wordtrainer20.AdapterFolder.ListViewAdapter;
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends GeneralMenu {
+
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private String[] data;
