@@ -43,7 +43,7 @@ public class ExerciseTwoActivity extends GeneralMenu {
 
         answer = (EditText) findViewById(R.id.textAnswer);
         textShow = (TextView) findViewById(R.id.textViewShow);
-        skipButt = (Button) findViewById(R.id.button_skip);
+        skipButt = (Button) findViewById(R.id.button_next);
 
         Exercise obj = new Exercise(ListWord);
 
