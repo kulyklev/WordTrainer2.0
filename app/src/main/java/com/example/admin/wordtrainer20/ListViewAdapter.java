@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by admin on 05.10.2017.
  */
@@ -17,9 +19,9 @@ import android.widget.TextView;
 public class ListViewAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
-    private String[] libraryNames;
+    private List<String> libraryNames;
 
-    ListViewAdapter(Context context, String[] libraryNames) {
+    ListViewAdapter(Context context, List<String> libraryNames) {
         this.context = context;
         this.libraryNames = libraryNames;
     }
@@ -32,12 +34,12 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return libraryNames.length;
+        return libraryNames.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return libraryNames[position];
+        return libraryNames.get(position);
     }
 
     @Override
@@ -64,17 +66,13 @@ public class ListViewAdapter extends BaseAdapter {
 
         viewHolder.openExerciseButt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //
-                //Do some stuff, when opening list of Exercises
-                //
-                //Toast.makeText(context, "You clicked button to open " + libraryNames[position], Toast.LENGTH_SHORT).show();
                 Intent openListOfWordsActivity = new Intent(context, SelectExerciseActivity.class);
                 context.startActivity(openListOfWordsActivity);
             }
         });
 
         viewHolder.image.setImageResource(R.drawable.ic_book_black_24dp);
-        viewHolder.text.setText(libraryNames[position]);
+        viewHolder.text.setText(libraryNames.get(position));
 
         return convertView;
     }

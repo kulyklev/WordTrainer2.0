@@ -20,10 +20,14 @@ import java.util.List;
 public class MainActivity extends GeneralMenu {
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
-    private String[] data;
     private ListView listView;
     private ListViewAdapter listViewAdapter;
-    public ImageButton openLibraryActivityButt;
+    private ImageButton openLibraryActivityButt;
+
+    //////////
+    private List<String> data;
+    private List<String> userTopics;
+    //////////
 
     //  Мои словари
     public void init(){
@@ -39,9 +43,9 @@ public class MainActivity extends GeneralMenu {
             throw mSQLException;
         }
 
-        List<String> userTopics = getTopic();
-        data = new String[userTopics.size()];
-        data = userTopics.toArray(data);
+        userTopics = getTopic();
+        /*data = new String[userTopics.size()];
+        data = userTopics.toArray(data);*/
 
         openLibraryActivityButt = (ImageButton) findViewById(R.id.openLibrariesButton);
         openLibraryActivityButt.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +56,7 @@ public class MainActivity extends GeneralMenu {
             }
         });
 
-        listViewAdapter = new ListViewAdapter(MainActivity.this, data);
+        listViewAdapter = new ListViewAdapter(MainActivity.this, userTopics);
         listView = (ListView) findViewById(R.id.LibListView);
         listView.setAdapter(listViewAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -63,7 +67,7 @@ public class MainActivity extends GeneralMenu {
                 //
                 //Pass some data
                 Intent openListOfWordsActivity = new Intent(MainActivity.this, ListOfWordsActivity.class);
-                openListOfWordsActivity.putExtra("id", getId(data[position]));
+                openListOfWordsActivity.putExtra("id", getId( userTopics.get(position) ));
                 startActivity(openListOfWordsActivity);
             }
         });
@@ -73,7 +77,7 @@ public class MainActivity extends GeneralMenu {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Delete")
-                        .setMessage("Do you want to delete " + data[position])
+                        .setMessage("Do you want to delete " + userTopics.get(position))
                         .setCancelable(true);
 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -84,7 +88,7 @@ public class MainActivity extends GeneralMenu {
                         dialog.cancel();
                         Toast.makeText(getApplicationContext(), "You clicked YES", Toast.LENGTH_SHORT).show();
 
-                        int id = getId(data[position]);
+                        int id = getId( userTopics.get(position) );
                         setVocabulary(id);
 
                         finish();
@@ -117,6 +121,22 @@ public class MainActivity extends GeneralMenu {
         setContentView(R.layout.activity_main);
 
         init();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        List<String> update = getTopic();
+
+        for (String item:
+                update) {
+            if ( !userTopics.contains(item) ) {
+                userTopics.add(item);
+            }
+        }
+
+        listViewAdapter.notifyDataSetChanged();
     }
 
     public int getId(String name){
