@@ -29,6 +29,12 @@ public class SelectExerciseActivity extends GeneralMenu {
     private Exercise learningObject;
     private int id_category;
 
+    /*
+    ПОКАЖИ ПРИМЕР, КАК ЭНЕЙБЛИТЬ КНОПКИ (ENABLE = false)
+    ВО ВСЕХ УПРАЖНЕНИЯХ ДОЛЖНА БЫТЬ КНОПКА ДАЛЕЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     */
+
+
 
     private void init(){
         exerciseTrue_or_False = (ImageButton) findViewById(R.id.ExerciseOneImageButton);
@@ -58,6 +64,18 @@ public class SelectExerciseActivity extends GeneralMenu {
             }
         });
 
+        exerciseChoiceRus_to_Eng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                //DO SOME STUFF
+                //
+                Intent openExerciseOneActivity = new Intent(SelectExerciseActivity.this, ExerciseChoiceActivity.class);
+                openExerciseOneActivity.putExtra("ListWord", (Serializable) listWord);
+                startActivity(openExerciseOneActivity);
+            }
+        });
+
         /*
 
 
@@ -72,25 +90,7 @@ public class SelectExerciseActivity extends GeneralMenu {
         });
 
 
-        exerciseChoiceRus_to_Eng.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                //DO SOME STUFF
-                //
-                List<Word> listChoiceRus_to_Eng = new ArrayList<Word>();
-                try {
-                    listChoiceRus_to_Eng = getWords("Choice");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //
-                Intent openExerciseOneActivity = new Intent(SelectExerciseActivity.this, ExerciseChoiceActivity.class);
-                openExerciseOneActivity.putExtra("ListWord", (Serializable) listChoiceRus_to_Eng);
-                startActivity(openExerciseOneActivity);
 
-            }
-        });
 
         exerciseChoiceEng_to_Rus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,7 +191,6 @@ public class SelectExerciseActivity extends GeneralMenu {
         if (extras != null)
         {
             id_category = (int) extras.getInt("id");;
-            int k = id_category; // do something with the customer
         }
         init();
     }

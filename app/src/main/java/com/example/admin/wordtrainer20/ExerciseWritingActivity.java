@@ -33,10 +33,20 @@ public class ExerciseWritingActivity extends GeneralMenu {
     private TextView textShow;         // Поле слова для изучения
     private Button nextBtn;            // Кнопка далее
     private Exercise learningObject;   // Реализация упражнения
-    private List<Word> ListWord = new ArrayList<>();    // Набор для изучения
     private Word nowStudy = new Word();                 // Слово изучаемое на данный момент
     private List<Word> copy = new ArrayList<>();        // Копия набора для изучения
     private boolean ans = false;                        // Ответ верный / не верный
+
+
+    /*
+     КНОПКУ ДАЛЕЕ ОПУСТИ ВНИЗ ( НЕ С БОКУ, А ВНИЗ)
+     ДОБАВЬ СТРОКУ ТЕКСТОВУЮ, куда будет выводиться правильный вариант ответа
+     НЕПРАВИЛЬНЫЙ ВАРИАНТ ОТВЕТА СТРОКА - должна либо зачеркиваться, либо как то подсвечиваться!!!!!!!
+    */
+
+
+
+
 
     private void init(){
         
@@ -161,6 +171,7 @@ public class ExerciseWritingActivity extends GeneralMenu {
         Bundle extras = getIntent().getExtras();
         if (extras != null)
         {
+            List<Word> ListWord = new ArrayList<>();    // Набор для изучения
             ListWord = (List<Word>) extras.getSerializable("ListWord");
             learningObject = new Exercise(ListWord);
             // do something with the customer

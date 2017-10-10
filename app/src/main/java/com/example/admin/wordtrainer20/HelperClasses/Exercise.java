@@ -3,6 +3,7 @@ package com.example.admin.wordtrainer20.HelperClasses;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -50,7 +51,8 @@ public class Exercise {
         return temp;
     }
 
-    public Boolean isStudiedTrainingsWord(int id, String field, SQLiteDatabase mDb){ //field - название тренировки
+    public Boolean isStudiedTrainingsWord(int id, String field, SQLiteDatabase mDb)
+    { //field - название тренировки
         Cursor cursor = mDb.rawQuery("SELECT * FROM trainings WHERE _id='"+ id + "'", null);
         cursor.moveToFirst();
         Boolean t = cursor.getInt(cursor.getColumnIndex(field)) == 1;
@@ -58,7 +60,7 @@ public class Exercise {
         return t;
     }
 
-    //НУЖНА ЛИ?
+
     public Boolean isTrainingOff(MarkExercise mark, SQLiteDatabase mDb){
 
         boolean off = false; // Они не изучены
@@ -78,7 +80,7 @@ public class Exercise {
         String s = "";
         if (mark == MarkExercise.ENG_TO_RUS)
             s = "EngtoRus"; // Тоже выбор, но кривой
-        else if (mark == MarkExercise.ENG_TO_RUS)
+        else if (mark == MarkExercise.RUS_TO_ENG)
             s =  "Choice";
         else if (mark == MarkExercise.TRUE_OR_FALSE)
             s = "TrueFalse";
@@ -100,7 +102,9 @@ public class Exercise {
     public void removeWordInList(Word word){
         this.WordList.remove(word);
     }
+
     public void insertWordInList(Word word) { WordList.add(word); }
+
     public List<Word> enableStudiedWords(MarkExercise mark, SQLiteDatabase mDb){
         List<Word> copy = new ArrayList<Word>();
         String field = getStringField(mark);
@@ -110,6 +114,30 @@ public class Exercise {
         }
         return copy;
     }
+
+    public List<Word> getListChoice(SQLiteDatabase mDb) throws IOException
+    {
+        List<Word> result = new ArrayList<>();
+        String query = "SELECT * FROM words ORDER BY RANDOM() LIMIT 4";
+        Cursor cursor = mDb.rawQuery(query, null);
+
+        if(cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()){
+                Word word = new Word();
+                word.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+                word.setEnglishWord(cursor.getString(cursor.getColumnIndex("English")));
+                word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));;
+                result.add(word);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return result;
+    }
+
+
+
+
 
 /*
     public Boolean getIsSelected(int category){
@@ -150,30 +178,7 @@ public class Exercise {
 
 
    /*
-    public List<Word> getListChoice(SQLiteDatabase mDb) throws IOException
-    {
-        List<Word> result = new ArrayList<>();
-        String query = "SELECT * FROM words";
-        Cursor cursor = mDb.rawQuery(query, null);
 
-        int random = (int)(Math.random()*30)+21;
-        int i=0;
-
-        if(cursor.getCount()>0) {
-            cursor.moveToFirst();
-            do {
-                if (i%random==0) {
-                    Word word = new Word();
-                    word.setEnglishWord(cursor.getString(cursor.getColumnIndex("English")));
-                    word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));;
-                    result.add(word);
-                }
-                i++;
-            } while (cursor.moveToNext() && result.size()< 4);
-        }
-        cursor.close();
-        return result;
-    }
     */
 
 
