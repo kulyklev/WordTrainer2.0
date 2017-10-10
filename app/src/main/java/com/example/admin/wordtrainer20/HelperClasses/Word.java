@@ -59,14 +59,14 @@ public class Word implements Serializable {
         this.russianWord = this.russianWord.toLowerCase();
         if ((NameExercise == MarkExercise.RUS_TO_ENG) || (NameExercise == MarkExercise.WRITING))
         {
-            if (this.russianWord.equals(UserTranslate))
+            if (this.englishWord.equals(UserTranslate))
                 return true;
             else
                 return false;
         }
         else
         {
-            if (this.englishWord.equals(UserTranslate))
+            if (this.russianWord.equals(UserTranslate))
                 return true;
             else
                 return false;

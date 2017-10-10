@@ -100,7 +100,16 @@ public class Exercise {
     public void removeWordInList(Word word){
         this.WordList.remove(word);
     }
-
+    public void insertWordInList(Word word) { WordList.add(word); }
+    public List<Word> enableStudiedWords(MarkExercise mark, SQLiteDatabase mDb){
+        List<Word> copy = new ArrayList<Word>();
+        String field = getStringField(mark);
+        for (Word w: this.WordList) {
+            if (isStudiedTrainingsWord(w.getId(), field, mDb)) // Если слово не выучено, вернуть false
+                copy.add(w);
+        }
+        return copy;
+    }
 
 /*
     public Boolean getIsSelected(int category){
@@ -131,6 +140,7 @@ public class Exercise {
         max -= min;
         return (int) (Math.random() * ++max) + min;
     }
+
 
 }
 
