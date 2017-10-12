@@ -1,20 +1,32 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.HelperClasses;
+
 
 import java.io.Serializable;
 
 public class Word implements Serializable {
+    private int id;
     private String englishWord;
     private String russianWord;
-    private boolean check = false; // Временное поле , пока нет базы и проверки полей Trainings
+    private boolean progress;
 
     public Word(){
         englishWord ="";
         russianWord ="";
+        progress = false;
     }
 
-    public Word(String englishWord, String translateWord){
+    public Word(int id, String englishWord, String translateWord){
+        this.id = id;
         this.englishWord = englishWord;
         this.russianWord = translateWord;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEnglishWord() {
@@ -33,15 +45,15 @@ public class Word implements Serializable {
         this.russianWord = russianWord;
     }
 
-    public boolean isCheck() {
-        return check;
+    public boolean isProgress() {
+        return progress;
     }
 
-    public void setCheck(boolean check) {
-        this.check = check;
+    public void setProgress(boolean progress) {
+        this.progress = progress;
     }
 
-    public boolean checkWorld(String UserTranslate, MarkExercise NameExercise){
+    public boolean checkWord(String UserTranslate, MarkExercise NameExercise){
         UserTranslate = UserTranslate.toLowerCase();
         this.englishWord = this.englishWord.toLowerCase();
         this.russianWord = this.russianWord.toLowerCase();
@@ -80,4 +92,6 @@ public class Word implements Serializable {
         result = 31 * result + russianWord.hashCode();
         return result;
     }
+
+
 }

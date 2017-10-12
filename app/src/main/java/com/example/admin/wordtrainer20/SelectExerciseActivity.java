@@ -5,9 +5,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+import com.example.admin.wordtrainer20.HelperClasses.Exercise;
+import com.example.admin.wordtrainer20.HelperClasses.Word;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -17,19 +20,98 @@ import java.util.List;
 public class SelectExerciseActivity extends GeneralMenu {
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
-    private ImageButton exerciseOne;
-    private ImageButton exerciseTwo;
-    private ImageButton exerciseThree;
-    private ImageButton exerciseFour;
+    private ImageButton exerciseTrue_or_False;
+    private ImageButton exerciseWriting;
+    private ImageButton exerciseChoiceRus_to_Eng;
+    private ImageButton exerciseChoiceEng_to_Rus;
     private final int NUMBER_FOR_TRAINING = 10;
+    private List<Word> listWord = new ArrayList<Word>();
+    private Exercise learningObject;
+    private int id_category;
+
+    /*
+    ПОКАЖИ ПРИМЕР, КАК ЭНЕЙБЛИТЬ КНОПКИ (ENABLE = false)
+    ВО ВСЕХ УПРАЖНЕНИЯХ ДОЛЖНА БЫТЬ КНОПКА ДАЛЕЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     */
+
 
 
     private void init(){
-        exerciseOne = (ImageButton) findViewById(R.id.ExerciseOneImageButton);
-        exerciseTwo = (ImageButton) findViewById(R.id.ExerciseTwoImageButton);
-        exerciseThree = (ImageButton) findViewById(R.id.ExerciseThreeImageButton);
-        exerciseFour = (ImageButton) findViewById(R.id.ExerciseFourImageButton);
+        exerciseTrue_or_False = (ImageButton) findViewById(R.id.ExerciseOneImageButton);
+        exerciseWriting = (ImageButton) findViewById(R.id.ExerciseTwoImageButton);
+        exerciseChoiceRus_to_Eng = (ImageButton) findViewById(R.id.ExerciseThreeImageButton);
+        exerciseChoiceEng_to_Rus = (ImageButton) findViewById(R.id.ExerciseFourImageButton);
 
+        connectionDatabase();
+
+
+        if (listWord.isEmpty()){
+            try {
+                listWord = getWords();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        exerciseWriting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent openExerciseTwoActivity = new Intent(SelectExerciseActivity.this, ExerciseWritingActivity.class);
+                openExerciseTwoActivity.putExtra("ListWord", (Serializable) listWord);
+                startActivity(openExerciseTwoActivity);
+            }
+        });
+
+        exerciseChoiceRus_to_Eng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                //DO SOME STUFF
+                //
+                Intent openExerciseOneActivity = new Intent(SelectExerciseActivity.this, ExerciseChoiceActivity.class);
+                openExerciseOneActivity.putExtra("ListWord", (Serializable) listWord);
+                startActivity(openExerciseOneActivity);
+            }
+        });
+
+        /*
+
+
+        exerciseTrue_or_False.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                Intent exerciseTrue_or_False = new Intent(SelectExerciseActivity.this, ExerciseOneActivity.class);
+                startActivity(exerciseTrue_or_False);
+                //
+            }
+        });
+
+
+
+
+        exerciseChoiceEng_to_Rus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Word> listChoiceEng_to_Rus = new ArrayList<Word>();
+                try {
+                    listChoiceEng_to_Rus  = getWords("Choice");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //
+                Intent openExerciseOneActivity = new Intent(SelectExerciseActivity.this, ExerciseChoiceActivity.class);
+                openExerciseOneActivity.putExtra("ListWord", (Serializable) listChoiceEng_to_Rus);
+                startActivity(openExerciseOneActivity);
+            }
+        });
+        */
+
+    }
+
+    public void connectionDatabase() {
         mDBHelper = new DatabaseHelper(this);
         try {
             mDBHelper.updateDataBase();
@@ -41,96 +123,42 @@ public class SelectExerciseActivity extends GeneralMenu {
         } catch (SQLException mSQLException) {
             throw mSQLException;
         }
-
-
-        exerciseOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                Intent openExerciseTwoActivity = new Intent(SelectExerciseActivity.this, ExerciseOneActivity.class);
-                startActivity(openExerciseTwoActivity);
-                //
-            }
-        });
-
-        exerciseTwo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                List<Word> listforExTwo = new ArrayList<Word>();
-                try {
-                    listforExTwo = getWords("Writing");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //
-                Intent openExerciseTwoActivity = new Intent(SelectExerciseActivity.this, ExerciseTwoActivity.class);
-                openExerciseTwoActivity.putExtra("ListWord", (Serializable) listforExTwo);
-                startActivity(openExerciseTwoActivity);
-            }
-        });
-
-        exerciseThree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                //DO SOME STUFF
-                //
-                List<Word> listforExThree = new ArrayList<Word>();
-                try {
-                    listforExThree = getWords("Choice");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //
-                Intent openExerciseOneActivity = new Intent(SelectExerciseActivity.this, ExerciseThreeActivity.class);
-                openExerciseOneActivity.putExtra("ListWord", (Serializable) listforExThree);
-                startActivity(openExerciseOneActivity);
-
-            }
-        });
-
-        exerciseFour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                //DO SOME STUFF
-                //
-            }
-        });
-
     }
 
-    public List<Word> getWords(String field) throws IOException
+
+
+    // Выбор 10 случайных слов
+    public List<Word> getWords() throws IOException
     {
         List<Word> result = new ArrayList<>();
-        String query = "SELECT * FROM words";
+        String query = "SELECT * FROM words WHERE Category ='" + id_category + "'";
         Cursor cursor = mDb.rawQuery(query, null);
 
         if(cursor.getCount()>0) {
             cursor.moveToFirst();
-            do {
+            do
+            {
                 Word word = new Word();
                 word.setEnglishWord(cursor.getString(cursor.getColumnIndex("English")));
                 word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));
-                //word.setCheck(false);
-                int id = cursor.getInt(cursor.getColumnIndex("_id"));
-                int category = cursor.getInt(cursor.getColumnIndex("Category"));
-
-                Boolean isSelected = getIsSelected(category);
-                Boolean isStudied = getIsStudied(id);
-                Boolean isTrainingOver = getFieldById(field,id);
-                if (isSelected && !isStudied && !isTrainingOver)
+                word.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+               // int category = cursor.getInt(cursor.getColumnIndex("Category"));
+                Boolean t = getFieldById("Writing", word.getId());
+                word.setProgress(t);
+                Boolean isSelected = getIsSelected(id_category);
+                Boolean isStudied = getIsStudied(word.getId());
+                if (isSelected && !isStudied)
                 {
                     result.add(word);
                 }
-            } while (cursor.moveToNext() && result.size()< NUMBER_FOR_TRAINING);
+            }
+            while (cursor.moveToNext() && result.size()< NUMBER_FOR_TRAINING);
         }
         cursor.close();
         return result;
     }
 
-    public Boolean getIsSelected(int category){
+       public Boolean getIsSelected(int category){
         Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary WHERE _id='"+ category + "'", null);
         cursor.moveToFirst();
         Boolean i = cursor.getInt(cursor.getColumnIndex("isSelected")) == 1;
@@ -159,6 +187,11 @@ public class SelectExerciseActivity extends GeneralMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_exercise);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+            id_category = (int) extras.getInt("id");;
+        }
         init();
     }
 

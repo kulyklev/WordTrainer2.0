@@ -18,14 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" android:launchMode="singleTask" />
-        <activity android:name=".LibraryActivity" android:launchMode="singleTask" />
-        <activity android:name=".ExerciseOneActivity" android:launchMode="singleTask" />
-        <activity android:name=".SelectExerciseActivity" android:launchMode="singleTask" />
-        <activity android:name=".ExerciseTwoActivity" android:launchMode="singleTask" />
-        <activity android:name=".CalendarActivity" android:launchMode="singleTask" />
-        <activity android:name=".ListOfWordsActivity" android:launchMode="singleTask" />
-        <activity android:name=".ExerciseThreeActivity" android:launchMode="singleTask" ></activity>
+        <activity android:name=".MyDictionaries" />
+        <activity android:name=".LibraryActivity" />
+        <activity android:name=".ExerciseOneActivity" />
+        <activity android:name=".SelectExerciseActivity" />
+        <activity android:name=".ExerciseWritingActivity" />
+        <activity android:name=".CalendarActivity" />
+        <activity android:name=".ListOfWordsActivity" />
+        <activity android:name=".ExerciseChoiceActivity"></activity>
     </application>
 
 </manifest>

@@ -1,15 +1,19 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.HelperClasses;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static String DB_NAME = "dictionaryDatab.db";
@@ -95,5 +99,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion)
             mNeedUpdate = true;
+    }
+
+
+    public List<Word> getRandomWords() throws IOException
+    {
+        List<Word> result = new ArrayList<>();
+        String query = "SELECT * FROM words";
+        while (result.size()< 10)
+        {
+            Cursor cursor = mDataBase.rawQuery(query, null);
+            int random = (int)(Math.random()*20);
+            int i=0;
+            if (cursor.moveToFirst()) {
+                do {
+                    if (i%random==0) {
+                        Word word = new Word();
+                        word.setEnglishWord(cursor.getString(1));
+                        word.setRussianWord(cursor.getString(3));
+                        result.add(word);
+                    }
+                    i++;
+                } while (cursor.moveToNext());
+            }
+        }
+        Log.d("getRandomWords()", result.toString());
+        return result;
     }
 }

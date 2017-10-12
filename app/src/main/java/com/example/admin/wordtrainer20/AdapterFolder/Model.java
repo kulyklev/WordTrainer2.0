@@ -1,4 +1,4 @@
-package com.example.admin.wordtrainer20;
+package com.example.admin.wordtrainer20.AdapterFolder;
 
 /**
  * Created by 2andr on 07.10.2017.

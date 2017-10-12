@@ -13,61 +13,51 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.admin.wordtrainer20.AdapterFolder.ListViewAdapter;
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends GeneralMenu {
-    private DatabaseHelper mDBHelper;
-    private SQLiteDatabase mDb;
-    private ListView listView;
-    private ListViewAdapter listViewAdapter;
-    private ImageButton openLibraryActivityButt;
+public class MyDictionaries extends GeneralMenu {
 
-    //////////
-    private List<String> data;
-    private List<String> userTopics;
-    //////////
+    private DatabaseHelper mDBHelper;  // Вспомогательный класс для подключения базы
+    private SQLiteDatabase mDb;        // Соединение с базой
+    private String[] dataUserTopic;    // Пользовательские словари
+    private ListView listView;         // Список для отображения
+    private ListViewAdapter listViewAdapter;
+
+    public ImageButton openLibraryActivityButt;
 
     //  Мои словари
     public void init(){
         mDBHelper = new DatabaseHelper(this);
-        try {
-            mDBHelper.updateDataBase();
-        } catch (IOException mIOException) {
-            throw new Error("UnableToUpdateDatabase");
-        }
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
 
-        userTopics = getTopic();
-        /*data = new String[userTopics.size()];
-        data = userTopics.toArray(data);*/
+        checkConnectionDatabase();
+
+        List<String> userTopics = getTopic();
+        dataUserTopic = new String[userTopics.size()];
+        dataUserTopic = userTopics.toArray(dataUserTopic);
 
         openLibraryActivityButt = (ImageButton) findViewById(R.id.openLibrariesButton);
         openLibraryActivityButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent openLibrariesActivity = new Intent(MainActivity.this, LibraryActivity.class);
+                Intent openLibrariesActivity = new Intent(MyDictionaries.this, LibraryActivity.class);
                 startActivity(openLibrariesActivity);
             }
         });
 
-        listViewAdapter = new ListViewAdapter(MainActivity.this, userTopics);
+        listViewAdapter = new ListViewAdapter(MyDictionaries.this, dataUserTopic, mDb);
         listView = (ListView) findViewById(R.id.LibListView);
         listView.setAdapter(listViewAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            public void onItemClick(AdapterView<?> parent, View v,
-            int position, long id) {
-                //
-                //DO SOME STUFF ON ITEM CLICK
-                //
-                //Pass some data
-                Intent openListOfWordsActivity = new Intent(MainActivity.this, ListOfWordsActivity.class);
-                openListOfWordsActivity.putExtra("id", getId( userTopics.get(position) ));
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                //Pass some dataUserTopic
+                Intent openListOfWordsActivity = new Intent(MyDictionaries.this, ListOfWordsActivity.class);
+                openListOfWordsActivity.putExtra("id", getId(dataUserTopic[position]));
                 startActivity(openListOfWordsActivity);
             }
         });
@@ -75,20 +65,17 @@ public class MainActivity extends GeneralMenu {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MyDictionaries.this);
                 builder.setTitle("Delete")
-                        .setMessage("Do you want to delete " + userTopics.get(position))
+                        .setMessage("Do you want to delete " + dataUserTopic[position])
                         .setCancelable(true);
 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
-                        //
-                        //Do some stuff, when YES is clicked
-                        //
                         dialog.cancel();
                         Toast.makeText(getApplicationContext(), "You clicked YES", Toast.LENGTH_SHORT).show();
 
-                        int id = getId( userTopics.get(position) );
+                        int id = getId(dataUserTopic[position]);
                         setVocabulary(id);
 
                         finish();
@@ -99,9 +86,7 @@ public class MainActivity extends GeneralMenu {
 
                 builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
-                        //
-                        //Do some stuff, when NO is clicked
-                        //
+
                         dialog.cancel();
                         Toast.makeText(getApplicationContext(), "You clicked NO", Toast.LENGTH_SHORT).show();
                     }
@@ -115,28 +100,32 @@ public class MainActivity extends GeneralMenu {
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void checkConnectionDatabase() {
+        try
+        {
+            mDBHelper.updateDataBase();
+        }
+        catch (IOException mIOException)
+        {
+            throw new Error("UnableToUpdateDatabase");
+        }
 
-        init();
+        try
+        {
+            mDb = mDBHelper.getWritableDatabase();
+        }
+        catch (SQLException mSQLException)
+        {
+            throw mSQLException;
+        }
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_dictionaries);
 
-        List<String> update = getTopic();
-
-        for (String item:
-                update) {
-            if ( !userTopics.contains(item) ) {
-                userTopics.add(item);
-            }
-        }
-
-        listViewAdapter.notifyDataSetChanged();
+        init();
     }
 
     public int getId(String name){
@@ -153,6 +142,7 @@ public class MainActivity extends GeneralMenu {
         cursor.moveToFirst();
         cursor.close();
     }
+
 
     public List<String> getTopic(){
         List<String> listTopic = new ArrayList<>();

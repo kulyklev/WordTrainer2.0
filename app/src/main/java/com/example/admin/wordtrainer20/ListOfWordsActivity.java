@@ -6,6 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+
+import com.example.admin.wordtrainer20.AdapterFolder.CustomAdapter;
+import com.example.admin.wordtrainer20.AdapterFolder.Model;
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+
 import java.io.*;
 import java.util.*;
 
@@ -15,6 +20,7 @@ public class ListOfWordsActivity extends GeneralMenu {
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private int categoryId;
+
 
     private void init() {
         mDBHelper = new DatabaseHelper(this);
@@ -104,9 +110,6 @@ public class ListOfWordsActivity extends GeneralMenu {
     }
 
     public void setWordTrue(long id){
-//        Toast toast = Toast.makeText(getApplicationContext(),
-//                "true"+String.valueOf(id), Toast.LENGTH_SHORT);
- //       toast.show();
         Cursor cursor = mDb.rawQuery("UPDATE study" +
                 " SET isStudied = 1 WHERE _id='" + id + "'",null);
         cursor.moveToFirst();
@@ -114,9 +117,6 @@ public class ListOfWordsActivity extends GeneralMenu {
     }
 
     public void setWordFalse(long id){
-//        Toast toast = Toast.makeText(getApplicationContext(),
-//                "false"+String.valueOf(id), Toast.LENGTH_SHORT);
-//        toast.show();
         Cursor cursor = mDb.rawQuery("UPDATE study" +
                 " SET isStudied = 0 WHERE _id='" + id + "'",null);
         cursor.moveToFirst();
