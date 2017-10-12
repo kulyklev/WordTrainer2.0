@@ -9,6 +9,7 @@ public class ExerciseOneActivity extends GeneralMenu {
 
     private Button buttonYes;
     private Button buttonNo;
+    private Button buttonSkip;
 
     private void init(){
         buttonYes = (Button) findViewById(R.id.buttonYes);
@@ -30,6 +31,17 @@ public class ExerciseOneActivity extends GeneralMenu {
                 //DO SOME STUFF ON BUTTON CLICK "I DON`T KNOW"
                 //
                 Toast.makeText(getApplicationContext(), "You clicked button NO", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        buttonSkip = (Button) findViewById(R.id.buttonNo);
+        buttonSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                //DO SOME STUFF ON BUTTON CLICK "SKIP"
+                //
+
             }
         });
     }

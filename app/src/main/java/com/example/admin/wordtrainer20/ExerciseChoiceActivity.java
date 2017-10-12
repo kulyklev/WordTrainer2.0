@@ -28,6 +28,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
     private Button selectBtn_3;
     private Button selectBtn_4;
     private Button selectBtn_5;
+    private Button skipBut;
     private final int RANDOM_NUMBER = 5;
     private List<Word> copy = new ArrayList<>();
     private Exercise learningObject;
@@ -91,6 +92,9 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
         selectBtn_5 = (Button) findViewById(R.id.variantButt_5);
         selectBtn_5.setOnClickListener(this);
         selectBtn_5.setText(listRandom.get(4).getEnglishWord());
+
+        skipBut = (Button) findViewById(R.id.SkipButt);
+        skipBut.setOnClickListener(this);
     }
 
     @Override
@@ -203,6 +207,14 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                     textShow.setText("No");
                     //learningObject.setWord(nowStudy.getId(), 0, mDb, MarkExercise.RUS_TO_ENG);
                 }
+                break;
+
+            case R.id.SkipButt:
+                //
+                //
+                //SKIP Button
+                //
+                //
                 break;
             default:
                 break;
