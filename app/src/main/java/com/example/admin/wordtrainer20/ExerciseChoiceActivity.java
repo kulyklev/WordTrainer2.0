@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class ExerciseChoiceActivity extends AppCompatActivity implements View.OnClickListener {
     private DatabaseHelper mDBHelper;
@@ -93,7 +92,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
         selectBtn_5.setOnClickListener(this);
         selectBtn_5.setText(listRandom.get(4).getEnglishWord());
 
-        skipBut = (Button) findViewById(R.id.SkipButt);
+        skipBut = (Button) findViewById(R.id.NextButt);
         skipBut.setOnClickListener(this);
     }
 
@@ -209,7 +208,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                 }
                 break;
 
-            case R.id.SkipButt:
+            case R.id.NextButt:
                 //
                 //
                 //SKIP Button

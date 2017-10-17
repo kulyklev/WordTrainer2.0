@@ -34,7 +34,7 @@ public class ExerciseOneActivity extends GeneralMenu {
             }
         });
 
-        buttonSkip = (Button) findViewById(R.id.buttonNo);
+        buttonSkip = (Button) findViewById(R.id.NextButton);
         buttonSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
