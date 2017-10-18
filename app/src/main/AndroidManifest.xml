@@ -20,7 +20,7 @@
         </activity>
         <activity android:name=".MyDictionaries" />
         <activity android:name=".LibraryActivity" />
-        <activity android:name=".ExerciseTrueFalseActivity" />
+        <activity android:name=".ExerciseOneActivity" />
         <activity android:name=".SelectExerciseActivity" />
         <activity android:name=".ExerciseWritingActivity" />
         <activity android:name=".CalendarActivity" />

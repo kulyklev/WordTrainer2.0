@@ -135,27 +135,6 @@ public class Exercise {
         return result;
     }
 
-    public String getVariantForTrueOrFalse(SQLiteDatabase mDb){
-        String query = "SELECT * FROM words ORDER BY RANDOM() LIMIT 2";
-        Cursor cursor = mDb.rawQuery(query, null);
-        List <String> listStr = new ArrayList<>();
-        String result  = "";
-        if(cursor.moveToFirst()) {
-            while (!cursor.isAfterLast())
-            {
-                result  = cursor.getString(cursor.getColumnIndex("Russian"));
-                listStr.add(result);
-                cursor.moveToNext();
-            }
-        }
-
-        int INDEX_RANDOM = GetRandomIndexForListWord(0, listStr.size());
-       //result = listStr.get();
-
-        cursor.close();
-        return result;
-    }
-
 
 
 

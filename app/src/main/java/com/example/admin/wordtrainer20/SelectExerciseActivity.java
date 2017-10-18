@@ -37,7 +37,6 @@ public class SelectExerciseActivity extends GeneralMenu {
 
 
     private void init(){
-
         exerciseTrue_or_False = (ImageButton) findViewById(R.id.ExerciseOneImageButton);
         exerciseWriting = (ImageButton) findViewById(R.id.ExerciseTwoImageButton);
         exerciseChoiceRus_to_Eng = (ImageButton) findViewById(R.id.ExerciseThreeImageButton);
@@ -54,28 +53,14 @@ public class SelectExerciseActivity extends GeneralMenu {
             }
         }
 
-        exerciseTrue_or_False.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                // DO SOME STUFF
-                //
-                Intent exerciseTrue_or_False = new Intent(SelectExerciseActivity.this, ExerciseTrueFalseActivity.class);
-                exerciseTrue_or_False.putExtra("ListWord", (Serializable) listWord);
-                startActivity(exerciseTrue_or_False);
-                //
-            }
-        });
 
         exerciseWriting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
-                // DO SOME STUFF
-                //
-                Intent exerciseWriting = new Intent(SelectExerciseActivity.this, ExerciseWritingActivity.class);
-                exerciseWriting.putExtra("ListWord", (Serializable) listWord);
-                startActivity(exerciseWriting);
+
+                Intent openExerciseTwoActivity = new Intent(SelectExerciseActivity.this, ExerciseWritingActivity.class);
+                openExerciseTwoActivity.putExtra("ListWord", (Serializable) listWord);
+                startActivity(openExerciseTwoActivity);
             }
         });
 
@@ -83,15 +68,28 @@ public class SelectExerciseActivity extends GeneralMenu {
             @Override
             public void onClick(View v) {
                 //
-                // DO SOME STUFF
+                //DO SOME STUFF
                 //
-                Intent exerciseChoiceRus_to_Eng = new Intent(SelectExerciseActivity.this, ExerciseChoiceActivity.class);
-                exerciseChoiceRus_to_Eng.putExtra("ListWord", (Serializable) listWord);
-                startActivity(exerciseChoiceRus_to_Eng);
+                Intent openExerciseOneActivity = new Intent(SelectExerciseActivity.this, ExerciseChoiceActivity.class);
+                openExerciseOneActivity.putExtra("ListWord", (Serializable) listWord);
+                startActivity(openExerciseOneActivity);
             }
         });
 
         /*
+
+
+        exerciseTrue_or_False.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                Intent exerciseTrue_or_False = new Intent(SelectExerciseActivity.this, ExerciseOneActivity.class);
+                startActivity(exerciseTrue_or_False);
+                //
+            }
+        });
+
+
 
 
         exerciseChoiceEng_to_Rus.setOnClickListener(new View.OnClickListener() {

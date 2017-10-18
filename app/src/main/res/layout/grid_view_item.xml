@@ -16,7 +16,7 @@
         android:id="@+id/signature"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:text="@string/grid_view_title"
+        android:text="@string/test_text"
         android:textAlignment="center"
         android:textSize="18sp"
         />
