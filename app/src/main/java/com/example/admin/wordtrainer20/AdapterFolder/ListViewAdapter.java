@@ -80,6 +80,7 @@ public class ListViewAdapter extends BaseAdapter {
                 int id = getId(libraryNames[position]);
 
                 Intent selectExerciseActivity = new Intent(context, SelectExerciseActivity.class);
+                selectExerciseActivity.putExtra("UniqForm","MyVocabulary");
                 selectExerciseActivity.putExtra("id", id);
                 context.startActivity(selectExerciseActivity);
 

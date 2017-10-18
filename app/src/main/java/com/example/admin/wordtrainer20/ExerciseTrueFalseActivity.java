@@ -1,5 +1,6 @@
 package com.example.admin.wordtrainer20;
 
+import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -15,44 +16,102 @@ import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
 import com.example.admin.wordtrainer20.HelperClasses.Word;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ExerciseTrueFalseActivity extends GeneralMenu {
 
-    private DatabaseHelper mDBHelper;
-    private SQLiteDatabase mDb;
+    private DatabaseHelper mDBHelper;                   // Класс для работы с базой
+    private SQLiteDatabase mDb;                         // Конект базы
+
+    // Кнопки
     private Button btnTrue;
     private Button btnFalse;
-    private Exercise learningObject;
-    private TextView textShowEnglish;
-    private TextView textShowRussian;
-    private Word nowStudy;
+    private Button btnSkip;
 
-    private void init(){
+    private Exercise learningObject;                    // Реализация упражнения
+    private TextView textViewEnglishWord;               // Поле для вывод английского слова
+    private TextView textViewRussianWord;               // Поле для вывод русского слова
 
-        textShowEnglish = (TextView) findViewById(R.id.textViewShowEng);
-        textShowRussian= (TextView) findViewById(R.id.textViewShowRus);
+    private Word nowStudy;                              // Слово изучаемо на данный момент
+    private List<Word> listRandom;                      // Список вариантов ответов
+    private List<Word> copy;                            // Дополнительный список
+    private boolean answer = false;                        // Ответ верный / не верный
+
+    private void init() throws IOException {
+
+        textViewEnglishWord = (TextView) findViewById(R.id.textViewShowEng);
+        textViewRussianWord = (TextView) findViewById(R.id.textViewShowRus);
+
+
+        connectionDatabase();           // Коннект
+
+
+        copy = new ArrayList<>();       // Инициализация доп массива
+
+
+        // Проверка на слова, которые уже прошли данную тренировку
+
+        if (learningObject.isTrainingOff(MarkExercise.TRUE_OR_FALSE, mDb))
+        {
+            // Проверка на конец тренировки
+            copy = learningObject.enableStudiedWords(MarkExercise.TRUE_OR_FALSE, mDb);
+            if (copy.size() > 0)
+            {
+                for (Word w: copy) {
+                    learningObject.removeWordInList(w);
+                }
+            }
+            nowStudy = learningObject.getWordForTextView(MarkExercise.TRUE_OR_FALSE, mDb);
+            textViewEnglishWord.setText(nowStudy.getEnglishWord());
+        }
+        else
+        {
+            // Если все слова прошли тренировку, вывести сообщение и закрыть окно.
+            Toast.makeText(getApplicationContext(), "Все слова на этой треннировке пройдены", Toast.LENGTH_LONG).show();
+            finish();
+        }
+
+        // Рандом слов для проверки правильный перевод или нет (всего 3 слова, одно из них 100% правильное)
+        listRandom = new ArrayList<Word>();
+        listRandom = learningObject.getListChoice(mDb, 2);
+        listRandom.add(nowStudy);
+        Collections.shuffle(listRandom);
+
+        // Выводим один из вариантов на экран
+        textViewRussianWord.setText(listRandom.get(randomWord(0, listRandom.size())).getRussianWord());
+
 
         btnTrue = (Button) findViewById(R.id.buttonYes);
-
-        connectionDatabase();
-
-        nowStudy = learningObject.getWordForTextView(MarkExercise.TRUE_OR_FALSE, mDb);
-        textShowEnglish.setText(nowStudy.getEnglishWord());
-
-        String true_or_false = "";
-
-
-
-
         btnTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
-                //DO SOME STUFF ON BUTTON CLICK "I KNOW"
-                //
-                Toast.makeText(getApplicationContext(), "You clicked button YES", Toast.LENGTH_SHORT).show();
+
+                if (nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE))
+                {
+                    // Процес аналогичен для всех тренировок.
+
+                    textViewEnglishWord.setText("Yes");
+                    answer = true;
+
+                    learningObject.setWord(nowStudy.getId(), 1, mDb, MarkExercise.TRUE_OR_FALSE);
+                    learningObject.removeWordInList(nowStudy);
+                    copy.add(nowStudy);
+
+                    if (learningObject.getWordList().size()== 0)
+                    {
+                        learningObject.setWordList(copy);
+                        checkEndExercise();
+                    }
+                }
+                else
+                {
+                    textViewEnglishWord.setText("No, your wrong");
+                    textViewRussianWord.setText("Correct answer: " + nowStudy.getRussianWord());
+                }
+
             }
         });
 
@@ -60,10 +119,74 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         btnFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
-                //DO SOME STUFF ON BUTTON CLICK "I DON`T KNOW"
-                //
-                Toast.makeText(getApplicationContext(), "You clicked button NO", Toast.LENGTH_SHORT).show();
+
+                // Если перевод слова неверный и пользователь нажал "No", тогда пользователь прав и слово обновляется, как изучено
+                if (!nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE))
+                {
+                    // Процес аналогичен для всех тренировок.
+
+                    textViewEnglishWord.setText("Yes");
+
+                    answer = true;
+
+                    learningObject.setWord(nowStudy.getId(), 1, mDb, MarkExercise.TRUE_OR_FALSE);
+                    learningObject.removeWordInList(nowStudy);
+                    copy.add(nowStudy);
+
+                    if (learningObject.getWordList().size()== 0)
+                    {
+                        learningObject.setWordList(copy);
+                        checkEndExercise();
+                    }
+                }
+                else
+                {
+                    textViewEnglishWord.setText("No, your wrong");
+                    textViewRussianWord.setText("Correct answer: " + nowStudy.getRussianWord());
+                }
+            }
+        });
+
+        btnSkip = (Button) findViewById(R.id.NextButton);
+        btnSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                // Процес аналогичен для всех тренировок.
+
+                textViewEnglishWord.setText("");
+                textViewRussianWord.setText("");
+
+                Word tempSave = new Word();
+
+                if (answer == false && learningObject.getWordList().size()>1)
+                {
+                    tempSave.setId(nowStudy.getId());
+                    tempSave.setEnglishWord(nowStudy.getEnglishWord());
+                    tempSave.setRussianWord(nowStudy.getRussianWord());
+                    learningObject.removeWordInList(nowStudy);
+                }
+
+                nowStudy = learningObject.getWordForTextView(MarkExercise.TRUE_OR_FALSE, mDb);
+                textViewEnglishWord.setText(nowStudy.getEnglishWord());
+
+                try {
+                    listRandom = learningObject.getListChoice(mDb, 2);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                listRandom.add(nowStudy);
+                Collections.shuffle(listRandom);
+
+                textViewRussianWord.setText(listRandom.get(randomWord(0, listRandom.size()-1)).getRussianWord());
+
+                if (answer == false)
+                    learningObject.insertWordInList(tempSave);
+
+                answer = false;
+
             }
         });
     }
@@ -79,7 +202,12 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
             ListWord = (List<Word>) extras.getSerializable("ListWord");
             learningObject = new Exercise(ListWord);
         }
-        init();
+
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void connectionDatabase() {
@@ -94,5 +222,18 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         } catch (SQLException mSQLException) {
             throw mSQLException;
         }
+    }
+
+    public int randomWord(int min, int max){
+        max -= min;
+        return (int) (Math.random() * ++max) + min;
+    }
+
+    public void checkEndExercise() {
+        finish();
+        Intent selectExerciseActivity = new Intent(this, SelectExerciseActivity.class);
+        selectExerciseActivity.putExtra("UniqForm","Tranning");
+        selectExerciseActivity.putExtra("ListWord", (Serializable) learningObject.getWordList());
+        startActivity(selectExerciseActivity);
     }
 }

@@ -7,9 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
 import com.example.admin.wordtrainer20.HelperClasses.Exercise;
+import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
 import com.example.admin.wordtrainer20.HelperClasses.Word;
 
 import java.io.IOException;
@@ -26,14 +28,7 @@ public class SelectExerciseActivity extends GeneralMenu {
     private ImageButton exerciseChoiceEng_to_Rus;
     private final int NUMBER_FOR_TRAINING = 10;
     private List<Word> listWord = new ArrayList<Word>();
-    private Exercise learningObject;
     private int id_category;
-
-    /*
-    ПОКАЖИ ПРИМЕР, КАК ЭНЕЙБЛИТЬ КНОПКИ (ENABLE = false)
-    ВО ВСЕХ УПРАЖНЕНИЯХ ДОЛЖНА БЫТЬ КНОПКА ДАЛЕЕ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     */
-
 
 
     private void init(){
@@ -45,12 +40,22 @@ public class SelectExerciseActivity extends GeneralMenu {
 
         connectionDatabase();
 
+        // Проверить на изученность списка
 
         if (listWord.isEmpty()){
             try {
                 listWord = getWords();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+        else
+        {
+            if (isTranningOff()){
+                Toast.makeText(getApplicationContext(), "Слова потренированы!", Toast.LENGTH_LONG).show();
+                finish();
+                Intent myDictionaries = new Intent(SelectExerciseActivity.this, MyDictionaries.class);
+                startActivity(myDictionaries);
             }
         }
 
@@ -87,29 +92,22 @@ public class SelectExerciseActivity extends GeneralMenu {
                 //
                 Intent exerciseChoiceRus_to_Eng = new Intent(SelectExerciseActivity.this, ExerciseChoiceActivity.class);
                 exerciseChoiceRus_to_Eng.putExtra("ListWord", (Serializable) listWord);
+                exerciseChoiceRus_to_Eng.putExtra("TitleExercise", MarkExercise.RUS_TO_ENG);
                 startActivity(exerciseChoiceRus_to_Eng);
             }
         });
-
-        /*
 
 
         exerciseChoiceEng_to_Rus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Word> listChoiceEng_to_Rus = new ArrayList<Word>();
-                try {
-                    listChoiceEng_to_Rus  = getWords("Choice");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //
-                Intent openExerciseOneActivity = new Intent(SelectExerciseActivity.this, ExerciseChoiceActivity.class);
-                openExerciseOneActivity.putExtra("ListWord", (Serializable) listChoiceEng_to_Rus);
-                startActivity(openExerciseOneActivity);
+
+                Intent exerciseChoiceEng_to_Rus = new Intent(SelectExerciseActivity.this, ExerciseChoiceActivity.class);
+                exerciseChoiceEng_to_Rus.putExtra("ListWord", (Serializable) listWord);
+                exerciseChoiceEng_to_Rus.putExtra("TitleExercise", MarkExercise.ENG_TO_RUS);
+                startActivity(exerciseChoiceEng_to_Rus);
             }
         });
-        */
 
     }
 
@@ -144,9 +142,6 @@ public class SelectExerciseActivity extends GeneralMenu {
                 word.setEnglishWord(cursor.getString(cursor.getColumnIndex("English")));
                 word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));
                 word.setId(cursor.getInt(cursor.getColumnIndex("_id")));
-               // int category = cursor.getInt(cursor.getColumnIndex("Category"));
-                Boolean t = getFieldById("Writing", word.getId());
-                word.setProgress(t);
                 Boolean isSelected = getIsSelected(id_category);
                 Boolean isStudied = getIsStudied(word.getId());
                 if (isSelected && !isStudied)
@@ -160,7 +155,7 @@ public class SelectExerciseActivity extends GeneralMenu {
         return result;
     }
 
-       public Boolean getIsSelected(int category){
+    public Boolean getIsSelected(int category){
         Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary WHERE _id='"+ category + "'", null);
         cursor.moveToFirst();
         Boolean i = cursor.getInt(cursor.getColumnIndex("isSelected")) == 1;
@@ -176,52 +171,35 @@ public class SelectExerciseActivity extends GeneralMenu {
         return i;
     }
 
-    public Boolean getFieldById(String field, int id){
-        Cursor cursor = mDb.rawQuery("SELECT * FROM trainings WHERE _id='"+ id + "'", null);
-        cursor.moveToFirst();
-        Boolean t = cursor.getInt(cursor.getColumnIndex(field))==1;
-        cursor.close();
-        return t;
+    public boolean isTranningOff(){
+        boolean isOff = true;
+        for (Word w : listWord) {
+            if (!w.checkComplete(mDb)){
+                isOff = false;
+                break;
+            }
+        }
+
+        return isOff;
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_exercise);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
-            id_category = (int) extras.getInt("id");;
+        Bundle extrasFirst = getIntent().getExtras();
+        if (extrasFirst != null){
+            String activity = extrasFirst.getString("UniqForm");
+            if ((activity.equals("MyVocabulary")))
+                id_category = (int) extrasFirst.getInt("id");
+            else if ((activity.equals("Tranning")))
+                listWord = (List<Word>) extrasFirst.getSerializable("ListWord");
         }
+
         init();
     }
 
-    /*//
-    //
-    //CODE BELOW MUST BE REFACTERED
-    //
-    //
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater mMenuInflater = getMenuInflater();
-        mMenuInflater.inflate(R.menu.menu_items, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_setting:
-                Toast.makeText(SelectExerciseActivity.this, "You have tapped on SETTING.", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.action_about_us:
-                Toast.makeText(SelectExerciseActivity.this, "You have tapped on ABOUT US.", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 }

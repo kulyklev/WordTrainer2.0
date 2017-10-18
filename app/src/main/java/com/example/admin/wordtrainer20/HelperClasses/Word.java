@@ -1,18 +1,19 @@
 package com.example.admin.wordtrainer20.HelperClasses;
 
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import java.io.Serializable;
 
 public class Word implements Serializable {
     private int id;
     private String englishWord;
     private String russianWord;
-    private boolean progress;
 
     public Word(){
         englishWord ="";
         russianWord ="";
-        progress = false;
     }
 
     public Word(int id, String englishWord, String translateWord){
@@ -43,14 +44,6 @@ public class Word implements Serializable {
 
     public void setRussianWord(String russianWord) {
         this.russianWord = russianWord;
-    }
-
-    public boolean isProgress() {
-        return progress;
-    }
-
-    public void setProgress(boolean progress) {
-        this.progress = progress;
     }
 
     public boolean checkWord(String UserTranslate, MarkExercise NameExercise){
@@ -93,5 +86,12 @@ public class Word implements Serializable {
         return result;
     }
 
+    public boolean checkComplete(SQLiteDatabase mDb){
+        Cursor cursor = mDb.rawQuery("SELECT * FROM trainings WHERE _id='"+ this.id + "'", null);
+        cursor.moveToFirst();
+        Boolean t = cursor.getInt(cursor.getColumnIndex("Complete")) == 1;
+        cursor.close();
+        return t;
+    }
 
 }

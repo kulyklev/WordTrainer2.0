@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.util.*;
 
 
@@ -51,6 +52,8 @@ public class Exercise {
         return temp;
     }
 
+     // Изучено ли слово на данной тренировке
+
     public Boolean isStudiedTrainingsWord(int id, String field, SQLiteDatabase mDb)
     { //field - название тренировки
         Cursor cursor = mDb.rawQuery("SELECT * FROM trainings WHERE _id='"+ id + "'", null);
@@ -61,6 +64,7 @@ public class Exercise {
     }
 
 
+    // Выучены ли все слова на данной тренировке
     public Boolean isTrainingOff(MarkExercise mark, SQLiteDatabase mDb){
 
         boolean off = false; // Они не изучены
@@ -76,10 +80,12 @@ public class Exercise {
     }
 
 
+    // Получения поля для обновления базы
+
     private String getStringField(MarkExercise mark) {
         String s = "";
         if (mark == MarkExercise.ENG_TO_RUS)
-            s = "EngtoRus"; // Тоже выбор, но кривой
+            s = "EngToRus"; // Тоже выбор, но кривой
         else if (mark == MarkExercise.RUS_TO_ENG)
             s =  "Choice";
         else if (mark == MarkExercise.TRUE_OR_FALSE)
@@ -90,6 +96,8 @@ public class Exercise {
         return s;
     }
 
+
+    // Установить слово изученым или нет
     public void setWord(long id, long valueTrueFalse, SQLiteDatabase mDb, MarkExercise mark){
         String field = getStringField(mark);
         Cursor cursor = mDb.rawQuery("UPDATE trainings" +
@@ -105,6 +113,10 @@ public class Exercise {
 
     public void insertWordInList(Word word) { WordList.add(word); }
 
+    // Если пользователю сгенерировало набор , где есть слова , которые прошли данную тренировку, тогда
+    // с помощью функции enableStudiedWords перемещаем их в дополнительный массив.
+
+
     public List<Word> enableStudiedWords(MarkExercise mark, SQLiteDatabase mDb){
         List<Word> copy = new ArrayList<Word>();
         String field = getStringField(mark);
@@ -115,10 +127,14 @@ public class Exercise {
         return copy;
     }
 
-    public List<Word> getListChoice(SQLiteDatabase mDb) throws IOException
+
+    // Генерация списка слов для выбора
+
+
+    public List<Word> getListChoice(SQLiteDatabase mDb, int countRandom) throws IOException
     {
         List<Word> result = new ArrayList<>();
-        String query = "SELECT * FROM words ORDER BY RANDOM() LIMIT 4";
+        String query = "SELECT * FROM words ORDER BY RANDOM() LIMIT " + Integer.toString(countRandom);
         Cursor cursor = mDb.rawQuery(query, null);
 
         if(cursor.moveToFirst()) {
@@ -134,55 +150,6 @@ public class Exercise {
         cursor.close();
         return result;
     }
-
-    public String getVariantForTrueOrFalse(SQLiteDatabase mDb){
-        String query = "SELECT * FROM words ORDER BY RANDOM() LIMIT 2";
-        Cursor cursor = mDb.rawQuery(query, null);
-        List <String> listStr = new ArrayList<>();
-        String result  = "";
-        if(cursor.moveToFirst()) {
-            while (!cursor.isAfterLast())
-            {
-                result  = cursor.getString(cursor.getColumnIndex("Russian"));
-                listStr.add(result);
-                cursor.moveToNext();
-            }
-        }
-
-        int INDEX_RANDOM = GetRandomIndexForListWord(0, listStr.size());
-       //result = listStr.get();
-
-        cursor.close();
-        return result;
-    }
-
-
-
-
-
-/*
-    public Boolean getIsSelected(int category){
-        Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary WHERE _id='"+ category + "'", null);
-        cursor.moveToFirst();
-        Boolean i = cursor.getInt(cursor.getColumnIndex("isSelected")) == 1;
-        cursor.close();
-        return i;
-    }
-
-    public Boolean getIsStudied(int id){
-        Cursor cursor = mDb.rawQuery("SELECT * FROM study WHERE _id='"+ id + "'", null);
-        cursor.moveToFirst();
-        Boolean i = cursor.getInt(cursor.getColumnIndex("isStudied")) == 1;
-        cursor.close();
-        return i;
-    }
-*/
-
-
-
-
-
-
 
 
     public int GetRandomIndexForListWord(int min, int max){
