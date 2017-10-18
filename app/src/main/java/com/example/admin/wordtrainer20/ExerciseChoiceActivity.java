@@ -44,9 +44,11 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
 
 
-    private void init() throws IOException {
+    private void initRussianToEnglish() throws IOException {
 
         connectionDatabase();
+
+
         textShow = (TextView) findViewById(R.id.wordTextView);
 
         if (learningObject.isTrainingOff(MarkExercise.RUS_TO_ENG, mDb))
@@ -107,7 +109,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
             // do something with the customer
         }
         try {
-            init();
+            initRussianToEnglish();
         } catch (IOException e) {
             e.printStackTrace();
         }
