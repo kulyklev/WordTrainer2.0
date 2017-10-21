@@ -47,11 +47,10 @@
         android:layout_height="70dp"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
         android:alpha="1"
         android:background="@drawable/ic_add_circle_black_24dp"
         android:contentDescription="@string/add_dictionary"
-        android:elevation="16dp"
+        android:elevation="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_editor_absoluteY="520dp" />

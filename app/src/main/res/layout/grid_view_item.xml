@@ -14,10 +14,11 @@
     <TextView
         android:layout_below="@+id/icons"
         android:id="@+id/signature"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
         android:text="@string/grid_view_title"
-        android:textAlignment="center"
-        android:textSize="18sp"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
         />
 </RelativeLayout>
