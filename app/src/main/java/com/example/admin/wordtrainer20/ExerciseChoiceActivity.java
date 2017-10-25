@@ -355,7 +355,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
         anim.start();
     }
-
+    //
     private void defaultButtonBackground(){
         selectBtn_1.setBackgroundResource(android.R.drawable.btn_default);
         selectBtn_2.setBackgroundResource(android.R.drawable.btn_default);
