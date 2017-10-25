@@ -1,8 +1,10 @@
 package com.example.admin.wordtrainer20;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -92,9 +94,8 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
                 if (nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE))
                 {
                     // Процес аналогичен для всех тренировок.
-
-                    textViewEnglishWord.setText("Yes");
                     answer = true;
+                    changeButtonBackground(btnTrue, answer);
 
                     learningObject.setWord(nowStudy.getId(), 1, mDb, MarkExercise.TRUE_OR_FALSE);
                     learningObject.removeWordInList(nowStudy);
@@ -108,8 +109,8 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
                 }
                 else
                 {
-                    textViewEnglishWord.setText("No, your wrong");
                     textViewRussianWord.setText("Correct answer: " + nowStudy.getRussianWord());
+                    changeButtonBackground(btnTrue, answer);
                 }
 
             }
@@ -125,9 +126,8 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
                 {
                     // Процес аналогичен для всех тренировок.
 
-                    textViewEnglishWord.setText("Yes");
-
                     answer = true;
+                    changeButtonBackground(btnFalse, answer);
 
                     learningObject.setWord(nowStudy.getId(), 1, mDb, MarkExercise.TRUE_OR_FALSE);
                     learningObject.removeWordInList(nowStudy);
@@ -141,8 +141,8 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
                 }
                 else
                 {
-                    textViewEnglishWord.setText("No, your wrong");
                     textViewRussianWord.setText("Correct answer: " + nowStudy.getRussianWord());
+                    changeButtonBackground(btnFalse, answer);
                 }
             }
         });
@@ -152,7 +152,7 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
             @Override
             public void onClick(View v) {
 
-
+                defaultButtonBackground();
                 // Процес аналогичен для всех тренировок.
 
                 textViewEnglishWord.setText("");
@@ -235,5 +235,39 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         selectExerciseActivity.putExtra("UniqForm","Tranning");
         selectExerciseActivity.putExtra("ListWord", (Serializable) learningObject.getWordList());
         startActivity(selectExerciseActivity);
+    }
+
+    private void changeButtonBackground(final Button btn, boolean color){
+        //if color = true => green
+        //if color = false => red
+
+        String clr = color ? "#FF00FF00" : "#FFFF0000";
+        final float[] from = new float[3],
+                to =   new float[3];
+
+        Color.colorToHSV(Color.parseColor("#FFFFFFFF"), from);   // from white
+        Color.colorToHSV(Color.parseColor(clr), to);     // to red
+
+        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
+        anim.setDuration(300);                              // for 300 ms
+
+        final float[] hsv  = new float[3];                  // transition color
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
+            @Override public void onAnimationUpdate(ValueAnimator animation) {
+                // Transition along each axis of HSV (hue, saturation, value)
+                hsv[0] = from[0] + (to[0] - from[0])*animation.getAnimatedFraction();
+                hsv[1] = from[1] + (to[1] - from[1])*animation.getAnimatedFraction();
+                hsv[2] = from[2] + (to[2] - from[2])*animation.getAnimatedFraction();
+
+                btn.setBackgroundColor(Color.HSVToColor(hsv));
+            }
+        });
+
+        anim.start();
+    }
+
+    private void defaultButtonBackground(){
+        btnFalse.setBackgroundResource(android.R.drawable.btn_default);
+        btnTrue.setBackgroundResource(android.R.drawable.btn_default);
     }
 }
