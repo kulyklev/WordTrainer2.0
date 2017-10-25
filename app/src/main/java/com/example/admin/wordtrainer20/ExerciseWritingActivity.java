@@ -117,7 +117,7 @@ public class ExerciseWritingActivity extends GeneralMenu {
                     else
                     {
                         // Если ошибка, слово выводим ошибку.
-                        textViewWord.setText("No");
+                        textViewWord.setText(textViewWord.getText() + "\n\nCorrect answer is " + nowStudy.getEnglishWord());
                         /*
                             ЛЕВ добавь поле для отображения правильного ответа
                          */
