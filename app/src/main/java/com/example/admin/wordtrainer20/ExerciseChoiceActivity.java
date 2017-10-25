@@ -1,11 +1,16 @@
 package com.example.admin.wordtrainer20;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -162,8 +167,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                 //
                 if (nowStudy.checkWord(selectBtn_1.getText().toString(), TypeExercise))
                 {
-                    textShow.setText("Yes");
-                    answerTrue();
+                    answerTrue(selectBtn_1);
 
                     if (learningObject.getWordList().size()== 0)
                     {
@@ -173,7 +177,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                 }
                 else
                 {
-                    answerFalse();
+                    answerFalse(selectBtn_1);
                 }
 
                 break;
@@ -182,8 +186,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
                 if (nowStudy.checkWord(selectBtn_2.getText().toString(), TypeExercise))
                 {
-                    textShow.setText("Yes");
-                    answerTrue();
+                    answerTrue(selectBtn_2);
                     if (learningObject.getWordList().size()== 0)
                     {
                         learningObject.setWordList(copy);
@@ -192,8 +195,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                 }
                 else
                 {
-                    textShow.setText("No");
-                    answerFalse();
+                    answerFalse(selectBtn_2);
                 }
 
                 break;
@@ -202,8 +204,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
                 if (nowStudy.checkWord(selectBtn_3.getText().toString(), TypeExercise))
                 {
-                    textShow.setText("Yes");
-                    answerTrue();
+                    answerTrue(selectBtn_3);
                     if (learningObject.getWordList().size()== 0)
                     {
                         learningObject.setWordList(copy);
@@ -212,8 +213,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                 }
                 else
                 {
-                    textShow.setText("No");
-                    answerFalse();
+                    answerFalse(selectBtn_3);
                 }
 
                 break;
@@ -222,8 +222,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
                 if (nowStudy.checkWord(selectBtn_4.getText().toString(), TypeExercise))
                 {
-                    textShow.setText("Yes");
-                    answerTrue();
+                    answerTrue(selectBtn_4);
                     if (learningObject.getWordList().size()== 0)
                     {
                         learningObject.setWordList(copy);
@@ -232,8 +231,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                 }
                 else
                 {
-                    textShow.setText("No");
-                    answerFalse();
+                    answerFalse(selectBtn_4);
                 }
 
                 break;
@@ -242,8 +240,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
                 if (nowStudy.checkWord(selectBtn_5.getText().toString(), TypeExercise))
                 {
-                    textShow.setText("Yes");
-                    answerTrue();
+                    answerTrue(selectBtn_5);
                     if (learningObject.getWordList().size()== 0)
                     {
                         learningObject.setWordList(copy);
@@ -253,13 +250,14 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                 else
                 {
                     textShow.setText("No");
-                    answerFalse();
+                    answerFalse(selectBtn_5);
                 }
                 break;
 
             case R.id.NextButt:
 
                 textShow.setText("");
+                defaultButtonBackground();
 
                 Word tempSave = new Word();
 
@@ -307,18 +305,62 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
         startActivity(selectExerciseActivity);
     }
 
-    public void answerFalse() {
-        textShow.setText("No");
+    public void answerFalse(Button btn) {
+       //
+        changeButtonBackground(btn, false);
+        //
+
+        //textShow.setText("No");
         ans = false;
         learningObject.setWord(nowStudy.getId(),0, mDb, MarkExercise.WRITING);
     }
 
-    public void answerTrue() {
+    public void answerTrue(final Button btn) {
+        //
+        changeButtonBackground(btn, true);
+        //
+
+
         ans = true;
         learningObject.setWord(nowStudy.getId(),1, mDb, TypeExercise);
         learningObject.removeWordInList(nowStudy);
         copy.add(nowStudy);
     }
 
+    private void changeButtonBackground(final Button btn, boolean color){
+        //if color = true => green
+        //if color = false => red
 
+        String clr = color ? "#FF00FF00" : "#FFFF0000";
+        final float[] from = new float[3],
+                to =   new float[3];
+
+        Color.colorToHSV(Color.parseColor("#FFFFFFFF"), from);   // from white
+        Color.colorToHSV(Color.parseColor(clr), to);     // to red
+
+        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
+        anim.setDuration(300);                              // for 300 ms
+
+        final float[] hsv  = new float[3];                  // transition color
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
+            @Override public void onAnimationUpdate(ValueAnimator animation) {
+                // Transition along each axis of HSV (hue, saturation, value)
+                hsv[0] = from[0] + (to[0] - from[0])*animation.getAnimatedFraction();
+                hsv[1] = from[1] + (to[1] - from[1])*animation.getAnimatedFraction();
+                hsv[2] = from[2] + (to[2] - from[2])*animation.getAnimatedFraction();
+
+                btn.setBackgroundColor(Color.HSVToColor(hsv));
+            }
+        });
+
+        anim.start();
+    }
+
+    private void defaultButtonBackground(){
+        selectBtn_1.setBackgroundResource(android.R.drawable.btn_default);
+        selectBtn_2.setBackgroundResource(android.R.drawable.btn_default);
+        selectBtn_3.setBackgroundResource(android.R.drawable.btn_default);
+        selectBtn_4.setBackgroundResource(android.R.drawable.btn_default);
+        selectBtn_5.setBackgroundResource(android.R.drawable.btn_default);
+    }
 }
