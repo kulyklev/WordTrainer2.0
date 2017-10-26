@@ -78,11 +78,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         mInput.close();
     }
 
-    public boolean openDataBase() throws SQLException {
-        mDataBase = SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        return mDataBase != null;
-    }
-
     @Override
     public synchronized void close() {
         if (mDataBase != null)
@@ -101,29 +96,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             mNeedUpdate = true;
     }
 
-
-    public List<Word> getRandomWords() throws IOException
-    {
-        List<Word> result = new ArrayList<>();
-        String query = "SELECT * FROM words";
-        while (result.size()< 10)
-        {
-            Cursor cursor = mDataBase.rawQuery(query, null);
-            int random = (int)(Math.random()*20);
-            int i=0;
-            if (cursor.moveToFirst()) {
-                do {
-                    if (i%random==0) {
-                        Word word = new Word();
-                        word.setEnglishWord(cursor.getString(1));
-                        word.setRussianWord(cursor.getString(3));
-                        result.add(word);
-                    }
-                    i++;
-                } while (cursor.moveToNext());
-            }
-        }
-        Log.d("getRandomWords()", result.toString());
-        return result;
-    }
 }
