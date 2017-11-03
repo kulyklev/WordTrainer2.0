@@ -1,25 +1,31 @@
 package com.example.admin.wordtrainer20;
 
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-import android.os.*;
-import android.view.*;
-import android.widget.*;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
-import com.example.admin.wordtrainer20.HelperClasses.*;
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
+import com.example.admin.wordtrainer20.HelperClasses.Word;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectExerciseActivity extends GeneralMenu {
+    private final int NUMBER_FOR_TRAINING = 10;
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private ImageButton exerciseTrue_or_False;
     private ImageButton exerciseWriting;
     private ImageButton exerciseChoiceRus_to_Eng;
     private ImageButton exerciseChoiceEng_to_Rus;
-    private final int NUMBER_FOR_TRAINING = 10;
     private List<Word> listWord = new ArrayList<Word>();
     private int id_category;
 

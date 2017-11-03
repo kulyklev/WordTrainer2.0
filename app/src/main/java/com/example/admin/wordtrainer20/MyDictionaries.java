@@ -1,28 +1,33 @@
 package com.example.admin.wordtrainer20;
 
-import android.app.*;
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-import android.os.*;
-import android.view.*;
-import android.widget.*;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import com.example.admin.wordtrainer20.AdapterFolder.*;
-import com.example.admin.wordtrainer20.HelperClasses.*;
+import com.example.admin.wordtrainer20.AdapterFolder.ListViewAdapter;
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyDictionaries extends GeneralMenu {
 
+    public ImageButton openLibraryActivityButt;
     private DatabaseHelper mDBHelper;  // Вспомогательный класс для подключения базы
     private SQLiteDatabase mDb;        // Соединение с базой
     private String[] dataUserTopic;    // Пользовательские словари
     private ListView listView;         // Список для отображения
     private ListViewAdapter listViewAdapter;
-
-    public ImageButton openLibraryActivityButt;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -142,7 +147,6 @@ public class MyDictionaries extends GeneralMenu {
         cursor.close();
     }
 
-
     public List<String> getTopic() {
         List<String> listTopic = new ArrayList<>();
         Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary WHERE isSelected=1;", null);
@@ -156,4 +160,5 @@ public class MyDictionaries extends GeneralMenu {
         cursor.close();
         return listTopic;
     }
+
 }

@@ -1,9 +1,11 @@
 package com.example.admin.wordtrainer20;
 
-import android.content.*;
-import android.support.v7.app.*;
-import android.view.*;
-import android.widget.*;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 /**
  * Created by admin on 22.09.2017.

@@ -1,13 +1,19 @@
 package com.example.admin.wordtrainer20.AdapterFolder;
 
-import android.content.*;
-import android.graphics.*;
-import android.view.*;
-import android.widget.*;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.admin.wordtrainer20.R;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by admin on 21.09.2017.
@@ -28,11 +34,6 @@ public class GridViewAdapter extends BaseAdapter {
                 icons) {
             this.icons.add(BitmapFactory.decodeByteArray(img, 0, img.length));
         }
-    }
-
-    private static class ViewHolder {
-        ImageView icon;
-        TextView text;
     }
 
     @Override
@@ -70,5 +71,10 @@ public class GridViewAdapter extends BaseAdapter {
         viewHolder.icon.setImageBitmap(icons.get(position));
 
         return convertView;
+    }
+
+    private static class ViewHolder {
+        ImageView icon;
+        TextView text;
     }
 }

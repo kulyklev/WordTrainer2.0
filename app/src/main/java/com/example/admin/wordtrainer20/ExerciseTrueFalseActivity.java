@@ -1,18 +1,26 @@
 package com.example.admin.wordtrainer20;
 
-import android.animation.*;
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-import android.graphics.*;
-import android.os.*;
-import android.view.*;
-import android.widget.*;
+import android.animation.ValueAnimator;
+import android.content.Intent;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.admin.wordtrainer20.HelperClasses.*;
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+import com.example.admin.wordtrainer20.HelperClasses.Exercise;
+import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
+import com.example.admin.wordtrainer20.HelperClasses.Word;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ExerciseTrueFalseActivity extends GeneralMenu {
 

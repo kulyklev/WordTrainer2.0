@@ -1,8 +1,12 @@
 package com.example.admin.wordtrainer20.AdapterFolder;
 
-import android.view.*;
-import android.widget.*;
-import android.content.*;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.example.admin.wordtrainer20.R;
 
@@ -11,11 +15,11 @@ import com.example.admin.wordtrainer20.R;
  */
 
 public class CustomAdapter extends ArrayAdapter<Model> {
+    private static LayoutInflater inflater = null;
     Model[] modelItems = null;
     Context context;
     private View vi;
     private ViewHolder viewHolder;
-    private static LayoutInflater inflater = null;
 
     public CustomAdapter(Context context, Model[] resource) {
         super(context, R.layout.row, resource);

@@ -1,11 +1,14 @@
 package com.example.admin.wordtrainer20;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.os.*;
-import android.view.*;
-import android.widget.*;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CalendarView;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class CalendarActivity extends GeneralMenu {
 

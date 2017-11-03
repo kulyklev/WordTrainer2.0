@@ -1,21 +1,30 @@
 package com.example.admin.wordtrainer20;
 
-import android.animation.*;
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-import android.graphics.*;
-import android.support.v7.app.*;
-import android.os.*;
-import android.view.*;
-import android.widget.*;
+import android.animation.ValueAnimator;
+import android.content.Intent;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.admin.wordtrainer20.HelperClasses.*;
+import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+import com.example.admin.wordtrainer20.HelperClasses.Exercise;
+import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
+import com.example.admin.wordtrainer20.HelperClasses.Word;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ExerciseChoiceActivity extends AppCompatActivity implements View.OnClickListener {
+    private final int RANDOM_NUMBER = 5;
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private Button selectBtn_1;
@@ -24,7 +33,6 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
     private Button selectBtn_4;
     private Button selectBtn_5;
     private Button skipBut;
-    private final int RANDOM_NUMBER = 5;
     private List<Word> copy = new ArrayList<>();
     private Exercise learningObject;
     private Word nowStudy = new Word();

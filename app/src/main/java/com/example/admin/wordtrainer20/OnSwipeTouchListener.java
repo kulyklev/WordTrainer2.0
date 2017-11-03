@@ -1,7 +1,9 @@
 package com.example.admin.wordtrainer20;
 
-import android.content.*;
-import android.view.*;
+import android.content.Context;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 
 /**
  * Created by admin on 11.10.2017.
@@ -17,6 +19,18 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
+    }
+
+    public void onSwipeRight() {
+    }
+
+    public void onSwipeLeft() {
+    }
+
+    public void onSwipeTop() {
+    }
+
+    public void onSwipeBottom() {
     }
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -57,17 +71,5 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
             }
             return result;
         }
-    }
-
-    public void onSwipeRight() {
-    }
-
-    public void onSwipeLeft() {
-    }
-
-    public void onSwipeTop() {
-    }
-
-    public void onSwipeBottom() {
     }
 }

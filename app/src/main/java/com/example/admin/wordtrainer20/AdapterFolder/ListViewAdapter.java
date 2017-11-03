@@ -1,10 +1,16 @@
 package com.example.admin.wordtrainer20.AdapterFolder;
 
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-import android.view.*;
-import android.widget.*;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.admin.wordtrainer20.R;
 import com.example.admin.wordtrainer20.SelectExerciseActivity;
@@ -23,12 +29,6 @@ public class ListViewAdapter extends BaseAdapter {
         this.context = context;
         this.libraryNames = libraryNames;
         this.mDb = mDb;
-    }
-
-    private static class ViewHolder {
-        ImageView image;
-        TextView text;
-        Button openExerciseButt;
     }
 
     @Override
@@ -91,5 +91,11 @@ public class ListViewAdapter extends BaseAdapter {
         int i = cursor.getInt(cursor.getColumnIndex("_id"));
         cursor.close();
         return i;
+    }
+
+    private static class ViewHolder {
+        ImageView image;
+        TextView text;
+        Button openExerciseButt;
     }
 }
