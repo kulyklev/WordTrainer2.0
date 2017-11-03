@@ -1,24 +1,18 @@
 package com.example.admin.wordtrainer20;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.app.*;
+import android.content.*;
+import android.database.*;
+import android.database.sqlite.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
-import com.example.admin.wordtrainer20.AdapterFolder.ListViewAdapter;
-import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+import com.example.admin.wordtrainer20.AdapterFolder.*;
+import com.example.admin.wordtrainer20.HelperClasses.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class MyDictionaries extends GeneralMenu {
 
@@ -30,8 +24,18 @@ public class MyDictionaries extends GeneralMenu {
 
     public ImageButton openLibraryActivityButt;
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            Intent refresh = new Intent(this, MyDictionaries.class);
+            this.finish();
+            startActivity(refresh);
+        }
+    }
+
     //  Мои словари
-    public void init(){
+    public void init() {
         mDBHelper = new DatabaseHelper(this);
 
         checkConnectionDatabase();
@@ -45,14 +49,14 @@ public class MyDictionaries extends GeneralMenu {
             @Override
             public void onClick(View v) {
                 Intent openLibrariesActivity = new Intent(MyDictionaries.this, LibraryActivity.class);
-                startActivity(openLibrariesActivity);
+                startActivityForResult(openLibrariesActivity, 1);
             }
         });
 
         listViewAdapter = new ListViewAdapter(MyDictionaries.this, dataUserTopic, mDb);
         listView = (ListView) findViewById(R.id.LibListView);
         listView.setAdapter(listViewAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
                 //Pass some dataUserTopic
@@ -100,22 +104,17 @@ public class MyDictionaries extends GeneralMenu {
         });
     }
 
+
     public void checkConnectionDatabase() {
-        try
-        {
+        try {
             mDBHelper.updateDataBase();
-        }
-        catch (IOException mIOException)
-        {
+        } catch (IOException mIOException) {
             throw new Error("UnableToUpdateDatabase");
         }
 
-        try
-        {
+        try {
             mDb = mDBHelper.getWritableDatabase();
-        }
-        catch (SQLException mSQLException)
-        {
+        } catch (SQLException mSQLException) {
             throw mSQLException;
         }
     }
@@ -128,26 +127,26 @@ public class MyDictionaries extends GeneralMenu {
         init();
     }
 
-    public int getId(String name){
-        Cursor cursor = mDb.rawQuery("SELECT _id FROM vocabulary WHERE ShortName='"+ name + "'", null);
+    public int getId(String name) {
+        Cursor cursor = mDb.rawQuery("SELECT _id FROM vocabulary WHERE ShortName='" + name + "'", null);
         cursor.moveToFirst();
         int i = cursor.getInt(cursor.getColumnIndex("_id"));
         cursor.close();
         return i;
     }
 
-    public void setVocabulary(long id){
+    public void setVocabulary(long id) {
         Cursor cursor = mDb.rawQuery("UPDATE vocabulary" +
-                " SET isSelected = 0 WHERE _id='" + id + "'",null);
+                " SET isSelected = 0 WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
     }
 
 
-    public List<String> getTopic(){
+    public List<String> getTopic() {
         List<String> listTopic = new ArrayList<>();
         Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary WHERE isSelected=1;", null);
-        if(cursor.getCount()>0) {
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
                 listTopic.add(cursor.getString(cursor.getColumnIndex("ShortName")));

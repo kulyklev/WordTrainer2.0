@@ -1,15 +1,14 @@
 package com.example.admin.wordtrainer20;
 
-import android.content.Intent;
+import android.content.*;
 import android.database.*;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.view.View;
+import android.database.sqlite.*;
+import android.os.*;
+import android.view.*;
 import android.widget.*;
 
-import com.example.admin.wordtrainer20.AdapterFolder.CustomAdapter;
-import com.example.admin.wordtrainer20.AdapterFolder.Model;
-import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+import com.example.admin.wordtrainer20.AdapterFolder.*;
+import com.example.admin.wordtrainer20.HelperClasses.*;
 
 import java.io.*;
 import java.util.*;
@@ -55,12 +54,9 @@ public class ListOfWordsActivity extends GeneralMenu {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 int study_id = getIdByEnglish(modelItems[position].getCategory());
-                if (!adapter.getCheckBox(position))
-                {
+                if (!adapter.getCheckBox(position)) {
                     setWordTrue(study_id);
-                }
-                else
-                {
+                } else {
                     setWordFalse(study_id);
                 }
                 adapter.setCheckBox(position);
@@ -72,17 +68,16 @@ public class ListOfWordsActivity extends GeneralMenu {
         });
     }
 
-    public List<Model> getWords(int id) throws IOException
-    {
+    public List<Model> getWords(int id) throws IOException {
         List<Model> list = new ArrayList<>();
-        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE Category='"+ id + "'", null);
-        if(cursor.getCount()>0) {
+        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE Category='" + id + "'", null);
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
                 String s = cursor.getString(cursor.getColumnIndex("English"));
                 Integer i = cursor.getInt(cursor.getColumnIndex("_id"));
                 Boolean b = getIsStudied(i);
-                Model model = new Model(s,b);
+                Model model = new Model(s, b);
                 list.add(model);
             }
             while (cursor.moveToNext());
@@ -91,34 +86,34 @@ public class ListOfWordsActivity extends GeneralMenu {
         return list;
     }
 
-    public int getIdByEnglish(String english){
+    public int getIdByEnglish(String english) {
         String copyEnglish = english.replaceAll("'", "''");
 
-        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE English='"+ copyEnglish + "'", null);
+        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE English='" + copyEnglish + "'", null);
         cursor.moveToFirst();
         int i = cursor.getInt(cursor.getColumnIndex("_id"));
         cursor.close();
         return i;
     }
 
-    public Boolean getIsStudied(int id){
-        Cursor cursor = mDb.rawQuery("SELECT * FROM study WHERE _id='"+ id + "'", null);
+    public Boolean getIsStudied(int id) {
+        Cursor cursor = mDb.rawQuery("SELECT * FROM study WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         Boolean i = cursor.getInt(cursor.getColumnIndex("isStudied")) == 1;
         cursor.close();
         return i;
     }
 
-    public void setWordTrue(long id){
+    public void setWordTrue(long id) {
         Cursor cursor = mDb.rawQuery("UPDATE study" +
-                " SET isStudied = 1 WHERE _id='" + id + "'",null);
+                " SET isStudied = 1 WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
     }
 
-    public void setWordFalse(long id){
+    public void setWordFalse(long id) {
         Cursor cursor = mDb.rawQuery("UPDATE study" +
-                " SET isStudied = 0 WHERE _id='" + id + "'",null);
+                " SET isStudied = 0 WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
     }
@@ -128,7 +123,7 @@ public class ListOfWordsActivity extends GeneralMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_words);
         Intent intent = getIntent();
-        categoryId = intent.getIntExtra("id",0);
+        categoryId = intent.getIntExtra("id", 0);
 
         init();
     }

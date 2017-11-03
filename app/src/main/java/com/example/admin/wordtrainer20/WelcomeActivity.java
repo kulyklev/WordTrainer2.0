@@ -1,8 +1,8 @@
 package com.example.admin.wordtrainer20;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.content.*;
+import android.support.v7.app.*;
+import android.os.*;
 
 public class WelcomeActivity extends AppCompatActivity {
 

@@ -1,30 +1,19 @@
 package com.example.admin.wordtrainer20;
 
-import android.animation.ValueAnimator;
-import android.content.Intent;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.animation.*;
+import android.content.*;
+import android.database.*;
+import android.database.sqlite.*;
+import android.graphics.*;
+import android.support.v7.app.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
-import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
-import com.example.admin.wordtrainer20.HelperClasses.Exercise;
-import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
-import com.example.admin.wordtrainer20.HelperClasses.Word;
+import com.example.admin.wordtrainer20.HelperClasses.*;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class ExerciseChoiceActivity extends AppCompatActivity implements View.OnClickListener {
     private DatabaseHelper mDBHelper;
@@ -42,8 +31,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
     private TextView textShow;
     private MarkExercise TypeExercise;
     private boolean ans; // Верный / Не вырный ответ
-    private List <Word> listRandom; // Рандом элементов выбора
-
+    private List<Word> listRandom; // Рандом элементов выбора
 
 
     @Override
@@ -52,8 +40,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_exercise_choice);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
             List<Word> ListWord = new ArrayList<>();    // Набор для изучения
             ListWord = (List<Word>) extras.getSerializable("ListWord");
             TypeExercise = (MarkExercise) extras.getSerializable("TitleExercise");
@@ -91,12 +78,10 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
         textShow = (TextView) findViewById(R.id.wordTextView);
 
-        if (learningObject.isTrainingOff(TypeExercise, mDb))
-        { // Проверка на конец тренировки
+        if (learningObject.isTrainingOff(TypeExercise, mDb)) { // Проверка на конец тренировки
             copy = learningObject.enableStudiedWords(TypeExercise, mDb);
-            if (copy.size() > 0)
-            {
-                for (Word w: copy) {
+            if (copy.size() > 0) {
+                for (Word w : copy) {
                     learningObject.removeWordInList(w);
                 }
             }
@@ -105,9 +90,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                 textShow.setText(nowStudy.getRussianWord());
             else
                 textShow.setText(nowStudy.getEnglishWord());
-        }
-        else
-        {
+        } else {
             Toast.makeText(getApplicationContext(), "Все слова на этой треннировке пройдены", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -151,7 +134,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
     // В зависимости от тренировки смена параметров
 
-    private String wordForExercise(MarkExercise mark, int index, List<Word> listRandom){
+    private String wordForExercise(MarkExercise mark, int index, List<Word> listRandom) {
         if (mark == MarkExercise.RUS_TO_ENG)
             return listRandom.get(index).getEnglishWord();
         else
@@ -160,23 +143,18 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
 
     @Override
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
         switch (v.getId()) {
             case R.id.variantButt_1:
                 //
-                if (nowStudy.checkWord(selectBtn_1.getText().toString(), TypeExercise))
-                {
+                if (nowStudy.checkWord(selectBtn_1.getText().toString(), TypeExercise)) {
                     answerTrue(selectBtn_1);
 
-                    if (learningObject.getWordList().size()== 0)
-                    {
+                    if (learningObject.getWordList().size() == 0) {
                         learningObject.setWordList(copy);
                         checkEndExercise();
                     }
-                }
-                else
-                {
+                } else {
                     answerFalse(selectBtn_1);
                 }
 
@@ -184,17 +162,13 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
             case R.id.variantButt_2:
 
-                if (nowStudy.checkWord(selectBtn_2.getText().toString(), TypeExercise))
-                {
+                if (nowStudy.checkWord(selectBtn_2.getText().toString(), TypeExercise)) {
                     answerTrue(selectBtn_2);
-                    if (learningObject.getWordList().size()== 0)
-                    {
+                    if (learningObject.getWordList().size() == 0) {
                         learningObject.setWordList(copy);
                         checkEndExercise();
                     }
-                }
-                else
-                {
+                } else {
                     answerFalse(selectBtn_2);
                 }
 
@@ -202,17 +176,13 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
             case R.id.variantButt_3:
 
-                if (nowStudy.checkWord(selectBtn_3.getText().toString(), TypeExercise))
-                {
+                if (nowStudy.checkWord(selectBtn_3.getText().toString(), TypeExercise)) {
                     answerTrue(selectBtn_3);
-                    if (learningObject.getWordList().size()== 0)
-                    {
+                    if (learningObject.getWordList().size() == 0) {
                         learningObject.setWordList(copy);
                         checkEndExercise();
                     }
-                }
-                else
-                {
+                } else {
                     answerFalse(selectBtn_3);
                 }
 
@@ -220,17 +190,13 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
             case R.id.variantButt_4:
 
-                if (nowStudy.checkWord(selectBtn_4.getText().toString(), TypeExercise))
-                {
+                if (nowStudy.checkWord(selectBtn_4.getText().toString(), TypeExercise)) {
                     answerTrue(selectBtn_4);
-                    if (learningObject.getWordList().size()== 0)
-                    {
+                    if (learningObject.getWordList().size() == 0) {
                         learningObject.setWordList(copy);
                         checkEndExercise();
                     }
-                }
-                else
-                {
+                } else {
                     answerFalse(selectBtn_4);
                 }
 
@@ -238,17 +204,13 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
             case R.id.variantButt_5:
 
-                if (nowStudy.checkWord(selectBtn_5.getText().toString(), TypeExercise))
-                {
+                if (nowStudy.checkWord(selectBtn_5.getText().toString(), TypeExercise)) {
                     answerTrue(selectBtn_5);
-                    if (learningObject.getWordList().size()== 0)
-                    {
+                    if (learningObject.getWordList().size() == 0) {
                         learningObject.setWordList(copy);
                         checkEndExercise();
                     }
-                }
-                else
-                {
+                } else {
                     textShow.setText("No");
                     answerFalse(selectBtn_5);
                 }
@@ -261,8 +223,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
                 Word tempSave = new Word();
 
-                if (ans == false && learningObject.getWordList().size()>1)
-                {
+                if (ans == false && learningObject.getWordList().size() > 1) {
                     tempSave.setId(nowStudy.getId());
                     tempSave.setEnglishWord(nowStudy.getEnglishWord());
                     tempSave.setRussianWord(nowStudy.getRussianWord());
@@ -300,19 +261,19 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
     public void checkEndExercise() {
         finish();
         Intent selectExerciseActivity = new Intent(this, SelectExerciseActivity.class);
-        selectExerciseActivity.putExtra("UniqForm","Tranning");
+        selectExerciseActivity.putExtra("UniqForm", "Tranning");
         selectExerciseActivity.putExtra("ListWord", (Serializable) learningObject.getWordList());
         startActivity(selectExerciseActivity);
     }
 
     public void answerFalse(Button btn) {
-       //
+        //
         changeButtonBackground(btn, false);
         //
 
         //textShow.setText("No");
         ans = false;
-        learningObject.setWord(nowStudy.getId(),0, mDb, MarkExercise.WRITING);
+        learningObject.setWord(nowStudy.getId(), 0, mDb, MarkExercise.WRITING);
     }
 
     public void answerTrue(final Button btn) {
@@ -322,18 +283,18 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
 
         ans = true;
-        learningObject.setWord(nowStudy.getId(),1, mDb, TypeExercise);
+        learningObject.setWord(nowStudy.getId(), 1, mDb, TypeExercise);
         learningObject.removeWordInList(nowStudy);
         copy.add(nowStudy);
     }
 
-    private void changeButtonBackground(final Button btn, boolean color){
+    private void changeButtonBackground(final Button btn, boolean color) {
         //if color = true => green
         //if color = false => red
 
         String clr = color ? "#FF00FF00" : "#FFFF0000";
         final float[] from = new float[3],
-                to =   new float[3];
+                to = new float[3];
 
         Color.colorToHSV(Color.parseColor("#FFFFFFFF"), from);   // from white
         Color.colorToHSV(Color.parseColor(clr), to);     // to red
@@ -341,13 +302,14 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
         ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
         anim.setDuration(300);                              // for 300 ms
 
-        final float[] hsv  = new float[3];                  // transition color
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
-            @Override public void onAnimationUpdate(ValueAnimator animation) {
+        final float[] hsv = new float[3];                  // transition color
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
                 // Transition along each axis of HSV (hue, saturation, value)
-                hsv[0] = from[0] + (to[0] - from[0])*animation.getAnimatedFraction();
-                hsv[1] = from[1] + (to[1] - from[1])*animation.getAnimatedFraction();
-                hsv[2] = from[2] + (to[2] - from[2])*animation.getAnimatedFraction();
+                hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
+                hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
+                hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
 
                 btn.setBackgroundColor(Color.HSVToColor(hsv));
             }
@@ -355,8 +317,9 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
         anim.start();
     }
+
     //
-    private void defaultButtonBackground(){
+    private void defaultButtonBackground() {
         selectBtn_1.setBackgroundResource(android.R.drawable.btn_default);
         selectBtn_2.setBackgroundResource(android.R.drawable.btn_default);
         selectBtn_3.setBackgroundResource(android.R.drawable.btn_default);

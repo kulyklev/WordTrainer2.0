@@ -1,23 +1,16 @@
 package com.example.admin.wordtrainer20;
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
+import android.content.*;
+import android.database.*;
+import android.database.sqlite.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
-import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
-import com.example.admin.wordtrainer20.HelperClasses.Exercise;
-import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
-import com.example.admin.wordtrainer20.HelperClasses.Word;
+import com.example.admin.wordtrainer20.HelperClasses.*;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class SelectExerciseActivity extends GeneralMenu {
     private DatabaseHelper mDBHelper;
@@ -31,7 +24,7 @@ public class SelectExerciseActivity extends GeneralMenu {
     private int id_category;
 
 
-    private void init(){
+    private void init() {
 
         exerciseTrue_or_False = (ImageButton) findViewById(R.id.ExerciseOneImageButton);
         exerciseWriting = (ImageButton) findViewById(R.id.ExerciseTwoImageButton);
@@ -42,16 +35,14 @@ public class SelectExerciseActivity extends GeneralMenu {
 
         // Проверить на изученность списка
 
-        if (listWord.isEmpty()){
+        if (listWord.isEmpty()) {
             try {
                 listWord = getWords();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
-            if (isTranningOff()){
+        } else {
+            if (isTranningOff()) {
                 Toast.makeText(getApplicationContext(), "Слова потренированы!", Toast.LENGTH_LONG).show();
                 finish();
                 Intent myDictionaries = new Intent(SelectExerciseActivity.this, MyDictionaries.class);
@@ -126,55 +117,51 @@ public class SelectExerciseActivity extends GeneralMenu {
     }
 
 
-
     // Выбор 10 случайных слов
-    public List<Word> getWords() throws IOException
-    {
+    public List<Word> getWords() throws IOException {
         List<Word> result = new ArrayList<>();
         String query = "SELECT * FROM words WHERE Category ='" + id_category + "'";
         Cursor cursor = mDb.rawQuery(query, null);
 
-        if(cursor.getCount()>0) {
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-            do
-            {
+            do {
                 Word word = new Word();
                 word.setEnglishWord(cursor.getString(cursor.getColumnIndex("English")));
                 word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));
                 word.setId(cursor.getInt(cursor.getColumnIndex("_id")));
                 Boolean isSelected = getIsSelected(id_category);
                 Boolean isStudied = getIsStudied(word.getId());
-                if (isSelected && !isStudied)
-                {
+                if (isSelected && !isStudied) {
                     result.add(word);
                 }
             }
-            while (cursor.moveToNext() && result.size()< NUMBER_FOR_TRAINING);
+            while (cursor.moveToNext() && result.size() < NUMBER_FOR_TRAINING);
         }
         cursor.close();
         return result;
     }
 
-    public Boolean getIsSelected(int category){
-        Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary WHERE _id='"+ category + "'", null);
+    public Boolean getIsSelected(int category) {
+        Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary WHERE _id='" + category + "'", null);
         cursor.moveToFirst();
         Boolean i = cursor.getInt(cursor.getColumnIndex("isSelected")) == 1;
         cursor.close();
         return i;
     }
 
-    public Boolean getIsStudied(int id){
-        Cursor cursor = mDb.rawQuery("SELECT * FROM study WHERE _id='"+ id + "'", null);
+    public Boolean getIsStudied(int id) {
+        Cursor cursor = mDb.rawQuery("SELECT * FROM study WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         Boolean i = cursor.getInt(cursor.getColumnIndex("isStudied")) == 1;
         cursor.close();
         return i;
     }
 
-    public boolean isTranningOff(){
+    public boolean isTranningOff() {
         boolean isOff = true;
         for (Word w : listWord) {
-            if (!w.checkComplete(mDb)){
+            if (!w.checkComplete(mDb)) {
                 isOff = false;
                 break;
             }
@@ -184,14 +171,13 @@ public class SelectExerciseActivity extends GeneralMenu {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_exercise);
 
         Bundle extrasFirst = getIntent().getExtras();
-        if (extrasFirst != null){
+        if (extrasFirst != null) {
             String activity = extrasFirst.getString("UniqForm");
             if ((activity.equals("MyVocabulary")))
                 id_category = (int) extrasFirst.getInt("id");

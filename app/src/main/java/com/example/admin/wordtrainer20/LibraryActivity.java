@@ -1,21 +1,17 @@
 package com.example.admin.wordtrainer20;
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.Toast;
+import android.content.*;
+import android.database.*;
+import android.database.sqlite.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
-import com.example.admin.wordtrainer20.AdapterFolder.GridViewAdapter;
-import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
+import com.example.admin.wordtrainer20.AdapterFolder.*;
+import com.example.admin.wordtrainer20.HelperClasses.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class LibraryActivity extends GeneralMenu {
 
@@ -54,10 +50,10 @@ public class LibraryActivity extends GeneralMenu {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 //update position in database
-                setVocabulary(position+1);
+                setVocabulary(position + 1);
 
-                Intent openMainActivity = new Intent(LibraryActivity.this, MyDictionaries.class);
-                startActivity(openMainActivity);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
                 finish();
 
                 Toast.makeText(LibraryActivity.this, "Вы успешно добавили тему : " + signatureText[position], Toast.LENGTH_SHORT).show();
@@ -75,19 +71,19 @@ public class LibraryActivity extends GeneralMenu {
         }
 
         try {
-           mDb = mDBHelper.getWritableDatabase();
+            mDb = mDBHelper.getWritableDatabase();
         } catch (SQLException mSQLException) {
             throw mSQLException;
         }
     }
 
     // Move to Helper
-    public List<String> getTopic(){
+    public List<String> getTopic() {
         List<String> listTopic = new ArrayList<>();
         Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary", null);
         cursor.moveToFirst();
 
-        do{
+        do {
             listTopic.add(cursor.getString(cursor.getColumnIndex("ShortName")));
         }
         while (cursor.moveToNext());
@@ -95,9 +91,9 @@ public class LibraryActivity extends GeneralMenu {
         return listTopic;
     }
 
-    public void setVocabulary(long id){
+    public void setVocabulary(long id) {
         Cursor cursor = mDb.rawQuery("UPDATE vocabulary" +
-                " SET isSelected = 1 WHERE _id='" + id + "'",null);
+                " SET isSelected = 1 WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
     }
@@ -108,7 +104,7 @@ public class LibraryActivity extends GeneralMenu {
         Cursor cursor = mDb.rawQuery("SELECT * FROM vocabulary", null);
         cursor.moveToFirst();
 
-        do{
+        do {
             byte[] arr = cursor.getBlob(cursor.getColumnIndex("image"));
             listIcons.add(arr);
         }

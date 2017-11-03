@@ -1,15 +1,11 @@
 package com.example.admin.wordtrainer20;
 
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class CalendarActivity extends GeneralMenu {
 
@@ -18,7 +14,7 @@ public class CalendarActivity extends GeneralMenu {
     private ArrayList<String> words;
     private ArrayAdapter<String> adapter;
 
-    private void init(){
+    private void init() {
         words = new ArrayList<>();
 
         listOfWords = (ListView) findViewById(R.id.ListOfWords);
@@ -27,7 +23,7 @@ public class CalendarActivity extends GeneralMenu {
         listOfWords.setAdapter(adapter);
 
         calendar = (CalendarView) findViewById(R.id.calendar);
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener(){
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 //
@@ -38,7 +34,7 @@ public class CalendarActivity extends GeneralMenu {
                 //
                 Toast.makeText(getApplicationContext(), dayOfMonth + "." + month + "." + year, Toast.LENGTH_SHORT).show();
 
-                addItems(listOfWords, new String( Integer.toString(dayOfMonth) + "." + Integer.toString(month) + "." + Integer.toString(year) ) );
+                addItems(listOfWords, new String(Integer.toString(dayOfMonth) + "." + Integer.toString(month) + "." + Integer.toString(year)));
             }
         });
     }

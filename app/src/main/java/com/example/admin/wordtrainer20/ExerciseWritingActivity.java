@@ -1,29 +1,20 @@
 package com.example.admin.wordtrainer20;
 
-import android.content.Intent;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.content.*;
+import android.database.*;
+import android.database.sqlite.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
-import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
-import com.example.admin.wordtrainer20.HelperClasses.Exercise;
-import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
-import com.example.admin.wordtrainer20.HelperClasses.Word;
+import com.example.admin.wordtrainer20.HelperClasses.*;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 
 public class ExerciseWritingActivity extends GeneralMenu {
-    
+
     private DatabaseHelper mDBHelper;                   // Класс для работы с базой
     private SQLiteDatabase mDb;                         // Конект базы
 
@@ -37,9 +28,8 @@ public class ExerciseWritingActivity extends GeneralMenu {
     private boolean answer = false;                     // Ответ верный / не верный
 
 
+    private void init() {
 
-    private void init(){
-        
         connectionDatabase();   // Коннект
 
 
@@ -49,25 +39,21 @@ public class ExerciseWritingActivity extends GeneralMenu {
 
         // Проверка на слова, которые уже прошли данную тренировку
 
-        if (learningObject.isTrainingOff(MarkExercise.WRITING, mDb))
-        { // Проверка на конец тренировки
+        if (learningObject.isTrainingOff(MarkExercise.WRITING, mDb)) { // Проверка на конец тренировки
             copy = learningObject.enableStudiedWords(MarkExercise.WRITING, mDb);
-            if (copy.size() > 0)
-            {
-                for (Word w: copy) {
+            if (copy.size() > 0) {
+                for (Word w : copy) {
                     learningObject.removeWordInList(w);
                 }
             }
             nowStudy = learningObject.getWordForTextView(MarkExercise.WRITING, mDb);
             textViewWord.setText(nowStudy.getRussianWord());
-        }
-        else {
+        } else {
 
             // Если все слова прошли тренировку, вывести сообщение и закрыть окно.
             Toast.makeText(getApplicationContext(), "Все слова на этой треннировке пройдены", Toast.LENGTH_LONG).show();
             finish();
         }
-
 
 
         editTextAnswer.setOnKeyListener(new View.OnKeyListener() {
@@ -77,21 +63,19 @@ public class ExerciseWritingActivity extends GeneralMenu {
                 //DO SOME STUFF
                 //
 
-                if(event.getAction() == KeyEvent.ACTION_DOWN && (keyCode == KeyEvent.KEYCODE_ENTER))
-                {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // сохраняем текст, введенный до нажатия Enter в переменную
                     String userTranslate = editTextAnswer.getText().toString();
 
                     // Проверка слова
-                    if (nowStudy.checkWord(userTranslate, MarkExercise.WRITING))
-                    {
+                    if (nowStudy.checkWord(userTranslate, MarkExercise.WRITING)) {
                         textViewWord.setText("Yes");
 
                         // Ставим флагу "верный ответ"
                         answer = true;
 
                         // Обновляем базу
-                        learningObject.setWord(nowStudy.getId(),1, mDb, MarkExercise.WRITING);
+                        learningObject.setWord(nowStudy.getId(), 1, mDb, MarkExercise.WRITING);
 
                          /*
                            Удаляем слово из набора для тренировок.
@@ -104,18 +88,15 @@ public class ExerciseWritingActivity extends GeneralMenu {
 
                         // Проверяем, если слов нет -> все слова прошли тренировку
                         // Тогда все слова возвращаем из дополнительного списка и открываем вкладу "Выбор тренировки"
-                        if (learningObject.getWordList().size()==0)
-                        {
+                        if (learningObject.getWordList().size() == 0) {
                             learningObject.setWordList(copy);
                             finish();
                             Intent openExerciseSelecetTraining = new Intent(ExerciseWritingActivity.this, ExerciseWritingActivity.class);
-                            openExerciseSelecetTraining.putExtra("UniqForm","Tranning");
+                            openExerciseSelecetTraining.putExtra("UniqForm", "Tranning");
                             openExerciseSelecetTraining.putExtra("ListWord", (Serializable) learningObject.getWordList());
                             startActivity(openExerciseSelecetTraining);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // Если ошибка, слово выводим ошибку.
                         textViewWord.setText(textViewWord.getText() + "\n\nCorrect answer is " + nowStudy.getEnglishWord());
                         /*
@@ -127,8 +108,7 @@ public class ExerciseWritingActivity extends GeneralMenu {
 
 
                     return true;
-                }
-                else
+                } else
                     return false;
             }
         });
@@ -190,8 +170,7 @@ public class ExerciseWritingActivity extends GeneralMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_writing);
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
             List<Word> ListWord = new ArrayList<>();    // Набор для изучения
             ListWord = (List<Word>) extras.getSerializable("ListWord");
             learningObject = new Exercise(ListWord);

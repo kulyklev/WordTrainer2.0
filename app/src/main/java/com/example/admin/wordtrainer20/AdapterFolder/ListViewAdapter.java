@@ -1,21 +1,13 @@
 package com.example.admin.wordtrainer20.AdapterFolder;
 
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
+import android.content.*;
+import android.database.*;
+import android.database.sqlite.*;
+import android.view.*;
+import android.widget.*;
 
 import com.example.admin.wordtrainer20.R;
 import com.example.admin.wordtrainer20.SelectExerciseActivity;
-
 
 /**
  * Created by admin on 05.10.2017.
@@ -80,7 +72,7 @@ public class ListViewAdapter extends BaseAdapter {
                 int id = getId(libraryNames[position]);
 
                 Intent selectExerciseActivity = new Intent(context, SelectExerciseActivity.class);
-                selectExerciseActivity.putExtra("UniqForm","MyVocabulary");
+                selectExerciseActivity.putExtra("UniqForm", "MyVocabulary");
                 selectExerciseActivity.putExtra("id", id);
                 context.startActivity(selectExerciseActivity);
 
@@ -93,8 +85,8 @@ public class ListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public int getId(String name){
-        Cursor cursor = mDb.rawQuery("SELECT _id FROM vocabulary WHERE ShortName='"+ name + "'", null);
+    public int getId(String name) {
+        Cursor cursor = mDb.rawQuery("SELECT _id FROM vocabulary WHERE ShortName='" + name + "'", null);
         cursor.moveToFirst();
         int i = cursor.getInt(cursor.getColumnIndex("_id"));
         cursor.close();

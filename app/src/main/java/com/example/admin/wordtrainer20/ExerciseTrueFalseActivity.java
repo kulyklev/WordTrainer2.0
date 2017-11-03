@@ -1,27 +1,18 @@
 package com.example.admin.wordtrainer20;
 
-import android.animation.ValueAnimator;
-import android.content.Intent;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.animation.*;
+import android.content.*;
+import android.database.*;
+import android.database.sqlite.*;
+import android.graphics.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
 
+import com.example.admin.wordtrainer20.HelperClasses.*;
 
-import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
-import com.example.admin.wordtrainer20.HelperClasses.Exercise;
-import com.example.admin.wordtrainer20.HelperClasses.MarkExercise;
-import com.example.admin.wordtrainer20.HelperClasses.Word;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class ExerciseTrueFalseActivity extends GeneralMenu {
 
@@ -56,21 +47,17 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
 
         // Проверка на слова, которые уже прошли данную тренировку
 
-        if (learningObject.isTrainingOff(MarkExercise.TRUE_OR_FALSE, mDb))
-        {
+        if (learningObject.isTrainingOff(MarkExercise.TRUE_OR_FALSE, mDb)) {
             // Проверка на конец тренировки
             copy = learningObject.enableStudiedWords(MarkExercise.TRUE_OR_FALSE, mDb);
-            if (copy.size() > 0)
-            {
-                for (Word w: copy) {
+            if (copy.size() > 0) {
+                for (Word w : copy) {
                     learningObject.removeWordInList(w);
                 }
             }
             nowStudy = learningObject.getWordForTextView(MarkExercise.TRUE_OR_FALSE, mDb);
             textViewEnglishWord.setText(nowStudy.getEnglishWord());
-        }
-        else
-        {
+        } else {
             // Если все слова прошли тренировку, вывести сообщение и закрыть окно.
             Toast.makeText(getApplicationContext(), "Все слова на этой треннировке пройдены", Toast.LENGTH_LONG).show();
             finish();
@@ -91,8 +78,7 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
             @Override
             public void onClick(View v) {
 
-                if (nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE))
-                {
+                if (nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE)) {
                     // Процес аналогичен для всех тренировок.
                     answer = true;
                     changeButtonBackground(btnTrue, answer);
@@ -101,14 +87,11 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
                     learningObject.removeWordInList(nowStudy);
                     copy.add(nowStudy);
 
-                    if (learningObject.getWordList().size()== 0)
-                    {
+                    if (learningObject.getWordList().size() == 0) {
                         learningObject.setWordList(copy);
                         checkEndExercise();
                     }
-                }
-                else
-                {
+                } else {
                     textViewRussianWord.setText("Correct answer: " + nowStudy.getRussianWord());
                     changeButtonBackground(btnTrue, answer);
                 }
@@ -122,8 +105,7 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
             public void onClick(View v) {
 
                 // Если перевод слова неверный и пользователь нажал "No", тогда пользователь прав и слово обновляется, как изучено
-                if (!nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE))
-                {
+                if (!nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE)) {
                     // Процес аналогичен для всех тренировок.
 
                     answer = true;
@@ -133,14 +115,11 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
                     learningObject.removeWordInList(nowStudy);
                     copy.add(nowStudy);
 
-                    if (learningObject.getWordList().size()== 0)
-                    {
+                    if (learningObject.getWordList().size() == 0) {
                         learningObject.setWordList(copy);
                         checkEndExercise();
                     }
-                }
-                else
-                {
+                } else {
                     textViewRussianWord.setText("Correct answer: " + nowStudy.getRussianWord());
                     changeButtonBackground(btnFalse, answer);
                 }
@@ -160,8 +139,7 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
 
                 Word tempSave = new Word();
 
-                if (answer == false && learningObject.getWordList().size()>1)
-                {
+                if (answer == false && learningObject.getWordList().size() > 1) {
                     tempSave.setId(nowStudy.getId());
                     tempSave.setEnglishWord(nowStudy.getEnglishWord());
                     tempSave.setRussianWord(nowStudy.getRussianWord());
@@ -180,7 +158,7 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
                 listRandom.add(nowStudy);
                 Collections.shuffle(listRandom);
 
-                textViewRussianWord.setText(listRandom.get(randomWord(0, listRandom.size()-1)).getRussianWord());
+                textViewRussianWord.setText(listRandom.get(randomWord(0, listRandom.size() - 1)).getRussianWord());
 
                 if (answer == false)
                     learningObject.insertWordInList(tempSave);
@@ -196,8 +174,7 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_true_or_false);
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
             List<Word> ListWord = new ArrayList<>();    // Набор для изучения
             ListWord = (List<Word>) extras.getSerializable("ListWord");
             learningObject = new Exercise(ListWord);
@@ -224,7 +201,7 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         }
     }
 
-    public int randomWord(int min, int max){
+    public int randomWord(int min, int max) {
         max -= min;
         return (int) (Math.random() * ++max) + min;
     }
@@ -232,18 +209,18 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
     public void checkEndExercise() {
         finish();
         Intent selectExerciseActivity = new Intent(this, SelectExerciseActivity.class);
-        selectExerciseActivity.putExtra("UniqForm","Tranning");
+        selectExerciseActivity.putExtra("UniqForm", "Tranning");
         selectExerciseActivity.putExtra("ListWord", (Serializable) learningObject.getWordList());
         startActivity(selectExerciseActivity);
     }
 
-    private void changeButtonBackground(final Button btn, boolean color){
+    private void changeButtonBackground(final Button btn, boolean color) {
         //if color = true => green
         //if color = false => red
 
         String clr = color ? "#FF00FF00" : "#FFFF0000";
         final float[] from = new float[3],
-                to =   new float[3];
+                to = new float[3];
 
         Color.colorToHSV(Color.parseColor("#FFFFFFFF"), from);   // from white
         Color.colorToHSV(Color.parseColor(clr), to);     // to red
@@ -251,13 +228,14 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
         anim.setDuration(300);                              // for 300 ms
 
-        final float[] hsv  = new float[3];                  // transition color
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
-            @Override public void onAnimationUpdate(ValueAnimator animation) {
+        final float[] hsv = new float[3];                  // transition color
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
                 // Transition along each axis of HSV (hue, saturation, value)
-                hsv[0] = from[0] + (to[0] - from[0])*animation.getAnimatedFraction();
-                hsv[1] = from[1] + (to[1] - from[1])*animation.getAnimatedFraction();
-                hsv[2] = from[2] + (to[2] - from[2])*animation.getAnimatedFraction();
+                hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
+                hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
+                hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
 
                 btn.setBackgroundColor(Color.HSVToColor(hsv));
             }
@@ -266,7 +244,7 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         anim.start();
     }
 
-    private void defaultButtonBackground(){
+    private void defaultButtonBackground() {
         btnFalse.setBackgroundResource(android.R.drawable.btn_default);
         btnTrue.setBackgroundResource(android.R.drawable.btn_default);
     }
