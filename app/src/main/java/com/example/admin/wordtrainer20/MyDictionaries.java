@@ -87,6 +87,9 @@ public class MyDictionaries extends GeneralMenu {
                         int id = getId(dataUserTopic[position]);
                         setVocabulary(id);
 
+                        List<Integer> ids = getWordsForCategory(id);
+                        deleteFromBaseVocabulary(ids);
+
                         finish();
                         startActivity(getIntent());
 
@@ -108,7 +111,6 @@ public class MyDictionaries extends GeneralMenu {
             }
         });
     }
-
 
     public void checkConnectionDatabase() {
         try {
@@ -132,6 +134,22 @@ public class MyDictionaries extends GeneralMenu {
         init();
     }
 
+    private List<Integer> getWordsForCategory(int id) {
+        List<Integer> list = new ArrayList<>();
+
+        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE Category='" + id + "'", null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                list.add(cursor.getInt(cursor.getColumnIndex("_id")));
+            }
+            while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return list;
+    }
+
     public int getId(String name) {
         Cursor cursor = mDb.rawQuery("SELECT _id FROM vocabulary WHERE ShortName='" + name + "'", null);
         cursor.moveToFirst();
@@ -145,6 +163,20 @@ public class MyDictionaries extends GeneralMenu {
                 " SET isSelected = 0 WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
+    }
+
+
+    private void deleteFromBaseVocabulary(List<Integer> ids) {
+        for (Integer id : ids) {
+            Cursor cursor = mDb.rawQuery("UPDATE study" +
+                    " SET isStudied = 0 WHERE _id='" + id + "'", null);
+            cursor.moveToFirst();
+            cursor.close();
+            cursor = mDb.rawQuery("UPDATE trainings" +
+                    " SET Writing = 0, Choice = 0, EngToRus = 0, TrueFalse = 0, Complete = 0 WHERE _id='" + id + "'", null);
+            cursor.moveToFirst();
+            cursor.close();
+        }
     }
 
     public List<String> getTopic() {

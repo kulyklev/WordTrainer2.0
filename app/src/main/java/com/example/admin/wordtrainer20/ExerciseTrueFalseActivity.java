@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class ExerciseTrueFalseActivity extends GeneralMenu {
 
@@ -46,13 +47,9 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         textViewEnglishWord = (TextView) findViewById(R.id.textViewShowEng);
         textViewRussianWord = (TextView) findViewById(R.id.textViewShowRus);
 
-
         connectionDatabase();           // Коннект
 
-
         copy = new ArrayList<>();       // Инициализация доп массива
-
-
         // Проверка на слова, которые уже прошли данную тренировку
 
         if (learningObject.isTrainingOff(MarkExercise.TRUE_OR_FALSE, mDb)) {
@@ -72,14 +69,13 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         }
 
         // Рандом слов для проверки правильный перевод или нет (всего 3 слова, одно из них 100% правильное)
-        listRandom = new ArrayList<Word>();
+        listRandom = new ArrayList<>();
         listRandom = learningObject.getListChoice(mDb, 2);
         listRandom.add(nowStudy);
         Collections.shuffle(listRandom);
 
         // Выводим один из вариантов на экран
         textViewRussianWord.setText(listRandom.get(randomWord(0, listRandom.size())).getRussianWord());
-
 
         btnTrue = (Button) findViewById(R.id.buttonYes);
         btnTrue.setOnClickListener(new View.OnClickListener() {
@@ -210,8 +206,9 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
     }
 
     public int randomWord(int min, int max) {
-        max -= min;
-        return (int) (Math.random() * ++max) + min;
+        max--;
+        Random random = new Random();
+        return random.nextInt(max + 1 - min) + min;
     }
 
     public void checkEndExercise() {
