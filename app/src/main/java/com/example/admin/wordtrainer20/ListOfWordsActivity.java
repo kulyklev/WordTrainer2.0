@@ -24,7 +24,6 @@ public class ListOfWordsActivity extends GeneralMenu {
     private SQLiteDatabase mDb;
     private int categoryId;
 
-
     private void init() {
         mDBHelper = new DatabaseHelper(this);
         try {
@@ -35,7 +34,7 @@ public class ListOfWordsActivity extends GeneralMenu {
         try {
             mDb = mDBHelper.getWritableDatabase();
         } catch (SQLException mSQLException) {
-            throw mSQLException;
+            throw new RuntimeException();
         }
 
         List<Model> databaseWords = new ArrayList<>();
@@ -47,10 +46,9 @@ public class ListOfWordsActivity extends GeneralMenu {
         modelItems = new Model[databaseWords.size()];
         modelItems = databaseWords.toArray(modelItems);
 
-
         wordsLV = (ListView) findViewById(R.id.listView1);
         final CustomAdapter adapter = new CustomAdapter(this, modelItems);
-        wordsLV.setChoiceMode(wordsLV.CHOICE_MODE_MULTIPLE);
+        wordsLV.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         wordsLV.setAdapter(adapter);
 
         wordsLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -64,10 +62,6 @@ public class ListOfWordsActivity extends GeneralMenu {
                     setWordFalse(study_id);
                 }
                 adapter.setCheckBox(position);
-//                Toast.makeText(ListOfWordsActivity.this, modelItems[position].getCategory() /*words[position]*/ + " checked : " /*+ item.isChecked()*/, Toast.LENGTH_SHORT).show();
-                //Intent intent = getIntent();
-                //finish();
-                //startActivity(intent);
             }
         });
     }
@@ -92,7 +86,6 @@ public class ListOfWordsActivity extends GeneralMenu {
 
     public int getIdByEnglish(String english) {
         String copyEnglish = english.replaceAll("'", "''");
-
         Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE English='" + copyEnglish + "'", null);
         cursor.moveToFirst();
         int i = cursor.getInt(cursor.getColumnIndex("_id"));
@@ -113,11 +106,19 @@ public class ListOfWordsActivity extends GeneralMenu {
                 " SET isStudied = 1 WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
+        cursor = mDb.rawQuery("UPDATE trainings" +
+                " SET Writing = 1, Choice = 1, EngToRus = 1, TrueFalse = 1, Complete = 1 WHERE _id='" + id + "'", null);
+        cursor.moveToFirst();
+        cursor.close();
     }
 
     public void setWordFalse(long id) {
         Cursor cursor = mDb.rawQuery("UPDATE study" +
                 " SET isStudied = 0 WHERE _id='" + id + "'", null);
+        cursor.moveToFirst();
+        cursor.close();
+        cursor = mDb.rawQuery("UPDATE trainings" +
+                " SET Writing = 0, Choice = 0, EngToRus = 0, TrueFalse = 0, Complete = 0 WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
     }
@@ -128,7 +129,6 @@ public class ListOfWordsActivity extends GeneralMenu {
         setContentView(R.layout.activity_list_of_words);
         Intent intent = getIntent();
         categoryId = intent.getIntExtra("id", 0);
-
         init();
     }
 }

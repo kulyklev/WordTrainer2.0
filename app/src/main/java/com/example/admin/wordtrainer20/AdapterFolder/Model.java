@@ -17,10 +17,6 @@ public class Model {
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public boolean isStudied() {
         return isStudied;
     }

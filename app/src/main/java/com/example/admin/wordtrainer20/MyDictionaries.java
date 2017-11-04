@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.admin.wordtrainer20.AdapterFolder.ListViewAdapter;
 import com.example.admin.wordtrainer20.HelperClasses.DatabaseHelper;
@@ -29,21 +28,19 @@ public class MyDictionaries extends GeneralMenu {
     private ListView listView;         // Список для отображения
     private ListViewAdapter listViewAdapter;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            Intent refresh = new Intent(this, MyDictionaries.class);
-            this.finish();
-            startActivity(refresh);
-        }
-    }
-
     //  Мои словари
     public void init() {
         mDBHelper = new DatabaseHelper(this);
-
-        checkConnectionDatabase();
+        try {
+            mDBHelper.updateDataBase();
+        } catch (IOException mIOException) {
+            throw new Error("UnableToUpdateDatabase");
+        }
+        try {
+            mDb = mDBHelper.getWritableDatabase();
+        } catch (SQLException mSQLException) {
+            throw new RuntimeException();
+        }
 
         List<String> userTopics = getTopic();
         dataUserTopic = new String[userTopics.size()];
@@ -61,10 +58,9 @@ public class MyDictionaries extends GeneralMenu {
         listViewAdapter = new ListViewAdapter(MyDictionaries.this, dataUserTopic, mDb);
         listView = (ListView) findViewById(R.id.LibListView);
         listView.setAdapter(listViewAdapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                //Pass some dataUserTopic
                 Intent openListOfWordsActivity = new Intent(MyDictionaries.this, ListOfWordsActivity.class);
                 openListOfWordsActivity.putExtra("id", getId(dataUserTopic[position]));
                 startActivity(openListOfWordsActivity);
@@ -75,14 +71,13 @@ public class MyDictionaries extends GeneralMenu {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MyDictionaries.this);
-                builder.setTitle("Delete")
-                        .setMessage("Do you want to delete " + dataUserTopic[position])
+                builder.setTitle("Delete menu")
+                        .setMessage("Do you want to delete: " + dataUserTopic[position])
                         .setCancelable(true);
 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
                         dialog.cancel();
-                        Toast.makeText(getApplicationContext(), "You clicked YES", Toast.LENGTH_SHORT).show();
 
                         int id = getId(dataUserTopic[position]);
                         setVocabulary(id);
@@ -98,9 +93,7 @@ public class MyDictionaries extends GeneralMenu {
 
                 builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
-
                         dialog.cancel();
-                        Toast.makeText(getApplicationContext(), "You clicked NO", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -112,17 +105,13 @@ public class MyDictionaries extends GeneralMenu {
         });
     }
 
-    public void checkConnectionDatabase() {
-        try {
-            mDBHelper.updateDataBase();
-        } catch (IOException mIOException) {
-            throw new Error("UnableToUpdateDatabase");
-        }
-
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            Intent refresh = new Intent(this, MyDictionaries.class);
+            this.finish();
+            startActivity(refresh);
         }
     }
 
@@ -130,13 +119,11 @@ public class MyDictionaries extends GeneralMenu {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_dictionaries);
-
         init();
     }
 
     private List<Integer> getWordsForCategory(int id) {
         List<Integer> list = new ArrayList<>();
-
         Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE Category='" + id + "'", null);
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -146,7 +133,6 @@ public class MyDictionaries extends GeneralMenu {
             while (cursor.moveToNext());
         }
         cursor.close();
-
         return list;
     }
 
@@ -164,7 +150,6 @@ public class MyDictionaries extends GeneralMenu {
         cursor.moveToFirst();
         cursor.close();
     }
-
 
     private void deleteFromBaseVocabulary(List<Integer> ids) {
         for (Integer id : ids) {

@@ -24,14 +24,12 @@ public class LibraryActivity extends GeneralMenu {
     private GridView gridView;
     private String[] signatureText;
 
-
     private List<byte[]> icons = new ArrayList<>(); // List for image
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library);
-
         gridView = (GridView) findViewById(R.id.gridView);
 
         checkConnectionDatabase();
@@ -46,13 +44,11 @@ public class LibraryActivity extends GeneralMenu {
             icons.add(listIcons.get(i));
 
         GridViewAdapter adapter = new GridViewAdapter(LibraryActivity.this, icons, signatureText);
-
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 //update position in database
                 setVocabulary(position + 1);
 

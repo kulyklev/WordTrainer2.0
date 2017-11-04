@@ -75,7 +75,6 @@ public class ListViewAdapter extends BaseAdapter {
                 selectExerciseActivity.putExtra("UniqForm", "MyVocabulary");
                 selectExerciseActivity.putExtra("id", id);
                 context.startActivity(selectExerciseActivity);
-
             }
         });
 

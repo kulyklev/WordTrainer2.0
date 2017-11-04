@@ -75,13 +75,14 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         Collections.shuffle(listRandom);
 
         // Выводим один из вариантов на экран
-        textViewRussianWord.setText(listRandom.get(randomWord(0, listRandom.size())).getRussianWord());
+        textViewRussianWord.setText(listRandom.get(randomWord(0, listRandom.size() - 1 )).getRussianWord());
 
         btnTrue = (Button) findViewById(R.id.buttonYes);
         btnTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                    btnFalse.setEnabled(false);
                 if (nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE)) {
                     // Процес аналогичен для всех тренировок.
                     answer = true;
@@ -107,7 +108,7 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         btnFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                    btnTrue.setEnabled(false);
                 // Если перевод слова неверный и пользователь нажал "No", тогда пользователь прав и слово обновляется, как изучено
                 if (!nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE)) {
                     // Процес аналогичен для всех тренировок.
@@ -134,7 +135,8 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                btnTrue.setEnabled(true);
+                btnFalse.setEnabled(true);
                 defaultButtonBackground();
                 // Процес аналогичен для всех тренировок.
 
