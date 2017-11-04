@@ -22,11 +22,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ExerciseChoiceActivity extends AppCompatActivity implements View.OnClickListener {
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private Button selectButtons[] = new Button[5];
+    private Button skipButton;
     private List<Word> copy = new ArrayList<>();
     private Exercise learningObject;
     private Word nowStudy = new Word();
@@ -111,9 +114,9 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
             selectButtons[i].setBackgroundResource(android.R.drawable.btn_default);
         }
 
-        Button skipBut = (Button) findViewById(R.id.NextButt);
-        skipBut.setOnClickListener(this);
-
+        skipButton = (Button) findViewById(R.id.NextButt);
+        skipButton.setOnClickListener(this);
+        skipButton.setBackgroundResource(android.R.drawable.btn_default);
     }
 
     // В зависимости от тренировки смена параметров
@@ -142,6 +145,22 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
         for (Button button : selectButtons) {
             button.setEnabled(false);
         }
+
+        skipButton.setEnabled(false);
+        Timer buttonTimer = new Timer();
+        buttonTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        skipButton.setEnabled(true);
+                    }
+                });
+            }
+        }, 400);
+
         switch (v.getId()) {
             case R.id.variantButt_1:
                 checkAnswer(0);
@@ -165,6 +184,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
             case R.id.NextButt:
                 Word tempSave = new Word();
+                textShow.setTextColor(Color.BLACK);
 
                 if (!ans && learningObject.getWordList().size() > 1) {
                     tempSave.setId(nowStudy.getId());
@@ -210,7 +230,12 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
     public void answerFalse(Button btn) {
         changeButtonBackground(btn, false);
-        //textShow.setText("No");
+        if (TypeExercise == MarkExercise.RUS_TO_ENG)
+            textShow.setText(nowStudy.getEnglishWord());
+        else
+            textShow.setText(nowStudy.getRussianWord());
+        textShow.setTextColor(Color.RED);
+
         ans = false;
         learningObject.setWord(nowStudy.getId(), 0, mDb, MarkExercise.WRITING);
     }
