@@ -4,18 +4,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
 public class Exercise {
 
     private List<Word> WordList = new ArrayList<>();
-
-    static private boolean ENG_RUS_CHOISE = true;   // Для Enable всего упражнения
-    static private boolean RUS_ENG_CHOISE = true;
-    static private boolean WRITING = true;
-    static private boolean TRUE_OR_FALSE = true;
 
     public Exercise() {
 
@@ -35,8 +31,9 @@ public class Exercise {
 
     // Генерация слова из списка для тренировки
 
-    public Word getWordForTextView(MarkExercise markTypeTraining, SQLiteDatabase mDb){
-        int RANDOM_INDEX = GetRandomIndexForListWord(0, WordList.size() - 1);
+    public Word getWordForTextView(MarkExercise markTypeTraining, SQLiteDatabase mDb) {
+        if (WordList.size()==0) return null;
+        int RANDOM_INDEX = GetRandomIndexForListWord(WordList.size() - 1);
 
         Word temp = WordList.get(RANDOM_INDEX);
         String nameFieldCheckTraining = getStringField(markTypeTraining);
@@ -44,7 +41,7 @@ public class Exercise {
         if (isStudiedTrainingsWord(temp.getId(), nameFieldCheckTraining, mDb)) {
             // Генерировать до любого непройденного слова.
             while (isStudiedTrainingsWord(temp.getId(), nameFieldCheckTraining, mDb)) {
-                RANDOM_INDEX = GetRandomIndexForListWord(0, WordList.size() - 1);
+                RANDOM_INDEX = GetRandomIndexForListWord(WordList.size() - 1);
                 temp = WordList.get(RANDOM_INDEX);
             }
         }
@@ -52,11 +49,10 @@ public class Exercise {
         return temp;
     }
 
-     // Изучено ли слово на данной тренировке
+    // Изучено ли слово на данной тренировке
 
-    public Boolean isStudiedTrainingsWord(int id, String field, SQLiteDatabase mDb)
-    { //field - название тренировки
-        Cursor cursor = mDb.rawQuery("SELECT * FROM trainings WHERE _id='"+ id + "'", null);
+    public Boolean isStudiedTrainingsWord(int id, String field, SQLiteDatabase mDb) { //field - название тренировки
+        Cursor cursor = mDb.rawQuery("SELECT * FROM trainings WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         Boolean t = cursor.getInt(cursor.getColumnIndex(field)) == 1;
         cursor.close();
@@ -65,11 +61,11 @@ public class Exercise {
 
 
     // Выучены ли все слова на данной тренировке
-    public Boolean isTrainingOff(MarkExercise mark, SQLiteDatabase mDb){
+    public Boolean isTrainingOff(MarkExercise mark, SQLiteDatabase mDb) {
 
         boolean off = false; // Они не изучены
         String field = getStringField(mark);
-        for (Word w: this.WordList) {
+        for (Word w : this.WordList) {
             if (!isStudiedTrainingsWord(w.getId(), field, mDb)) // Если слово не выучено, вернуть false
             {
                 off = true; // Если хотя бы одно не изучено, тогда продолжить упражнение.
@@ -86,29 +82,31 @@ public class Exercise {
     }
 
     // Установить слово изученым или нет
-    public void setWord(long id, long valueTrueFalse, SQLiteDatabase mDb, MarkExercise mark){
+    public void setWord(long id, long valueTrueFalse, SQLiteDatabase mDb, MarkExercise mark) {
         String field = getStringField(mark);
         Cursor cursor = mDb.rawQuery("UPDATE trainings" +
-                " SET " + field + "='" + valueTrueFalse +"'"+" WHERE _id='" + id + "'",null);
+                " SET " + field + "='" + valueTrueFalse + "'" + " WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
 
     }
 
-    public void removeWordInList(Word word){
+    public void removeWordInList(Word word) {
         this.WordList.remove(word);
     }
 
-    public void insertWordInList(Word word) { WordList.add(word); }
+    public void insertWordInList(Word word) {
+        WordList.add(word);
+    }
 
     // Если пользователю сгенерировало набор , где есть слова , которые прошли данную тренировку, тогда
     // с помощью функции enableStudiedWords перемещаем их в дополнительный массив.
 
 
-    public List<Word> enableStudiedWords(MarkExercise mark, SQLiteDatabase mDb){
+    public List<Word> enableStudiedWords(MarkExercise mark, SQLiteDatabase mDb) {
         List<Word> copy = new ArrayList<Word>();
         String field = getStringField(mark);
-        for (Word w: this.WordList) {
+        for (Word w : this.WordList) {
             if (isStudiedTrainingsWord(w.getId(), field, mDb)) // Если слово не выучено, вернуть false
                 copy.add(w);
         }
@@ -119,18 +117,17 @@ public class Exercise {
     // Генерация списка слов для выбора
 
 
-    public List<Word> getListChoice(SQLiteDatabase mDb, int countRandom) throws IOException
-    {
+    public List<Word> getListChoice(SQLiteDatabase mDb, int countRandom) throws IOException {
         List<Word> result = new ArrayList<>();
         String query = "SELECT * FROM words ORDER BY RANDOM() LIMIT " + Integer.toString(countRandom);
         Cursor cursor = mDb.rawQuery(query, null);
 
-        if(cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()){
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
                 Word word = new Word();
                 word.setId(cursor.getInt(cursor.getColumnIndex("_id")));
                 word.setEnglishWord(cursor.getString(cursor.getColumnIndex("English")));
-                word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));;
+                word.setRussianWord(cursor.getString(cursor.getColumnIndex("Russian")));
                 result.add(word);
                 cursor.moveToNext();
             }
@@ -140,9 +137,10 @@ public class Exercise {
     }
 
 
-    public int GetRandomIndexForListWord(int min, int max){
-        max -= min;
-        return (int) (Math.random() * ++max) + min;
+    public int GetRandomIndexForListWord(int max) {
+        max--;
+        Random random = new Random();
+        return random.nextInt(max + 1);
     }
 
 

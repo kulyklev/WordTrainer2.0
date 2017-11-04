@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class ExerciseTrueFalseActivity extends GeneralMenu {
+public class ExerciseTrueFalseActivity extends GeneralMenu implements View.OnClickListener {
 
     private DatabaseHelper mDBHelper;                   // Класс для работы с базой
     private SQLiteDatabase mDb;                         // Конект базы
@@ -42,16 +44,116 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
     private List<Word> copy;                            // Дополнительный список
     private boolean answer = false;                        // Ответ верный / не верный
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_exercise_true_or_false);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            List<Word> ListWord = (List<Word>) extras.getSerializable("ListWord");
+            learningObject = new Exercise(ListWord);
+        }
+
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void checkAndApproveAnswer(Button buttonYes, Button buttonNo, boolean bool) {
+        buttonNo.setEnabled(false);
+        if (nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE) == bool) {
+            answer = true;
+            changeButtonBackground(buttonYes, answer);
+
+            learningObject.setWord(nowStudy.getId(), 1, mDb, MarkExercise.TRUE_OR_FALSE);
+            learningObject.removeWordInList(nowStudy);
+            copy.add(nowStudy);
+
+            if (learningObject.getWordList().size() == 0) {
+                learningObject.setWordList(copy);
+                checkEndExercise();
+            }
+        } else {
+            textViewRussianWord.setText("Correct answer: " + nowStudy.getRussianWord());
+            changeButtonBackground(buttonYes, answer);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        nextDelay();
+        switch (view.getId()) {
+            case R.id.buttonYes:
+                checkAndApproveAnswer(btnTrue, btnFalse, true);
+                break;
+
+            case R.id.buttonFalse:
+                checkAndApproveAnswer(btnFalse, btnTrue, false);
+                break;
+
+            case R.id.NextButton:
+                btnTrue.setEnabled(true);
+                btnFalse.setEnabled(true);
+
+                btnFalse.setBackgroundResource(android.R.drawable.btn_default);
+                btnTrue.setBackgroundResource(android.R.drawable.btn_default);
+
+                Word tempSave = new Word();
+
+                if (!answer && learningObject.getWordList().size() > 1) {
+                    tempSave.setId(nowStudy.getId());
+                    tempSave.setEnglishWord(nowStudy.getEnglishWord());
+                    tempSave.setRussianWord(nowStudy.getRussianWord());
+                    learningObject.removeWordInList(nowStudy);
+                }
+
+                nowStudy = learningObject.getWordForTextView(MarkExercise.TRUE_OR_FALSE, mDb);
+                textViewEnglishWord.setText(nowStudy.getEnglishWord());
+
+                try {
+                    listRandom = learningObject.getListChoice(mDb, 2);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                listRandom.add(nowStudy);
+                Collections.shuffle(listRandom);
+
+                textViewRussianWord.setText(listRandom.get(randomWord(listRandom.size() - 1)).getRussianWord());
+
+                if (!answer)
+                    learningObject.insertWordInList(tempSave);
+
+                answer = false;
+
+                break;
+            default:
+                break;
+        }
+    }
+
     private void init() throws IOException {
 
         textViewEnglishWord = (TextView) findViewById(R.id.textViewShowEng);
         textViewRussianWord = (TextView) findViewById(R.id.textViewShowRus);
 
-        connectionDatabase();           // Коннект
+        mDBHelper = new DatabaseHelper(this);
+        try {
+            mDBHelper.updateDataBase();
+        } catch (IOException mIOException) {
+            throw new Error("UnableToUpdateDatabase");
+        }
+        try {
+            mDb = mDBHelper.getWritableDatabase();
+        } catch (SQLException mSQLException) {
+            throw new RuntimeException();
+        }
 
         copy = new ArrayList<>();       // Инициализация доп массива
-        // Проверка на слова, которые уже прошли данную тренировку
 
+        // Проверка на слова, которые уже прошли данную тренировку
         if (learningObject.isTrainingOff(MarkExercise.TRUE_OR_FALSE, mDb)) {
             // Проверка на конец тренировки
             copy = learningObject.enableStudiedWords(MarkExercise.TRUE_OR_FALSE, mDb);
@@ -75,142 +177,38 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         Collections.shuffle(listRandom);
 
         // Выводим один из вариантов на экран
-        textViewRussianWord.setText(listRandom.get(randomWord(0, listRandom.size() - 1 )).getRussianWord());
+        textViewRussianWord.setText(listRandom.get(randomWord(listRandom.size() - 1)).getRussianWord());
 
         btnTrue = (Button) findViewById(R.id.buttonYes);
-        btnTrue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                    btnFalse.setEnabled(false);
-                if (nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE)) {
-                    // Процес аналогичен для всех тренировок.
-                    answer = true;
-                    changeButtonBackground(btnTrue, answer);
-
-                    learningObject.setWord(nowStudy.getId(), 1, mDb, MarkExercise.TRUE_OR_FALSE);
-                    learningObject.removeWordInList(nowStudy);
-                    copy.add(nowStudy);
-
-                    if (learningObject.getWordList().size() == 0) {
-                        learningObject.setWordList(copy);
-                        checkEndExercise();
-                    }
-                } else {
-                    textViewRussianWord.setText("Correct answer: " + nowStudy.getRussianWord());
-                    changeButtonBackground(btnTrue, answer);
-                }
-
-            }
-        });
-
+        btnTrue.setOnClickListener(this);
         btnFalse = (Button) findViewById(R.id.buttonFalse);
-        btnFalse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    btnTrue.setEnabled(false);
-                // Если перевод слова неверный и пользователь нажал "No", тогда пользователь прав и слово обновляется, как изучено
-                if (!nowStudy.checkWord(textViewRussianWord.getText().toString(), MarkExercise.TRUE_OR_FALSE)) {
-                    // Процес аналогичен для всех тренировок.
-
-                    answer = true;
-                    changeButtonBackground(btnFalse, answer);
-
-                    learningObject.setWord(nowStudy.getId(), 1, mDb, MarkExercise.TRUE_OR_FALSE);
-                    learningObject.removeWordInList(nowStudy);
-                    copy.add(nowStudy);
-
-                    if (learningObject.getWordList().size() == 0) {
-                        learningObject.setWordList(copy);
-                        checkEndExercise();
-                    }
-                } else {
-                    textViewRussianWord.setText("Correct answer: " + nowStudy.getRussianWord());
-                    changeButtonBackground(btnFalse, answer);
-                }
-            }
-        });
+        btnFalse.setOnClickListener(this);
 
         btnSkip = (Button) findViewById(R.id.NextButton);
-        btnSkip.setOnClickListener(new View.OnClickListener() {
+        btnSkip.setOnClickListener(this);
+    }
+
+    public void nextDelay() {
+        btnSkip.setEnabled(false);
+        Timer buttonTimer = new Timer();
+        buttonTimer.schedule(new TimerTask() {
             @Override
-            public void onClick(View v) {
-                btnTrue.setEnabled(true);
-                btnFalse.setEnabled(true);
-                defaultButtonBackground();
-                // Процес аналогичен для всех тренировок.
+            public void run() {
+                runOnUiThread(new Runnable() {
 
-                textViewEnglishWord.setText("");
-                textViewRussianWord.setText("");
-
-                Word tempSave = new Word();
-
-                if (answer == false && learningObject.getWordList().size() > 1) {
-                    tempSave.setId(nowStudy.getId());
-                    tempSave.setEnglishWord(nowStudy.getEnglishWord());
-                    tempSave.setRussianWord(nowStudy.getRussianWord());
-                    learningObject.removeWordInList(nowStudy);
-                }
-
-                nowStudy = learningObject.getWordForTextView(MarkExercise.TRUE_OR_FALSE, mDb);
-                textViewEnglishWord.setText(nowStudy.getEnglishWord());
-
-                try {
-                    listRandom = learningObject.getListChoice(mDb, 2);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                listRandom.add(nowStudy);
-                Collections.shuffle(listRandom);
-
-                textViewRussianWord.setText(listRandom.get(randomWord(0, listRandom.size() - 1)).getRussianWord());
-
-                if (answer == false)
-                    learningObject.insertWordInList(tempSave);
-
-                answer = false;
-
+                    @Override
+                    public void run() {
+                        btnSkip.setEnabled(true);
+                    }
+                });
             }
-        });
+        }, 400);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exercise_true_or_false);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            List<Word> ListWord = new ArrayList<>();    // Набор для изучения
-            ListWord = (List<Word>) extras.getSerializable("ListWord");
-            learningObject = new Exercise(ListWord);
-        }
-
-        try {
-            init();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void connectionDatabase() {
-        mDBHelper = new DatabaseHelper(this);
-        try {
-            mDBHelper.updateDataBase();
-        } catch (IOException mIOException) {
-            throw new Error("UnableToUpdateDatabase");
-        }
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
-    }
-
-    public int randomWord(int min, int max) {
+    public int randomWord(int max) {
         max--;
         Random random = new Random();
-        return random.nextInt(max + 1 - min) + min;
+        return random.nextInt(max + 1);
     }
 
     public void checkEndExercise() {
@@ -221,10 +219,8 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
         startActivity(selectExerciseActivity);
     }
 
+    //if color = true => green, if color = false => red
     private void changeButtonBackground(final Button btn, boolean color) {
-        //if color = true => green
-        //if color = false => red
-
         String clr = color ? "#FF00FF00" : "#FFFF0000";
         final float[] from = new float[3],
                 to = new float[3];
@@ -240,19 +236,13 @@ public class ExerciseTrueFalseActivity extends GeneralMenu {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 // Transition along each axis of HSV (hue, saturation, value)
-                hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
-                hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
-                hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
-
+                for (int i = 0; i < 3; i++) {
+                    hsv[i] = from[i] + (to[i] - from[i]) * animation.getAnimatedFraction();
+                }
                 btn.setBackgroundColor(Color.HSVToColor(hsv));
             }
         });
 
         anim.start();
-    }
-
-    private void defaultButtonBackground() {
-        btnFalse.setBackgroundResource(android.R.drawable.btn_default);
-        btnTrue.setBackgroundResource(android.R.drawable.btn_default);
     }
 }

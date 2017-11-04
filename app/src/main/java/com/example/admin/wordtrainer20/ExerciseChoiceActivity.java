@@ -35,7 +35,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
     private Word nowStudy = new Word();
     private TextView textShow;
     private MarkExercise TypeExercise;
-    private boolean ans; // Верный / неверный ответ
+    private boolean ans; // Верный\неверный ответ
     private List<Word> listRandom; // Рандом элементов выбора
 
     @Override
@@ -45,8 +45,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            List<Word> ListWord = new ArrayList<>();    // Набор для изучения
-            ListWord = (List<Word>) extras.getSerializable("ListWord");
+            List<Word> ListWord = (List<Word>) extras.getSerializable("ListWord");
             TypeExercise = (MarkExercise) extras.getSerializable("TitleExercise");
             learningObject = new Exercise(ListWord);
         }

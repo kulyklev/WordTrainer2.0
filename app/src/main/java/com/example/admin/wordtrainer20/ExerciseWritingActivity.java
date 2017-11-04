@@ -38,9 +38,17 @@ public class ExerciseWritingActivity extends GeneralMenu {
 
 
     private void init() {
-
-        connectionDatabase();   // Коннект
-
+        mDBHelper = new DatabaseHelper(this);
+        try {
+            mDBHelper.updateDataBase();
+        } catch (IOException mIOException) {
+            throw new Error("UnableToUpdateDatabase");
+        }
+        try {
+            mDb = mDBHelper.getWritableDatabase();
+        } catch (SQLException mSQLException) {
+            throw new RuntimeException();
+        }
 
         editTextAnswer = (EditText) findViewById(R.id.textAnswer);
         textViewWord = (TextView) findViewById(R.id.textViewShow);
@@ -108,13 +116,13 @@ public class ExerciseWritingActivity extends GeneralMenu {
                     } else {
                         // Если ошибка, слово выводим ошибку.
                         textViewWord.setText(textViewWord.getText() + "\n\nCorrect answer is " + nowStudy.getEnglishWord());
+                        textViewWord.setEnabled(false);
                         /*
                             ЛЕВ добавь поле для отображения правильного ответа
                          */
 
                         // learningObject.setWord(nowStudy.getId(),0, mDb, MarkExercise.WRITING);
                     }
-
 
                     return true;
                 } else
@@ -136,7 +144,7 @@ public class ExerciseWritingActivity extends GeneralMenu {
                     делается , что бы слово не повторилось сразу же + у меньшение объема рандома
                  */
                 Word tempSave = new Word();
-                if (answer == false && learningObject.getWordList().size() > 1) {
+                if (!answer && learningObject.getWordList().size() > 1) {
                     tempSave.setId(nowStudy.getId());
                     tempSave.setEnglishWord(nowStudy.getEnglishWord());
                     tempSave.setRussianWord(nowStudy.getRussianWord());
@@ -150,7 +158,7 @@ public class ExerciseWritingActivity extends GeneralMenu {
 
 
                 // Возвращаем слово, на которое был дан не правильный ответ.
-                if (answer == false)
+                if (!answer)
                     learningObject.insertWordInList(tempSave);
 
                 // Флаг ставим в обратную позицию.
@@ -158,21 +166,6 @@ public class ExerciseWritingActivity extends GeneralMenu {
             }
         });
     }
-
-    public void connectionDatabase() {
-        mDBHelper = new DatabaseHelper(this);
-        try {
-            mDBHelper.updateDataBase();
-        } catch (IOException mIOException) {
-            throw new Error("UnableToUpdateDatabase");
-        }
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
