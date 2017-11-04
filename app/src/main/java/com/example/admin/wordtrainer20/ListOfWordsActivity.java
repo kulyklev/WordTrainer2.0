@@ -107,7 +107,7 @@ public class ListOfWordsActivity extends GeneralMenu {
         cursor.moveToFirst();
         cursor.close();
         cursor = mDb.rawQuery("UPDATE trainings" +
-                " SET Writing = 1, Choice = 1, EngToRus = 1, TrueFalse = 1, Complete = 1 WHERE _id='" + id + "'", null);
+                " SET Writing = 1, RusToEng = 1, EngToRus = 1, TrueFalse = 1, Complete = 1 WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
     }
@@ -118,7 +118,7 @@ public class ListOfWordsActivity extends GeneralMenu {
         cursor.moveToFirst();
         cursor.close();
         cursor = mDb.rawQuery("UPDATE trainings" +
-                " SET Writing = 0, Choice = 0, EngToRus = 0, TrueFalse = 0, Complete = 0 WHERE _id='" + id + "'", null);
+                " SET Writing = 0, RusToEng = 0, EngToRus = 0, TrueFalse = 0, Complete = 0 WHERE _id='" + id + "'", null);
         cursor.moveToFirst();
         cursor.close();
     }

@@ -158,7 +158,7 @@ public class MyDictionaries extends GeneralMenu {
             cursor.moveToFirst();
             cursor.close();
             cursor = mDb.rawQuery("UPDATE trainings" +
-                    " SET Writing = 0, Choice = 0, EngToRus = 0, TrueFalse = 0, Complete = 0 WHERE _id='" + id + "'", null);
+                    " SET Writing = 0, RusToEng = 0, EngToRus = 0, TrueFalse = 0, Complete = 0 WHERE _id='" + id + "'", null);
             cursor.moveToFirst();
             cursor.close();
         }

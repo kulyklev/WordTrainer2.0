@@ -79,23 +79,11 @@ public class Exercise {
         return off;
     }
 
-
     // Получения поля для обновления базы
 
     private String getStringField(MarkExercise mark) {
-        String s = "";
-        if (mark == MarkExercise.ENG_TO_RUS)
-            s = "EngToRus"; // Тоже выбор, но кривой
-        else if (mark == MarkExercise.RUS_TO_ENG)
-            s =  "Choice";
-        else if (mark == MarkExercise.TRUE_OR_FALSE)
-            s = "TrueFalse";
-        else if (mark == MarkExercise.WRITING)
-            s = "Writing";
-
-        return s;
+        return mark.getFieldName();
     }
-
 
     // Установить слово изученым или нет
     public void setWord(long id, long valueTrueFalse, SQLiteDatabase mDb, MarkExercise mark){

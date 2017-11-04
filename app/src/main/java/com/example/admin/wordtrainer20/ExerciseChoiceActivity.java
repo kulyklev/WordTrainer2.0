@@ -108,6 +108,7 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
             selectButtons[i].setOnClickListener(this);
             selectButtons[i].setText(wordForExercise(TypeExercise, i, listRandom));
             selectButtons[i].setEnabled(true);
+            selectButtons[i].setBackgroundResource(android.R.drawable.btn_default);
         }
 
         Button skipBut = (Button) findViewById(R.id.NextButt);
@@ -163,12 +164,6 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.NextButt:
-
-                textShow.setText("");
-                for (Button button : selectButtons) {
-                    button.setBackgroundResource(android.R.drawable.btn_default);
-                }
-
                 Word tempSave = new Word();
 
                 if (!ans && learningObject.getWordList().size() > 1) {
@@ -192,7 +187,6 @@ public class ExerciseChoiceActivity extends AppCompatActivity implements View.On
 
                 listRandom.add(nowStudy);
                 Collections.shuffle(listRandom);
-
                 initializationButton(listRandom);
 
                 if (!ans)
